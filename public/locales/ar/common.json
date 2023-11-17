@@ -1,0 +1,161 @@
+{
+    "navLinks": {
+        "emp": {
+            "title": "الموظفين",
+            "icon": "employees",
+            "target": "/employees"
+        },
+        "accounts": {
+            "title": "العملاء (الشركات)",
+            "icon": "accounts",
+            "target": "/accounts"
+        },
+        "contacts": {
+            "title": "العملاء (الأفراد)",
+            "icon": "contacts",
+            "target": "/contacts"
+        },
+        "suppliers": {
+            "title": "المـوردين",
+            "icon": "suppliers",
+            "target": "/suppliers"
+        },
+        "stations": {
+            "title": "المحطات",
+            "icon": "stations",
+            "target": "/stations"
+        },
+        "products": {
+            "title": "المنتجات",
+            "icon": "products",
+            "children": {
+                "segments": {
+                    "title": "شرائح السوق",
+                    "target": "/segments"
+                },
+                "products": {
+                    "title": "المنتجات",
+                    "target": "/products"
+                }
+            }
+        },
+        "supply": {
+            "title": "ادارة التوريدات",
+            "icon": "supply",
+            "children": {
+                "supplyOrders": {
+                    "title": "طلبات التوريد",
+                    "target": "/supply-orders"
+                },
+                "returnRequests": {
+                    "title": "طلبات الإسترجاع",
+                    "target": "/return-requests"
+                }
+            }
+        },
+        "inventory": {
+            "title": "ادارة المخازن",
+            "icon": "inventory",
+            "children": {
+                "products": {
+                    "title": "المنتجات",
+                    "children": {
+                        "inStock": {
+                            "title": "فى المخازن",
+                            "target": "/prodcuts/in-stock"
+                        },
+                        "fulfilled": {
+                            "title": "المصروفة",
+                            "target": "/prodcuts/fullfilled"
+                        }
+                    }
+                },
+                "equipments": {
+                    "title": "المهمات",
+                    "children": {
+                        "inStock": {
+                            "title": "فى المخازن",
+                            "target": "/equipments/in-stock"
+                        },
+                        "fulfilled": {
+                            "title": "المصروفة",
+                            "target": "/equipments/fullfilled"
+                        }
+                    }
+                }
+            }
+        },
+        "sales": {
+            "title": "المبيعات",
+            "icon": "sales",
+            "children": {
+                "cases": {
+                    "title": "طلبات المبيعات",
+                    "target": "/sales"
+                }
+            }
+        },
+        "marketing": {
+            "title": "التسويق",
+            "icon": "marketing",
+            "children": {
+                "emails": {
+                    "title": "الايميلات",
+                    "target": "/emails"
+                },
+                "whatsapp": {
+                    "title": "الواتساب",
+                    "target": "/whatsapp"
+                },
+                "socialPosts": {
+                    "title": "وسائل التواصل",
+                    "target": "/social-posts"
+                }
+            }
+        },
+        "accounting": {
+            "title": "الحسابات",
+            "icon": "accounting",
+            "children": {
+                "debitAccount": {
+                    "title": "حساب مدين",
+                    "children": {
+                        "suppliers": {
+                            "title": "المـوردين",
+                            "target": "/accounting/debit/suppliers"
+                        },
+                        "stations": {
+                            "title": "المحطات",
+                            "target": "/accounting/debit/stations"
+                        },
+                        "expenses": {
+                            "title": "المصروفات",
+                            "target": "/accounting/debit/expenses"
+                        }
+                    }
+                },
+                "creditAccount": {
+                    "title": "حساب دائن",
+                    "children": {
+                        "revenue": {
+                            "title": "الأرباح",
+                            "target": "/accounting/credit/revenue"
+                        },
+                        "returnRequests": {
+                            "title": "طلبات الإسترجاع",
+                            "target": "/accounting/credit/return-requests"
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    "labels": {
+        "logout": "الخروج"
+    },
+
+    "pages": {
+        "emp": "الموظفين"
+    }
+}

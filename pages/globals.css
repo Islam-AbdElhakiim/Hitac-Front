@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.rtl-rdirection {
+  direction: rtl;
+}
+
+td,
+th {
+  @apply px-8 py-2 max-w-[200px]
+}
+
+th {
+  @apply font-medium text-[18px]
+}
+
+td {
+  @apply py-3 border border-transparent border-b-bgGray overflow-hidden
+}
+
+tbody tr {
+  @apply hover:bg-lightGray 
+}
+
+.gradient-bg {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(354deg, rgba(2, 0, 36, 1) 0%, rgba(255, 255, 255, 1) 100%, rgba(0, 212, 255, 1) 100%);
+}
+
+
+/* Start loader  */
+.loader {
+  width: 120px;
+  height: 120px;
+  border: 5px solid #0F8BFD;
+  border-bottom-color: #FF551F; 
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* end loader  */
