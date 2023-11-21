@@ -31,6 +31,8 @@ const Layout = ({ children }: { children: React.ReactComponentElement<any> }) =>
 
         //check if the user is logged in by session cookie
         const sessionCookie = document.cookie.includes('session');
+        console.log(document.cookie.split(";"), "cookies");
+        console.log("session", sessionCookie);
 
         if (!sessionCookie && component != "Login") {
             dispatch(SHOW_LOADER());
@@ -56,6 +58,7 @@ const Layout = ({ children }: { children: React.ReactComponentElement<any> }) =>
                         // setLoader(true)
                         // setIsLocalLoading(true)
                         const userSession = checkCookie('user');
+                        console.log("session2", userSession);
                         if (userSession) {
                             const user = await getUserById(userSession);
                             // console.log(user)
@@ -64,10 +67,10 @@ const Layout = ({ children }: { children: React.ReactComponentElement<any> }) =>
                                 return setIsLocalLoading(false);
                             } else {
                                 throw new Error(" couldn't fetch the user at layout fetchUser method");
-
                             }
 
                         } else {
+                            console.log("can't find sessin")
                             router.push('/login')
                         }
                     } catch (e) {
@@ -76,8 +79,6 @@ const Layout = ({ children }: { children: React.ReactComponentElement<any> }) =>
 
                     } finally {
                         setIsLocalLoading(false)
-
-
                     }
                 }
                 fetchUser();

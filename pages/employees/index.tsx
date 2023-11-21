@@ -22,7 +22,7 @@ import Link from "next/link";
 
 
 export const getServerSideProps = async ({ locale }: any) => {
-    const response = await fetch('http://localhost:3002/employees');
+    const response = await fetch('http://127.0.0.1:3002/employees');
     const data = await response.json();
     return {
         props: { employees: data, ...(await serverSideTranslations(locale, ['common'])) }
@@ -221,7 +221,7 @@ export default function Employees({ employees }: any) {
                                                         <td>
                                                             <div className="flex justify-center items-center gap-3 w-full">
                                                                 <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
-                                                                    <Image src={`${emp.image}`} fill alt="user image" />
+                                                                    <Image src={`${emp.image ? emp.image : "/uploads/avatar.png"}`} fill alt="user image" />
                                                                 </div>
                                                                 <div className=" w-1/2">
                                                                     <p className="text-xl text-darkGray  overflow-hidden max-w-full">{emp.firstName}</p>

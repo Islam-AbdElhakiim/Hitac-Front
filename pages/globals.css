@@ -28,6 +28,14 @@ tbody tr {
   background: linear-gradient(354deg, rgba(2, 0, 36, 1) 0%, rgba(255, 255, 255, 1) 100%, rgba(0, 212, 255, 1) 100%);
 }
 
+.fs-md {
+  font-size: clamp(1.0rem, 1vw + 0.6rem, 12rem);
+}
+
+.fs-sm {
+  font-size: clamp(0.5rem, 1vw + 0.2rem, 6rem);
+}
+
 
 /* Start loader  */
 .loader {
