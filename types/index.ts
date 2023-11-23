@@ -14,6 +14,7 @@ export type ButtonParams = {
     isLink?: boolean;
     href?: Url;
     as?: string;
+    type?: "button" | "submit" | "reset" | undefined;
     isIconRight?: boolean;
     isDisabled?: boolean;
     // ifTrue?: () => void;
@@ -34,6 +35,10 @@ export type DepartmentTitles = "sales" | "marketing" | "inventory" | "accounting
 
 export type Department = {
     title: DepartmentTitles,
+    selected: boolean
+}
+export type Segment = {
+    title: string,
     selected: boolean
 }
 
@@ -65,6 +70,76 @@ export type EmployeeType = {
     [key: string]: string | number | undefined | boolean | string[]; // Adding an index signature
 
 };
+export type accountType = {
+    _id?: string;
+    englishName:string,
+    arabicName:string,
+    website:string,
+    countries:{[key: string]: string}[],
+    emails:{[key: string]: string}[],
+    addresses:{[key: string]: string}[],
+    telephones:{[key: string]: string}[],
+    cities: {[key: string]: string}[],
+    ports: {[key: string]: string}[],
+    segments: string[],
+    products: string[],
+
+    contacts: string[],
+    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[]; // Adding an index signature
+
+};
+export type contactType = {
+    _id?: string;
+    englishName:string,
+    arabicName:string,
+    websites:{[key: string]: string}[],
+    country:string,
+    emails:{[key: string]: string}[],
+    telephones:{[key: string]: string}[],
+    city:string,
+    ports: {[key: string]: string}[],
+    segments: string[],
+    products: string[],
+
+    account: string,
+    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[]; // Adding an index signature
+
+};
+export type supplierType = {
+    _id?: string;
+    firstName:string,
+    lastName:string,
+    countries:string,
+    emails:string[],
+    telephones:string[],
+    cities:string,
+    segments: string[],
+    products: string[],
+    note:string,
+
+    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+
+};
+export type stationType = {
+    _id?: string;
+    englishName:string,
+    arabicName:string,
+    address:string,
+    countries:string,
+    emails:string[],
+    telephones:string[],
+    cities:string,
+    note:string,
+
+    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+
+};
+
+export type segmentType ={
+    _id?: string;
+    title:string,
+    description:string,
+}
 
 export class CreateEmployeeDTO {
     _id?: string;
@@ -140,4 +215,16 @@ export type ValidationObject = {
 export type singleValidationObject = {
     regex?: RegExp,
     isValid: boolean
+}
+export type accountsValidationKeys = "arabicName" | "englishName" | "emails" | "telephones" | "countries" | "cities" | "ports" | "segments" | "products" | "contacts" | "website" | "addresses";
+// export type validationKeyss = "firstName" | "lastName" | "email" | "telephone" | "age" | "salary" | "password" | "role";
+
+export type accountsValidationObject = {
+    [key in accountsValidationKeys]: singleValidationObject;
+}
+export type contactsValidationKeys = "arabicName" | "englishName" | "emails" | "telephones" | "country" | "city" | "ports" | "segments" | "products" | "account" | "websites";
+// export type validationKeyss = "firstName" | "lastName" | "email" | "telephone" | "age" | "salary" | "password" | "role";
+
+export type contactsValidationObject = {
+    [key in contactsValidationKeys]: singleValidationObject;
 }

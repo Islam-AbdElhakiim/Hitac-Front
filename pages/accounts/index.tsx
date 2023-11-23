@@ -10,28 +10,29 @@ import { TbArrowsSort, TbTextDirectionLtr } from "react-icons/tb";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { GETALL } from "@/redux/modules/employees-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { EmployeeType } from "@/types";
+import { Account, EmployeeType } from "@/types";
 import { HIDE_LOADER, SHOW_LOADER } from "@/redux/modules/loader-slice";
 import Loader from "@/components/Loader";
 import MyModal from "@/components/MyModal";
 import Link from "next/link";
 import { getRequest } from "@/http/requests";
 import { deleteUserById, getAllEmployees } from "@/http/employeeHttp";
+import { deleteAccountById, getAllAccounts } from "@/http/accountsHttp";
+import { GETALLACCOUNTS } from "@/redux/modules/accounts-slice";
 
 export const getServerSideProps = async ({ locale }: any) => {
-  const data = await getAllEmployees();
+  const data = await getAllAccounts();
   return {
     props: {
-      employees: data,
+      accounts: data,
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };
 };
 
-export default function Employees({ employees }: any) {
+export default function Accounts({ accounts }: any) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation("common", {
@@ -43,8 +44,10 @@ export default function Employees({ employees }: any) {
 
   // const [allEmployees, setAllEmployees] = useState<EmployeeType[]>(employees);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageEmployees, setPageEmployees] = useState(employees.slice());
-  const [selectedEmployees, setSelectedEmployees] = useState(new Array());
+  const [pageAccounts, setPageAccounts] = useState(accounts?.slice());
+  console.log(pageAccounts);
+
+  const [selectedAccounts, setSelectedAccounts] = useState(new Array());
 
   // modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -57,8 +60,8 @@ export default function Employees({ employees }: any) {
   }, []);
 
   //#region dispatch employees to the store
-  if (employees && employees.length > 0) {
-    dispatch(GETALL({ employees }));
+  if (accounts && accounts?.length > 0) {
+    dispatch(GETALLACCOUNTS({ accounts }));
   }
   //#endregion
 
@@ -68,26 +71,26 @@ export default function Employees({ employees }: any) {
     if (currentPage > 1) setCurrentPage((prev: number) => prev - 1);
   };
   const handleNextPagination = () => {
-    if (10 * currentPage < employees.length)
+    if (10 * currentPage < accounts?.length)
       setCurrentPage((prev: number) => prev + 1);
   };
   //#endregion
 
-  //#region handle selecting employee
+  //#region handle selecting employee Account
   const handleClick = (emp: any) => {
-    if (!selectedEmployees.includes(emp._id)) {
-      setSelectedEmployees([...selectedEmployees, emp._id]);
+    if (!selectedAccounts.includes(emp._id)) {
+      setSelectedAccounts([...selectedAccounts, emp._id]);
     } else {
-      setSelectedEmployees(
-        selectedEmployees.filter((employee) => employee != emp._id)
+      setSelectedAccounts(
+        selectedAccounts.filter((accounts) => accounts != emp._id)
       );
     }
   };
   //selecting all emplyee
   const selectAll = () => {
-    setSelectedEmployees(employees.map((emp: any) => emp._id));
-    if (selectedEmployees.length == employees.length) {
-      setSelectedEmployees([]);
+    setSelectedAccounts(accounts.map((acc: any) => acc._id));
+    if (selectedAccounts?.length == accounts?.length) {
+      setSelectedAccounts([]);
     }
   };
   //#endregion
@@ -96,32 +99,32 @@ export default function Employees({ employees }: any) {
   const handleSearch = (value: string) => {
     // console.log(value)
     if (value) {
-      setPageEmployees(
-        pageEmployees.filter((emp: { firstName: string }) =>
-          emp.firstName.startsWith(value)
+      setPageAccounts(
+        pageAccounts.filter((acc: { englishName: string }) =>
+          acc.englishName.startsWith(value)
         )
       );
     } else {
-      setPageEmployees(employees.slice());
+      setPageAccounts(accounts?.slice());
     }
   };
   //#endregion
 
   //#region handleDelete
   const handleDelete = async () => {
-    const deleteUsers = async () => {
+    const deleteAccounts = async () => {
       dispatch(SHOW_LOADER());
       try {
-        selectedEmployees
+        selectedAccounts
           .filter((id) => id != user._id)
           .forEach(async (_id) => {
-            await deleteUserById(_id);
+            await deleteAccountById(_id);
           });
-        setPageEmployees((prev: EmployeeType[]) =>
-          prev.filter((emp) => !selectedEmployees.includes(emp._id))
+        setPageAccounts((prev: Account[]) =>
+          prev.filter((acc) => !selectedAccounts.includes(acc._id))
         );
       } catch (e) {
-        console.log("error in deleting user", e);
+        console.log("error in deleting account", e);
       } finally {
         dispatch(HIDE_LOADER());
       }
@@ -129,9 +132,9 @@ export default function Employees({ employees }: any) {
 
     setModalTitle("Are you sure?");
     setModalBody(
-      "Deleteing the selected employee/s will ERASE THEM FOREVER from the database! "
+      "Deleteing the selected account/s will ERASE THEM FOREVER from the database! "
     );
-    setModalTrue(() => deleteUsers);
+    setModalTrue(() => deleteAccounts);
     setIsOpen(true);
     //#endregion
   };
@@ -142,7 +145,7 @@ export default function Employees({ employees }: any) {
         <Loader />
       ) : (
         <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.emp" />
+          <PageHeader pageTitle="pages.acc" />
           {/* Page Body */}
           <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
             {/* top control row */}
@@ -180,13 +183,13 @@ export default function Employees({ employees }: any) {
                   title="Create"
                   classes=" hover:bg-[#00733B] group hover:text-[white] transition"
                   isLink={true}
-                  href={"/employees/new"}
+                  href={"/accounts/new"}
                 />
                 <Button
                   icon={
                     <span
                       className={` text-2xl transition ${
-                        selectedEmployees.length != 1
+                        selectedAccounts.length != 1
                           ? " text-darkGray group-hover:!text-darkGray"
                           : "text-mainBlue group-hover:!text-white"
                       } `}
@@ -196,20 +199,20 @@ export default function Employees({ employees }: any) {
                   }
                   title="Update"
                   classes={`${
-                    selectedEmployees.length != 1
+                    selectedAccounts.length != 1
                       ? " !bg-bgGray hover:!bg-bgGray "
                       : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
                   }  group `}
-                  isDisabled={selectedEmployees.length != 1}
+                  isDisabled={selectedAccounts.length != 1}
                   handleOnClick={() =>
-                    router.push(`employees/${selectedEmployees[0]}?isEdit=true`)
+                    router.push(`accounts/${selectedAccounts[0]}?isEdit=true`)
                   }
                 />
                 <Button
                   icon={
                     <span
                       className={` text-2xl transition ${
-                        selectedEmployees.length < 1
+                        selectedAccounts.length < 1
                           ? " text-darkGray group-hover:!text-darkGray"
                           : "!text-[#E70C0C] group-hover:!text-white"
                       } `}
@@ -220,11 +223,11 @@ export default function Employees({ employees }: any) {
                   }
                   title="Delete"
                   classes={`${
-                    selectedEmployees.length < 1
+                    selectedAccounts.length < 1
                       ? " !bg-bgGray hover:!bg-bgGray "
                       : "!bg-lightGray hover:!bg-red-500 hover:text-white"
                   }  group `}
-                  isDisabled={selectedEmployees.length < 1}
+                  isDisabled={selectedAccounts.length < 1}
                   handleOnClick={handleDelete}
                 />
               </div>
@@ -239,7 +242,7 @@ export default function Employees({ employees }: any) {
                       <input
                         type="checkbox"
                         className=" cursor-pointer"
-                        checked={selectedEmployees.length == employees.length}
+                        checked={selectedAccounts?.length == accounts?.length}
                         onClick={() => selectAll()}
                         readOnly
                       />
@@ -264,7 +267,14 @@ export default function Employees({ employees }: any) {
                         {" "}
                         <TbArrowsSort />{" "}
                       </span>
-                      <span>Department</span>
+                      <span>Country</span>
+                    </th>
+                    <th className="">
+                      <span className=" inline-block relative top-1 mr-1 ">
+                        {" "}
+                        <TbArrowsSort />{" "}
+                      </span>
+                      <span>PHone</span>
                     </th>
                     <th className="">
                       <span className=" inline-block relative top-1 mr-1 ">
@@ -274,6 +284,20 @@ export default function Employees({ employees }: any) {
                       <span>Email</span>
                     </th>
                     <th className="">
+                      <span className=" inline-block relative top-1 mr-1 ">
+                        {" "}
+                        <TbArrowsSort />{" "}
+                      </span>
+                      <span>Contact</span>
+                    </th>
+                    <th className="">
+                      <span className=" inline-block relative top-1 mr-1 ">
+                        {" "}
+                        <TbArrowsSort />{" "}
+                      </span>
+                      <span>Segments</span>
+                    </th>
+                    <th className="">
                       <span className="  text-darkGray text-[26px]">
                         <PiDotsThreeCircleLight />
                       </span>
@@ -281,55 +305,41 @@ export default function Employees({ employees }: any) {
                   </tr>
                 </thead>
                 <tbody className="  h-[200px] border border-green-500 overflow-auto">
-                  {pageEmployees
-                    .filter(
-                      (emp: EmployeeType) =>
-                        !emp.isDeleted && emp._id != user._id
-                    )
-                    .map((emp: EmployeeType, index: number) => {
+                  {pageAccounts
+                    ?.filter((acc: Account) => !acc.isDeleted)
+                    .map((acc: Account, index: number) => {
                       if (index >= startingIndex && index < currentPage * 10) {
                         return (
-                          <tr key={emp._id} className=" text-left h-full">
+                          <tr key={acc._id} className=" text-left h-full">
                             <td
                               className="check"
-                              onClick={() => handleClick(emp)}
+                              onClick={() => handleClick(acc)}
                             >
                               <input
                                 type="checkbox"
-                                checked={selectedEmployees.includes(emp._id)}
+                                checked={selectedAccounts.includes(acc._id)}
                                 readOnly
                               />
                             </td>
-                            <td>{emp._id}</td>
+                            <td>{acc._id}</td>
                             <td>
                               <div className="flex justify-center items-center gap-3 w-full">
-                                <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
-                                  <Image
-                                    src={`${
-                                      emp?.image
-                                        ? emp.image
-                                        : "/uploads/avatar.png"
-                                    }`}
-                                    fill
-                                    alt="user image"
-                                  />
-                                </div>
                                 <div className=" w-1/2">
                                   <p className="text-xl text-darkGray  overflow-hidden max-w-full">
-                                    {emp.firstName}
-                                  </p>
-                                  <p className="text-sm text-lightGray">
-                                    {emp.lastName}
+                                    {acc.englishName}
                                   </p>
                                 </div>
                               </div>
                             </td>
 
-                            <td>{emp.role}</td>
-                            <td>{emp.email}</td>
+                            <td>{acc.countries[0]}</td>
+                            <td>{acc.telephones}</td>
+                            <td>{acc.emails[0]}</td>
+                            <td>{acc.contacts[0]}</td>
+                            <td>{acc.segments[0]}</td>
 
                             <td>
-                              <Link href={`/employees/${emp._id}`}>
+                              <Link href={`/accounts/${acc._id}`}>
                                 <span className=" text-[26px] text-mainBlue cursor-pointer">
                                   <TbTextDirectionLtr />
                                 </span>
@@ -348,10 +358,10 @@ export default function Employees({ employees }: any) {
               <div className="flex gap-5 justify-center items-center my-3">
                 <span className=" text-[#9A9A9A]  ">
                   Showing {startingIndex == 0 ? 1 : startingIndex} to{" "}
-                  {currentPage * 10 > pageEmployees.length
-                    ? pageEmployees.length
+                  {currentPage * 10 > pageAccounts?.length
+                    ? pageAccounts?.length
                     : currentPage * 10}{" "}
-                  of {pageEmployees.length} entries
+                  of {pageAccounts?.length} entries
                 </span>
                 <button onClick={() => handlePrevPagination()}>&lt;</button>
                 <div className="pages">

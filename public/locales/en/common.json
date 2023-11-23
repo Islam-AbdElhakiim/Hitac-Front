@@ -156,6 +156,8 @@
     },
 
     "pages": {
-        "emp": "Employees"
+        "emp": "Employees",
+        "acc": "Accounts",
+        "contact": "Contacts"
     }
 }

@@ -1,4 +1,4 @@
-import { CreateEmployeeDTO, Department } from "@/types"
+import { CreateEmployeeDTO, Department, Segment } from "@/types"
 
 // export const navigationLinks = {
 //     "employees": "Employees",
@@ -31,49 +31,32 @@ export const departments: Department[] = [
     },
 
 ]
+export const segments: Segment[] = [
+    {
+        title: 'Fresh',
+        selected: false
+    },
+    {
+        title: 'Dry',
+        selected: false
+    },
+    {
+        title: 'Frozen',
+        selected: false
+    },
+
+
+]
 
 export const baseUrl = 'http://localhost:3002'
+// export const baseUrl = 'http://34.125.207.14'
 export const employeeBase = `${baseUrl}/employees`;
 export const endpoints = {
     login: `${employeeBase}/login`,
 }
 
 
-export const getAllEmployees = async () => {
-    const result = await fetch(`${employeeBase}`);
-    const data = await result.json();
-    return data;
-}
 
-export const getUserById = async (id: string) => {
-    const result = await fetch(`${employeeBase}/${id}`);
-    const data = await result.json();
-    // console.log(data)
-    return data;
-}
-
-export const deleteUserById = async (id: string) => {
-    const result = await fetch(`${employeeBase}/delete/${id}`, {
-        method: "DELETE",
-    });
-    const data = await result.json();
-    // console.log(data)
-    return data;
-}
-
-export const updateEmp = async (id: string, newEmp: CreateEmployeeDTO) => {
-    const result = await fetch(`${employeeBase}/${id}`, {
-        method: "PUT",
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json', 
-        },
-        body: JSON.stringify(newEmp)
-    });
-    const data = await result.json();
-    // console.log(data)
-    return data;
-}
 
 export function checkCookie(cookieName: string) { //thanks to chat GPT
     const cookies = document.cookie.split('; ');
