@@ -134,11 +134,45 @@ export type stationType = {
     [key: string]: string | number | undefined  | string[] ; // Adding an index signature
 
 };
+export type supplyOrderType = {
+    _id?: string;
+    salesOrder:string,
+    supplier:string,
+    createdOn:string,
+    product:string[],
+    price:string,
+    description:string,
+    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+
+};
+export type returnRequestsType = {
+    _id?: string;
+    supplyOrder:    {},
+    supplier:{},
+    createdOn:string,
+    product: {},
+    price:string,
+    description:string,
+    [key: string]: string | number | undefined  | string[] |{} ; // Adding an index signature
+
+};
 
 export type segmentType ={
     _id?: string;
-    title:string,
+    name:string,
     description:string,
+    image?:string,
+    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+
+}
+export type productType ={
+    _id?: string;
+    name:string,
+    description:string,
+    size:string,
+    image?:string,
+    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+
 }
 
 export class CreateEmployeeDTO {

@@ -22,11 +22,11 @@ export const deleteSegmentsById = async (id: string) => {
   return result;
 };
 
-export const updateSegments = async (id: string, supp: segmentType) => {
-  const result = await patchRequest(`segments/${id}`, supp);
+export const updateSegments = async (id: string, seg: segmentType) => {
+  const result = await patchRequest(`segments/${id}`, seg);
   return result;
 };
-export const createSegments = async (supp: segmentType) => {
-  const result = await postRequest(`segments`, supp);
+export const createSegments = async (seg: segmentType) => {
+  const result = await postRequest(`segments`, seg);
   return result;
 };

@@ -1,4 +1,9 @@
-import { CreateEmployeeDTO, segmentType, supplierType } from "@/types";
+import {
+  CreateEmployeeDTO,
+  productType,
+  segmentType,
+  supplierType,
+} from "@/types";
 import {
   deleteRequest,
   getRequest,
@@ -22,11 +27,11 @@ export const deleteProductsById = async (id: string) => {
   return result;
 };
 
-export const updateProducts = async (id: string, supp: segmentType) => {
+export const updateProducts = async (id: string, supp: productType) => {
   const result = await patchRequest(`products/${id}`, supp);
   return result;
 };
-export const createProducts = async (supp: segmentType) => {
+export const createProducts = async (supp: productType) => {
   const result = await postRequest(`products`, supp);
   return result;
 };
