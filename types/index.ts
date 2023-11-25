@@ -147,13 +147,24 @@ export type supplyOrderType = {
 };
 export type returnRequestsType = {
     _id?: string;
-    supplyOrder:    {},
-    supplier:{},
+    supplyOrder:    {[key: string]: string},
+    supplier:{[key: string]: string},
     createdOn:string,
-    product: {},
+    product: {[key: string]: string},
     price:string,
     description:string,
-    [key: string]: string | number | undefined  | string[] |{} ; // Adding an index signature
+    [key: string]: string | number | undefined  | string[] |{[key: string]: string} ; // Adding an index signature
+
+};
+export type returnRequestsInitalType = {
+    _id?: string;
+    supplyOrder:    string,
+    supplier:string,
+    createdOn:string,
+    product: string,
+    price:string,
+    description:string,
+    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
 
 };
 

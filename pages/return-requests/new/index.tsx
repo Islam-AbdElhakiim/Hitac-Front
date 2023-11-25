@@ -10,8 +10,12 @@ import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import countries from "@/constants/countries";
-import { productType, supplyOrderType } from "@/types";
-import { createSupplyOrder } from "@/http/supplyOrderHttp";
+import {
+  productType,
+  returnRequestsInitalType,
+  returnRequestsType,
+} from "@/types";
+import { createSupplyOrder, getAllSupplyOrders } from "@/http/supplyOrderHttp";
 import Select from "react-select";
 import { StylesConfig } from "react-select";
 import { SelectInput } from "@/components/ReactSelect/SelectInput";
@@ -19,7 +23,11 @@ import SelectField from "@/components/ReactSelect/SelectField";
 import { useEffect } from "react";
 import { getAllSuppliers } from "@/http/supplierHttp";
 import { getAllProducts } from "@/http/productsHttp";
+import { createReturnRequests } from "@/http/returnRequestHttp";
 export const getServerSideProps = async (context: any) => {
+  const supplyOrders = async () => {
+    return await getAllSupplyOrders();
+  };
   const supplierFetch = async () => {
     return await getAllSuppliers();
   };
@@ -27,7 +35,8 @@ export const getServerSideProps = async (context: any) => {
     return await getAllProducts();
   };
 
-  const [supplier, products] = await Promise.all([
+  const [supplyOrder, supplier, products] = await Promise.all([
+    supplyOrders(),
     supplierFetch(),
     productFetch(),
   ]);
@@ -36,6 +45,7 @@ export const getServerSideProps = async (context: any) => {
 
   return {
     props: {
+      supplyOrder,
       supplier,
       products,
 
@@ -43,7 +53,7 @@ export const getServerSideProps = async (context: any) => {
     },
   };
 };
-const NewSupplyOrder = ({ supplier, products }: any) => {
+const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
   console.log(supplier, products);
 
   const { t } = useTranslation("common", {
@@ -53,41 +63,43 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
   const router = useRouter();
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
+  const user = useSelector((state: any) => state.authReducer);
 
   //#region initialization
 
   const validationSchema: any = Yup.object().shape({
-    salesOrder: Yup.string().required("Sales Order is required"),
+    supplyOrder: Yup.string().required("Supply Order is required"),
     supplier: Yup.string().required("Supplier is required"),
     createdOn: Yup.string().required("Created On is required"),
-    product: Yup.array().required("Product is required"),
+    product: Yup.string().required("Product is required"),
     price: Yup.string().required("Price is required"),
     description: Yup.string().required("Description is required"),
 
     // Dynamically added email fields validation
   });
 
-  const formik = useFormik<supplyOrderType>({
+  const formik = useFormik<returnRequestsInitalType>({
     initialValues: {
-      salesOrder: "qq",
+      supplyOrder: "",
       supplier: "",
       createdOn: "",
-      product: [],
+      createdBy: user._id,
+      product: "",
       price: "",
-
       description: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // Handle form submission
 
-      await createSupplyOrder({
+      await createReturnRequests({
         ...values,
       });
-      router.push("/supply-orders");
+      router.push("/return-requests");
       console.log(values);
     },
   });
+  console.log(formik.values, formik.errors);
 
   //#region modules
 
@@ -117,26 +129,26 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
               <div className="grid grid-cols-2 w-full text-darkGray gap-5">
                 {/* left col */}
                 <div className="flex flex-col w-full gap-3 relative mb-2">
-                  <label className="text-lg h-12" htmlFor="salesOrder">
-                    Sales Order<span className="text-red-500">*</span>
+                  <label className="text-lg h-12" htmlFor="supplyOrder">
+                    Supply Order<span className="text-red-500">*</span>
                   </label>
                   <SelectField
-                    options={supplier?.map((res: any) => {
+                    options={supplyOrder?.map((res: any) => {
                       return {
                         value: res._id,
-                        label: `${res.firstName} ${res.lastName}`,
+                        label: res._id,
                       };
                     })}
-                    value={formik.values.salesOrder}
+                    value={formik.values.supplyOrder}
                     onChange={(value: any) =>
-                      formik.setFieldValue("salesOrder", value.value)
+                      formik.setFieldValue("supplyOrder", value.value)
                     }
                   />
-                  {formik.touched.salesOrder && formik.errors.salesOrder && (
+                  {formik.touched.supplyOrder && formik.errors.supplyOrder && (
                     <small
                       className={`text-red-500 absolute -bottom-6 left-2 `}
                     >
-                      {formik.errors.salesOrder}
+                      {formik.errors.supplyOrder}
                     </small>
                   )}
                 </div>
@@ -218,9 +230,8 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     })}
                     value={formik.values.product}
                     onChange={(value: any) =>
-                      formik.setFieldValue("product", value)
+                      formik.setFieldValue("product", value.value)
                     }
-                    isMulti={true}
                   />
 
                   {formik.touched.product && formik.errors.product && (
@@ -305,4 +316,4 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
   );
 };
 
-export default NewSupplyOrder;
+export default NewReturnRequest;

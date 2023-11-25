@@ -1,4 +1,9 @@
-import { returnRequestsType, stationType, supplyOrderType } from "@/types";
+import {
+  returnRequestsInitalType,
+  returnRequestsType,
+  stationType,
+  supplyOrderType,
+} from "@/types";
 import {
   deleteRequest,
   getRequest,
@@ -24,12 +29,12 @@ export const deleteReturnRequestsById = async (id: string) => {
 
 export const updateReturnRequests = async (
   id: string,
-  supp: returnRequestsType
+  supp: returnRequestsInitalType
 ) => {
   const result = await patchRequest(`return-requests/${id}`, supp);
   return result;
 };
-export const createReturnRequests = async (supp: returnRequestsType) => {
+export const createReturnRequests = async (supp: returnRequestsInitalType) => {
   const result = await postRequest(`return-requests`, supp);
   return result;
 };
