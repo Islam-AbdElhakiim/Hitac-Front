@@ -52,6 +52,7 @@ export const getServerSideProps = async (context: any) => {
   const accountFetch = async () => {
     return await getAccountById(id);
   };
+
   const accountsFetch = async () => {
     return await (await fetch(`http://localhost:3002/accounts`)).json();
   };
@@ -60,8 +61,6 @@ export const getServerSideProps = async (context: any) => {
     accountFetch(),
     accountsFetch(),
   ]);
-  // console.log(employee, accounts)
-
   return {
     props: {
       details,
@@ -71,14 +70,10 @@ export const getServerSideProps = async (context: any) => {
   };
 };
 
-const Acount = ({
-  details,
-  accounts,
-}: {
-  details: any;
-  accounts: Account[];
-}) => {
+const Account = ({details,accounts,}: {details: any; accounts: Account[];}) => {
   console.log(details);
+  console.log(accounts);
+  
   const initAccount = () => ({
     englishName: details[0]?.englishName,
     arabicName: details[0]?.arabicName,
@@ -1014,4 +1009,4 @@ const Acount = ({
   );
 };
 
-export default Acount;
+export default Account;

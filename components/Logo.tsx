@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const Logo = ({ classes }: { classes?: string }) => {
+const Logo = ({ classes, textClasses }: { classes?: string, textClasses?: string }) => {
     return (
         <div className="flex items-center justify-center">
             <Link href="/" className="flex items-center justify-center ">
@@ -14,7 +14,7 @@ const Logo = ({ classes }: { classes?: string }) => {
                     draggable={false}
                 />
             </div>
-            <h2 className="text-[40px] text-mainBlue uppercase relative -top-2"><span className=" text-mainOrange">Hi</span>tac</h2>
+            <h2 className={`text-mainBlue uppercase relative -top-2 ${textClasses}`}><span className=" text-mainOrange">Hi</span>tac</h2>
             </Link>
         </div>
     );

@@ -1,8 +1,9 @@
 import { FiFilter } from "react-icons/fi";
 import Button from "./Button";
 import { useTranslation } from "next-i18next";
+import Link from "next/link";
 
-const PageHeader = ({ pageTitle }: { pageTitle: string }) => {
+const PageHeader = ({ pageTitle, newUrl }: { pageTitle: string, newUrl: string }) => {
     const { t } = useTranslation('common', { bindI18n: 'languageChanged loaded' })
     return (
 
@@ -14,7 +15,9 @@ const PageHeader = ({ pageTitle }: { pageTitle: string }) => {
             {/* control */}
             <div className="flex justify-center items-center">
                 <Button title="Filter" icon={<FiFilter />} />
-                <Button title="Add new" classes="bg-mainOrange text-white" />
+                <Link href={newUrl}>
+                    <Button title="Add new" classes="bg-mainOrange text-white" />
+                </Link>
             </div>
 
         </div>

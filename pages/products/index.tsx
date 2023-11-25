@@ -56,7 +56,7 @@ export default function Products({ products }: { products: productType[] }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
+  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -150,7 +150,7 @@ export default function Products({ products }: { products: productType[] }) {
         <Loader />
       ) : (
         <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.products" />
+          <PageHeader pageTitle="pages.products" newUrl="" />
           {/* Page Body */}
           <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
             {/* top control row */}
@@ -193,21 +193,19 @@ export default function Products({ products }: { products: productType[] }) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedProducts.length != 1
+                      className={` text-2xl transition ${selectedProducts.length != 1
                           ? " text-darkGray group-hover:!text-darkGray"
                           : "text-mainBlue group-hover:!text-white"
-                      } `}
+                        } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${
-                    selectedProducts.length != 1
+                  classes={`${selectedProducts.length != 1
                       ? " !bg-bgGray hover:!bg-bgGray "
                       : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
-                  }  group `}
+                    }  group `}
                   isDisabled={selectedProducts.length != 1}
                   handleOnClick={() =>
                     router.push(`products/${selectedProducts[0]}?isEdit=true`)
@@ -216,22 +214,20 @@ export default function Products({ products }: { products: productType[] }) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedProducts.length < 1
+                      className={` text-2xl transition ${selectedProducts.length < 1
                           ? " text-darkGray group-hover:!text-darkGray"
                           : "!text-[#E70C0C] group-hover:!text-white"
-                      } `}
+                        } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${
-                    selectedProducts.length < 1
+                  classes={`${selectedProducts.length < 1
                       ? " !bg-bgGray hover:!bg-bgGray "
                       : "!bg-lightGray hover:!bg-red-500 hover:text-white"
-                  }  group `}
+                    }  group `}
                   isDisabled={selectedProducts.length < 1}
                   handleOnClick={handleDelete}
                 />

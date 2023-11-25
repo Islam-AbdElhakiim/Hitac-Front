@@ -16,11 +16,11 @@ th {
 }
 
 td {
-  @apply py-3 border border-transparent border-b-bgGray overflow-hidden
+  @apply py-3 overflow-hidden
 }
 
-tbody tr {
-  @apply hover:bg-lightGray 
+.main-table tbody tr {
+  @apply border border-bgGray rounded-2xl  transition hover:bg-lightGray 
 }
 
 .gradient-bg {
@@ -28,8 +28,15 @@ tbody tr {
   background: linear-gradient(354deg, rgba(2, 0, 36, 1) 0%, rgba(255, 255, 255, 1) 100%, rgba(0, 212, 255, 1) 100%);
 }
 
+.fs-md {
+  font-size: clamp(1.0rem, 1vw + 0.6rem, 12rem);
+}
 
-/* Start loader  */
+.fs-sm {
+  font-size: clamp(0.5rem, 1vw + 0.2rem, 6rem);
+}
+
+/*#region Start loader  */
 .loader {
   width: 120px;
   height: 120px;
@@ -50,5 +57,4 @@ tbody tr {
     transform: rotate(360deg);
   }
 }
-
-/* end loader  */
+/* #endregion loader */
