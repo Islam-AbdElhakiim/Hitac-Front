@@ -1,5 +1,11 @@
-import { CreateEmployeeDTO } from "@/types";
-import { deleteRequest, getRequest, postRequest, putRequest } from "./requests";
+import { CreateEmployeeDTO, accountInitalType } from "@/types";
+import {
+  deleteRequest,
+  getRequest,
+  patchRequest,
+  postRequest,
+  putRequest,
+} from "./requests";
 
 export const getAllAccounts = async () => {
   const result = await getRequest(`accounts`);
@@ -16,11 +22,11 @@ export const deleteAccountById = async (id: string) => {
   return result;
 };
 
-export const updateAccount = async (id: string, newEmp: CreateEmployeeDTO) => {
-  const result = await putRequest(`accounts/${id}`, newEmp);
+export const updateAccount = async (id: string, acc: accountInitalType) => {
+  const result = await patchRequest(`accounts/${id}`, acc);
   return result;
 };
-export const createAccount = async (newEmp: any) => {
-  const result = await postRequest(`accounts`, newEmp);
+export const createAccount = async (acc: accountInitalType) => {
+  const result = await postRequest(`accounts`, acc);
   return result;
 };

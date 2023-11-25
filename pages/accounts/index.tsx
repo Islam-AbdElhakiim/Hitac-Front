@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { Account, EmployeeType } from "@/types";
+import { Account, EmployeeType, accountType } from "@/types";
 import { HIDE_LOADER, SHOW_LOADER } from "@/redux/modules/loader-slice";
 import Loader from "@/components/Loader";
 import MyModal from "@/components/MyModal";
@@ -21,6 +21,7 @@ import { getRequest } from "@/http/requests";
 import { deleteUserById, getAllEmployees } from "@/http/employeeHttp";
 import { deleteAccountById, getAllAccounts } from "@/http/accountsHttp";
 import { GETALLACCOUNTS } from "@/redux/modules/accounts-slice";
+import { IoArrowForward } from "react-icons/io5";
 
 export const getServerSideProps = async ({ locale }: any) => {
   const data = await getAllAccounts();
@@ -38,6 +39,7 @@ export default function Accounts({ accounts }: any) {
   const { t } = useTranslation("common", {
     bindI18n: "languageChanged loaded",
   });
+  console.log(accounts);
 
   const user = useSelector((state: any) => state.authReducer);
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
@@ -45,7 +47,6 @@ export default function Accounts({ accounts }: any) {
   // const [allEmployees, setAllEmployees] = useState<EmployeeType[]>(employees);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageAccounts, setPageAccounts] = useState(accounts?.slice());
-  console.log(pageAccounts);
 
   const [selectedAccounts, setSelectedAccounts] = useState(new Array());
 
@@ -97,7 +98,6 @@ export default function Accounts({ accounts }: any) {
 
   //#region handle interna search method
   const handleSearch = (value: string) => {
-    // console.log(value)
     if (value) {
       setPageAccounts(
         pageAccounts.filter((acc: { englishName: string }) =>
@@ -145,7 +145,7 @@ export default function Accounts({ accounts }: any) {
         <Loader />
       ) : (
         <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader newUrl="/" pageTitle="pages.acc" />
+          <PageHeader pageTitle="pages.acc" newUrl={`accounts/new`} />
           {/* Page Body */}
           <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
             {/* top control row */}
@@ -190,8 +190,8 @@ export default function Accounts({ accounts }: any) {
                     <span
                       className={` text-2xl transition ${
                         selectedAccounts.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "text-mainBlue group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       <MdModeEdit />
@@ -200,8 +200,8 @@ export default function Accounts({ accounts }: any) {
                   title="Update"
                   classes={`${
                     selectedAccounts.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedAccounts.length != 1}
                   handleOnClick={() =>
@@ -234,7 +234,7 @@ export default function Accounts({ accounts }: any) {
             </div>
 
             {/* Table */}
-            <div className="w-full h-[80%] overflow-auto">
+            <div className="main-table w-full h-[80%] overflow-auto">
               <table className={` w-full`}>
                 <thead className=" bg-bgGray ">
                   <tr className="  text-left ">
@@ -274,7 +274,7 @@ export default function Accounts({ accounts }: any) {
                         {" "}
                         <TbArrowsSort />{" "}
                       </span>
-                      <span>PHone</span>
+                      <span>Phone</span>
                     </th>
                     <th className="">
                       <span className=" inline-block relative top-1 mr-1 ">
@@ -304,10 +304,10 @@ export default function Accounts({ accounts }: any) {
                     </th>
                   </tr>
                 </thead>
-                  <tbody className=" main-table overflow-auto">
+                <tbody className="main-table overflow-auto">
                   {pageAccounts
-                    ?.filter((acc: Account) => !acc.isDeleted)
-                    .map((acc: Account, index: number) => {
+                    ?.filter((acc: accountType) => !acc.isDeleted)
+                    .map((acc: accountType, index: number) => {
                       if (index >= startingIndex && index < currentPage * 10) {
                         return (
                           <tr key={acc._id} className=" text-left h-full">
@@ -321,27 +321,22 @@ export default function Accounts({ accounts }: any) {
                                 readOnly
                               />
                             </td>
-                            <td>{acc._id}</td>
-                            <td>
-                              <div className="flex justify-center items-center gap-3 w-full">
-                                <div className=" w-1/2">
-                                  <p className="text-xl text-darkGray  overflow-hidden max-w-full">
-                                    {acc.englishName}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
+                            <td>{acc?._id}</td>
+                            <td>{acc?.englishName}</td>
 
-                            <td>{acc.countries[0]}</td>
-                            <td>{acc.telephones}</td>
-                            <td>{acc.emails[0]}</td>
-                            <td>{acc.contacts[0]}</td>
-                            <td>{acc.segments[0]}</td>
+                            <td>{acc?.countries[0]}</td>
+                            <td>{acc?.telephones[0]}</td>
+                            <td>{acc?.emails[0]}</td>
+                            <td>
+                              {acc?.contacts[0]?.firstName}{" "}
+                              {acc?.contacts[0]?.lastName}
+                            </td>
+                            <td>{acc?.segments[0]?.name}</td>
 
                             <td>
                               <Link href={`/accounts/${acc._id}`}>
                                 <span className=" text-[26px] text-mainBlue cursor-pointer">
-                                  <TbTextDirectionLtr />
+                                  <IoArrowForward />
                                 </span>
                               </Link>
                             </td>

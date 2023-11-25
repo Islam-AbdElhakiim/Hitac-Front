@@ -75,17 +75,35 @@ export type accountType = {
     englishName:string,
     arabicName:string,
     website:string,
-    countries:{[key: string]: string}[],
-    emails:{[key: string]: string}[],
-    addresses:{[key: string]: string}[],
-    telephones:{[key: string]: string}[],
-    cities: {[key: string]: string}[],
-    ports: {[key: string]: string}[],
+    countries:string[],
+    emails:string[],
+    addresses:string[],
+    telephones:string[],
+    cities: string[],
+    ports: string[],
+    segments:  {[key: string]: string}[],
+    products:  {[key: string]: string}[],
+
+    contacts: {[key: string]: string}[],
+    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[]; // Adding an index signature
+
+};
+export type accountInitalType = {
+    _id?: string;
+    englishName:string,
+    arabicName:string,
+    website:string,
+    country:string,
+    email:string,
+    address:string,
+    telephone:string,
+    city: string,
+    port: string,
     segments: string[],
     products: string[],
 
     contacts: string[],
-    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[]; // Adding an index signature
+    [key: string]: string | number | undefined  | string[]// Adding an index signature
 
 };
 export type contactType = {
