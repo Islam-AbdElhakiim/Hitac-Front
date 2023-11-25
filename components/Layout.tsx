@@ -34,8 +34,10 @@ const Layout = ({
       dispatch(HIDE_LOADER());
     }
 
-    //check if the user is logged in by session cookie
-    const sessionCookie = document.cookie.includes("session");
+        //check if the user is logged in by session cookie
+        const sessionCookie = document.cookie.includes('session');
+        console.log(document.cookie.split(";"), "cookies");
+        console.log("session", sessionCookie);
 
     if (!sessionCookie && component != "Login") {
       dispatch(SHOW_LOADER());
@@ -49,42 +51,51 @@ const Layout = ({
       setIsLocalLoading(false);
     }
 
-    //check for store user data, if not exists fetch him
-    //if not exists fetch it
-    if (component != "Login") {
-      if (Object.keys(user).length < 1 && component != "Login") {
-        let fetchUser = async () => {
-          try {
-            // setLoader(true)
-            // setIsLocalLoading(true)
-            const userSession = checkCookie("user");
-            if (userSession) {
-              const user = await getUserById(userSession);
-              // console.log(user)
-              if (user) {
-                dispatch(LOGIN({ user }));
-                return setIsLocalLoading(false);
-              } else {
-                throw new Error(
-                  " couldn't fetch the user at layout fetchUser method"
-                );
-              }
+        //check for store user data, if not exists fetch him
+        //if not exists fetch it 
+        if (component != "Login") {
+
+            if (Object.keys(user).length < 1 && component != "Login") {
+                let fetchUser = async () => {
+                    try {
+                        // setLoader(true)
+                        // setIsLocalLoading(true)
+                        const userSession = checkCookie('user');
+                        console.log("session2", userSession);
+                        if (userSession) {
+                            const user = await getUserById(userSession);
+                            // console.log(user)
+                            if (user) {
+                                dispatch(LOGIN({ user }));
+                                return setIsLocalLoading(false);
+                            } else {
+                                throw new Error(" couldn't fetch the user at layout fetchUser method");
+                            }
+
+                        } else {
+                            console.log("can't find sessin")
+                            router.push('/login')
+                        }
+                    } catch (e) {
+                        console.log(e)
+                        router.push('/login')
+
+                    } finally {
+                        setIsLocalLoading(false)
+                    }
+                }
+                fetchUser();
             } else {
-              router.push("/login");
+                setIsLocalLoading(false);
             }
-          } catch (e) {
-            console.log(e);
-            router.push("/login");
-          } finally {
-            setIsLocalLoading(false);
-          }
-        };
-        fetchUser();
-      } else {
-        setIsLocalLoading(false);
-      }
-    }
-  }, []);
+        }
+
+    }, [])
+
+
+
+
+
 
   return (
     <div className="div">

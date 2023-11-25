@@ -22,14 +22,15 @@ import { getRequest } from "@/http/requests";
 import { deleteUserById, getAllEmployees } from "@/http/employeeHttp";
 
 export const getServerSideProps = async ({ locale }: any) => {
-  const data = await getAllEmployees();
-  return {
-    props: {
-      employees: data,
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
-};
+    const response = await fetch('http://127.0.0.1:3002/employees');
+    const data = await response.json();
+    return {
+        props: { employees: data, ...(await serverSideTranslations(locale, ['common'])) }
+    }
+}
+
+
+
 
 export default function Employees({ employees }: any) {
   const router = useRouter();
@@ -245,85 +246,51 @@ export default function Employees({ employees }: any) {
                       />
                     </th>
 
-                    <th className="">
-                      <span className=" inline-block relative top-1  mr-1 ">
-                        {" "}
-                        <TbArrowsSort />{" "}
-                      </span>
-                      <span>ID</span>
-                    </th>
-                    <th className="">
-                      <span className=" inline-block relative top-1 mr-1 ">
-                        {" "}
-                        <TbArrowsSort />{" "}
-                      </span>
-                      <span>Name</span>
-                    </th>
-                    <th className="">
-                      <span className=" inline-block relative top-1 mr-1 ">
-                        {" "}
-                        <TbArrowsSort />{" "}
-                      </span>
-                      <span>Department</span>
-                    </th>
-                    <th className="">
-                      <span className=" inline-block relative top-1 mr-1 ">
-                        {" "}
-                        <TbArrowsSort />{" "}
-                      </span>
-                      <span>Email</span>
-                    </th>
-                    <th className="">
-                      <span className="  text-darkGray text-[26px]">
-                        <PiDotsThreeCircleLight />
-                      </span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="  h-[200px] border border-green-500 overflow-auto">
-                  {pageEmployees
-                    .filter(
-                      (emp: EmployeeType) =>
-                        !emp.isDeleted && emp._id != user._id
-                    )
-                    .map((emp: EmployeeType, index: number) => {
-                      if (index >= startingIndex && index < currentPage * 10) {
-                        return (
-                          <tr key={emp._id} className=" text-left h-full">
-                            <td
-                              className="check"
-                              onClick={() => handleClick(emp)}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedEmployees.includes(emp._id)}
-                                readOnly
-                              />
-                            </td>
-                            <td>{emp._id}</td>
-                            <td>
-                              <div className="flex justify-center items-center gap-3 w-full">
-                                <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
-                                  <Image
-                                    src={`${
-                                      emp?.image
-                                        ? emp.image
-                                        : "/uploads/avatar.png"
-                                    }`}
-                                    fill
-                                    alt="user image"
-                                  />
-                                </div>
-                                <div className=" w-1/2">
-                                  <p className="text-xl text-darkGray  overflow-hidden max-w-full">
-                                    {emp.firstName}
-                                  </p>
-                                  <p className="text-sm text-lightGray">
-                                    {emp.lastName}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
+                                        <th className="">
+                                            <span className=" inline-block relative top-1  mr-1 "> <TbArrowsSort /> </span>
+                                            <span>ID</span>
+                                        </th>
+                                        <th className="">
+                                            <span className=" inline-block relative top-1 mr-1 "> <TbArrowsSort /> </span>
+                                            <span>Name</span>
+                                        </th>
+                                        <th className="">
+                                            <span className=" inline-block relative top-1 mr-1 "> <TbArrowsSort /> </span>
+                                            <span>Department</span>
+                                        </th>
+                                        <th className="">
+                                            <span className=" inline-block relative top-1 mr-1 "> <TbArrowsSort /> </span>
+                                            <span>Email</span>
+                                        </th>
+                                        <th className="">
+                                            <span className="  text-darkGray text-[26px]"><PiDotsThreeCircleLight /></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="  h-[200px] border border-green-500 overflow-auto">
+                                    {
+                                        pageEmployees.filter((emp: EmployeeType) => !emp.isDeleted && emp._id != user._id).map((emp: EmployeeType, index: number) => {
+                                            if (index >= startingIndex && index < currentPage * 10) {
+                                                return (
+                                                    <tr key={emp._id} className=" text-left h-full">
+                                                        <td className="check" onClick={() => handleClick(emp)}>
+                                                            <input type="checkbox" checked={selectedEmployees.includes(emp._id)} readOnly />
+                                                        </td>
+                                                        <td>
+                                                            {emp._id}
+                                                        </td>
+                                                        <td>
+                                                            <div className="flex justify-center items-center gap-3 w-full">
+                                                                <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
+                                                                    <Image src={`${emp.image ? emp.image : "/uploads/avatar.png"}`} fill alt="user image" />
+                                                                </div>
+                                                                <div className=" w-1/2">
+                                                                    <p className="text-xl text-darkGray  overflow-hidden max-w-full">{emp.firstName}</p>
+                                                                    <p className="text-sm text-lightGray">{emp.lastName}</p>
+
+                                                                </div>
+                                                            </div>
+                                                        </td>
 
                             <td>{emp.role}</td>
                             <td>{emp.email}</td>
