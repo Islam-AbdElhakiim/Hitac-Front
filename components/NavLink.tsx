@@ -65,16 +65,8 @@ const icons: any = {
   // accounting: <span className=" text-teal-700">< RiBankLine /> </span>
 };
 
-const NavLink = ({
-  link,
-  openMenu,
-  opened,
-  subMenuOpened,
-  openSubMenu,
-  selected,
-  isActive,
-}: any) => {
-  console.log(link);
+const NavLink = ({ link, openMenu, opened, subMenuOpened, openSubMenu, selected, isActive, }: any) => {
+  // console.log(link);
   // const pathName = useRouter().pathname.slice(1);
   // console.log(pathName)
   // console.log(link.title.toLowerCase())
@@ -82,22 +74,19 @@ const NavLink = ({
 
   return (
     <div
-      className={`gray-wrapper flex flex-col w-full p-2 my-2 text-darkGray text-[18px] rounded-xl ${
-        opened == link.title && " bg-linkBgGray"
-      } border-b-[1px] ${isActive && "bg-mainBlue"} `}
+      className={`gray-wrapper flex flex-col w-full p-2 my-2 text-darkGray text-[18px] rounded-xl ${opened == link.title && " bg-linkBgGray"
+        } border-b-[1px] ${isActive && "bg-mainBlue"} `}
     >
       {/* if simple link */}
       {!link.children && (
         <Link
           href={link.target ? link.target : "not"}
-          className={`blue-wrapper flex w-full py-3 pl-5 gap-5 text-darkGray text-[18px] rounded-xl ${
-            link.title == opened && " bg-mainBlue text-white "
-          }`}
+          className={`blue-wrapper flex w-full py-3 pl-5 gap-5 text-darkGray text-[18px] rounded-xl ${link.title == opened && " bg-mainBlue text-white "
+            }`}
         >
           <i
-            className={` text-3xl ${icons[link?.icon]?.color} ${
-              isActive && " !text-white"
-            } `}
+            className={` text-3xl ${icons[link?.icon]?.color} ${isActive && " !text-white"
+              } `}
           >
             {link.icon && icons[link.icon].icon}
           </i>
@@ -107,9 +96,8 @@ const NavLink = ({
       {/* if dropdown */}
       {link.children && (
         <div
-          className={`blue-wrapper w-full rounded-xl pl-5 flex items-center justify-between ${
-            link.title == "Employees" && " bg-mainBlue text-white"
-          } `}
+          className={`blue-wrapper w-full rounded-xl pl-5 flex items-center justify-between ${link.title == "Employees" && " bg-mainBlue text-white"
+            } `}
         >
           <div
             onClick={() => openMenu(link.title)}
@@ -121,9 +109,8 @@ const NavLink = ({
               {link.title}
             </div>
             <span
-              className={`${link.children ? "block" : "hidden"} ${
-                opened == link.title ? "rotate-90" : "rotate-0"
-              } transition-all`}
+              className={`${link.children ? "block" : "hidden"} ${opened == link.title ? "rotate-90" : "rotate-0"
+                } transition-all`}
             >
               {" "}
               <MdKeyboardArrowRight />{" "}
@@ -133,9 +120,8 @@ const NavLink = ({
       )}
 
       <div
-        className={` flex flex-col w-full gap-10 ${
-          opened == link.title ? " block " : " hidden h-0"
-        } transition-all origin-bottom`}
+        className={` flex flex-col w-full gap-10 ${opened == link.title ? " block " : " hidden h-0"
+          } transition-all origin-bottom`}
       >
         {link.children &&
           Object.keys(link.children).map((directChild: any) =>
@@ -148,27 +134,24 @@ const NavLink = ({
                 key={Math.random() * Math.random() + Math.random()}
               >
                 <span
-                  className={`mx-5 opacity-0 ${
-                    selected == link.children[directChild].title &&
+                  className={`mx-5 opacity-0 ${selected == link.children[directChild].title &&
                     "opacity-100 text-mainBlue"
-                  }`}
+                    }`}
                 >
                   |
                 </span>
                 <span
-                  className={` ${
-                    selected == link.children[directChild].title
+                  className={` ${selected == link.children[directChild].title
                       ? "hidden"
                       : "inline"
-                  }`}
+                    }`}
                 >
                   -
                 </span>
                 <span
-                  className={`${
-                    selected == link.children[directChild].title &&
+                  className={`${selected == link.children[directChild].title &&
                     "text-mainBlue"
-                  }`}
+                    }`}
                 >
                   {" "}
                   {link.children[directChild].title}
@@ -187,41 +170,37 @@ const NavLink = ({
                   >
                     <div className="flex justify-center items-center">
                       <span
-                        className={`mx-4 ${
-                          subMenuOpened == link.children[directChild].title
+                        className={`mx-4 ${subMenuOpened == link.children[directChild].title
                             ? "text-mainBlue"
                             : "text-darkGray"
-                        }`}
+                          }`}
                       >
                         |
                       </span>
                       <span
-                        className={`${
-                          subMenuOpened == link.children[directChild].title
+                        className={`${subMenuOpened == link.children[directChild].title
                             ? "text-mainBlue"
                             : "text-darkGray"
-                        }`}
+                          }`}
                       >
                         {link.children[directChild].title}
                       </span>
                     </div>
                     <span
-                      className={` ${
-                        subMenuOpened == link.children[directChild].title
+                      className={` ${subMenuOpened == link.children[directChild].title
                           ? "rotate-90"
                           : "rotate-0"
-                      } transition-all`}
+                        } transition-all`}
                     >
                       {" "}
                       <MdKeyboardArrowRight />{" "}
                     </span>
                   </div>
                   <div
-                    className={`latest-menu-wrapper flex flex-col ${
-                      subMenuOpened == link.children[directChild].title
+                    className={`latest-menu-wrapper flex flex-col ${subMenuOpened == link.children[directChild].title
                         ? "block"
                         : "hidden"
-                    }`}
+                      }`}
                   >
                     {link.children[directChild].children &&
                       Object.keys(link.children[directChild].children).map(
@@ -236,24 +215,22 @@ const NavLink = ({
                             className="pl-6 py-3"
                           >
                             <span
-                              className={`mx-5 ${
-                                selected ==
-                                link.children[directChild].children[latestChild]
-                                  .title
+                              className={`mx-5 ${selected ==
+                                  link.children[directChild].children[latestChild]
+                                    .title
                                   ? "text-mainBlue"
                                   : "text-darkGray"
-                              }`}
+                                }`}
                             >
                               -
                             </span>
                             <span
-                              className={`${
-                                selected ==
-                                link.children[directChild].children[latestChild]
-                                  .title
+                              className={`${selected ==
+                                  link.children[directChild].children[latestChild]
+                                    .title
                                   ? "text-mainBlue"
                                   : "text-darkGray"
-                              } `}
+                                } `}
                             >
                               {
                                 link.children[directChild].children[latestChild]

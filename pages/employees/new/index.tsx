@@ -112,17 +112,17 @@ const NewEmployee = (props: any) => {
   // image
   const handleImageUpload = async (e: any) => {
     const files = e.target.files;
-    console.log(files[0]);
+    // console.log(files[0]);
     const formData = new FormData();
     formData.append("image", files[0]);
-    const res = await fetch("http://localhost:3000/api/upload", {
+    const res = await fetch("https://localhost:3000/api/upload", {
       method: "POST",
       body: formData,
     });
     const data = await res.json();
     if (data) {
-      console.log(data.filePath.slice(8));
-      console.log(typeof data.filePath.slice(8));
+      // console.log(data.filePath.slice(8));
+      // console.log(typeof data.filePath.slice(8));
       setFilePath(data.filePath.slice(8));
       setNewEmployee((prev) => ({ ...prev, image: data.filePath.slice(8) }));
     }

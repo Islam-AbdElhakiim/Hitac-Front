@@ -9,5 +9,5 @@ export function middleware(request: NextRequest) {
         url.pathname = '/employees'
         return NextResponse.redirect(url)
     }
-    return NextResponse.next();
-}
+    return NextResponse.next(); 
+} 

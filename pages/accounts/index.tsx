@@ -145,7 +145,7 @@ export default function Accounts({ accounts }: any) {
         <Loader />
       ) : (
         <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.acc" />
+          <PageHeader newUrl="/" pageTitle="pages.acc" />
           {/* Page Body */}
           <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
             {/* top control row */}
@@ -304,7 +304,7 @@ export default function Accounts({ accounts }: any) {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="  h-[200px] border border-green-500 overflow-auto">
+                  <tbody className=" main-table overflow-auto">
                   {pageAccounts
                     ?.filter((acc: Account) => !acc.isDeleted)
                     .map((acc: Account, index: number) => {

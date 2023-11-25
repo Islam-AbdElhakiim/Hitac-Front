@@ -1,5 +1,5 @@
 import { CreateEmployeeDTO } from "@/types";
-import { deleteRequest, getRequest, putRequest } from "./requests";
+import { deleteRequest, getRequest, patchRequest } from "./requests";
 
 export const getAllEmployees = async () => {
   const result = await getRequest(`employees`);
@@ -17,6 +17,6 @@ export const deleteUserById = async (id: string) => {
 };
 
 export const updateEmp = async (id: string, newEmp: CreateEmployeeDTO) => {
-  const result = await putRequest(`employees/${id}`, newEmp);
+  const result = await patchRequest(`employees/${id}`, newEmp);
   return result;
 };
