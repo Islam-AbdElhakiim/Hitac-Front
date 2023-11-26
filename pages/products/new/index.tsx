@@ -1,5 +1,10 @@
 import Button from "@/components/Button";
-import { productType, segmentType, stationType } from "@/types";
+import {
+  productInitalType,
+  productType,
+  segmentType,
+  stationType,
+} from "@/types";
 import { useTranslation } from "next-i18next";
 import { MdOutlineAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,17 +53,15 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
       .max(20, "Name should be between 3 and 20 letters!")
       .required("Name is required"),
     description: Yup.string().required("Description is required"),
-    department: Yup.string().required("Department is required"),
     segment: Yup.string().required("Segment is required"),
     size: Yup.string().required("Size is required"),
     // Dynamically added email fields validation
   });
 
-  const formik = useFormik<productType>({
+  const formik = useFormik<productInitalType>({
     initialValues: {
       name: "",
       description: "",
-      department: "",
       segment: "",
       size: "",
       image: "",
@@ -204,38 +207,7 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
                     </small>
                   )}
                 </div>
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg h-12" htmlFor="department">
-                    Department<span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="department"
-                    id="department"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      formik.touched.department && formik.errors.department
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
-                    onChange={formik.handleChange}
-                    value={formik.values.department}
-                  >
-                    <option selected hidden disabled value={""}>
-                      Select
-                    </option>
-                    {["Inventory", "Marketing", "Sales", "Accounting"].map(
-                      (res: any) => {
-                        return <option value={res}>{res}</option>;
-                      }
-                    )}
-                  </select>
-                  {formik.touched.department && formik.errors.department && (
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 `}
-                    >
-                      {formik.errors.department}
-                    </small>
-                  )}
-                </div>
+
                 <div className="flex flex-col w-full gap-3 relative">
                   <label className="text-lg h-12" htmlFor="segment">
                     Segments<span className="text-red-500">*</span>

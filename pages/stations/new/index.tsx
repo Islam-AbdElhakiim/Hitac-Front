@@ -56,9 +56,13 @@ const NewStation = () => {
 
   const validationSchema: any = Yup.object().shape({
     englishName: Yup.string()
-      .min(3, "First Name should be between 3 and 20 letters!")
-      .max(20, "First Name should be between 3 and 20 letters!")
-      .required("First Name is required"),
+      .min(3, "English Name should be between 3 and 20 letters!")
+      .max(20, "English Name should be between 3 and 20 letters!")
+      .required("English Name is required"),
+    arabicName: Yup.string()
+      .min(3, "Arabic Name should be between 3 and 20 letters!")
+      .max(20, "Arabic Name should be between 3 and 20 letters!")
+      .required("Arabic Name is required"),
     address: Yup.string().required("Address is required"),
     countries: Yup.string().required("Country is required"),
     cities: Yup.string().required("City is required"),
@@ -238,7 +242,7 @@ const NewStation = () => {
                 {/* left col */}
                 <div className="flex flex-col w-full gap-3 relative mb-2">
                   <label className="text-lg h-12" htmlFor="englishName">
-                    Name<span className="text-red-500">*</span>
+                    English Name<span className="text-red-500">*</span>
                   </label>
 
                   <input
@@ -259,6 +263,32 @@ const NewStation = () => {
                       className={`text-red-500 absolute -bottom-6 left-2 `}
                     >
                       {formik.errors.englishName}
+                    </small>
+                  )}
+                </div>
+                <div className="flex flex-col w-full gap-3 relative mb-2">
+                  <label className="text-lg h-12" htmlFor="arabicName">
+                    Arabic Name<span className="text-red-500">*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    name="arabicName"
+                    id="arabicName"
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
+                      formik.touched.arabicName && formik.errors.arabicName
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
+                    }} `}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.arabicName}
+                  />
+                  {formik.touched.arabicName && formik.errors.arabicName && (
+                    <small
+                      className={`text-red-500 absolute -bottom-6 left-2 `}
+                    >
+                      {formik.errors.arabicName}
                     </small>
                   )}
                 </div>
@@ -293,24 +323,19 @@ const NewStation = () => {
                   <label className="text-lg h-12" htmlFor="countries">
                     Country<span className="text-red-500">*</span>
                   </label>
-                  <select
+                  <input
+                    type="text"
                     name="countries"
                     id="countries"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                       formik.touched.countries && formik.errors.countries
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }`}
+                    } `}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.countries}
-                  >
-                    <option selected disabled value={""}>
-                      Select
-                    </option>
-                    {countryList.map((res: any) => {
-                      return <option value={res}>{res}</option>;
-                    })}
-                  </select>
+                  />
                   {formik.touched.countries && formik.errors.countries && (
                     <small
                       className={`text-red-500 absolute -bottom-6 left-2 `}
@@ -323,25 +348,19 @@ const NewStation = () => {
                   <label className="text-lg h-12" htmlFor="cities">
                     City<span className="text-red-500">*</span>
                   </label>
-                  <select
+                  <input
+                    type="text"
                     name="cities"
                     id="cities"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                       formik.touched.cities && formik.errors.cities
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }`}
+                    } `}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.cities}
-                    disabled={formik.values.countries ? false : true}
-                  >
-                    <option selected disabled value={""}>
-                      Select
-                    </option>
-                    {countries[formik.values.countries]?.map((res: any) => {
-                      return <option value={res}>{res}</option>;
-                    })}
-                  </select>
+                  />
                   {formik.touched.cities && formik.errors.cities && (
                     <small
                       className={`text-red-500 absolute -bottom-6 left-2 `}

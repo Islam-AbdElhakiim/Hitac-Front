@@ -1,5 +1,6 @@
 import {
   CreateEmployeeDTO,
+  productInitalType,
   productType,
   segmentType,
   supplierType,
@@ -27,11 +28,11 @@ export const deleteProductsById = async (id: string) => {
   return result;
 };
 
-export const updateProducts = async (id: string, supp: productType) => {
+export const updateProducts = async (id: string, supp: productInitalType) => {
   const result = await patchRequest(`products/${id}`, supp);
   return result;
 };
-export const createProducts = async (supp: productType) => {
+export const createProducts = async (supp: productInitalType) => {
   const result = await postRequest(`products`, supp);
   return result;
 };

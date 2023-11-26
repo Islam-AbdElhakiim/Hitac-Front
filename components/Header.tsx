@@ -29,7 +29,7 @@ const Header = () => {
   }, 60000);
 
   return (
-    <header className="flex flex-col h-[10%] border-b mx-10">
+    <header className="flex flex-col h-[10vh] border-b mx-10">
       {/* first row => date & time */}
       <div className="flex self-end gap-3 text-darkGray text-xs">
         <span>{time}</span>|<span>{dayOfWeak}</span>

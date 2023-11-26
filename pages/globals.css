@@ -8,7 +8,7 @@
 
 td,
 th {
-  @apply px-8 py-2 max-w-[200px]
+  @apply px-8 py-2 max-w-[200px] min-w-[170px]
 }
 
 th {

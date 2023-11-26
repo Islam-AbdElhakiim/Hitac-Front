@@ -20,6 +20,7 @@ import {
   getAllSupplyOrders,
 } from "@/http/supplyOrderHttp";
 import { supplyOrderType } from "@/types";
+import { IoArrowForward } from "react-icons/io5";
 
 export const getServerSideProps = async ({ locale }: any) => {
   const data = await getAllSupplyOrders();
@@ -143,10 +144,14 @@ export default function SupplyOrders({ orders }: any) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.supply-orders" />
+        <div className="flex flex-col justify-center items-center px-5 h-full ">
+          <PageHeader
+            pageTitle="pages.supply-orders"
+            newUrl={`supply-orders/new`}
+          />
+
           {/* Page Body */}
-          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
+          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
             {/* top control row */}
             <div className="flex justify-center items-center w-full  py-3">
               {/* top pagination
@@ -189,8 +194,8 @@ export default function SupplyOrders({ orders }: any) {
                     <span
                       className={` text-2xl transition ${
                         selectedRow.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "text-mainBlue group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       <MdModeEdit />
@@ -199,8 +204,8 @@ export default function SupplyOrders({ orders }: any) {
                   title="Update"
                   classes={`${
                     selectedRow.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedRow.length != 1}
                   handleOnClick={() =>
@@ -212,8 +217,8 @@ export default function SupplyOrders({ orders }: any) {
                     <span
                       className={` text-2xl transition ${
                         selectedRow.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "!text-[#E70C0C] group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       {" "}
@@ -223,8 +228,8 @@ export default function SupplyOrders({ orders }: any) {
                   title="Delete"
                   classes={`${
                     selectedRow.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedRow.length < 1}
                   handleOnClick={handleDelete}
@@ -233,7 +238,7 @@ export default function SupplyOrders({ orders }: any) {
             </div>
 
             {/* Table */}
-            <div className="w-full h-[80%] overflow-auto">
+            <div className=" main-table w-full h-[80%] overflow-auto">
               <table className={` w-full`}>
                 <thead className=" bg-bgGray ">
                   <tr className="  text-left ">
@@ -297,9 +302,14 @@ export default function SupplyOrders({ orders }: any) {
                       </span>
                       <span>Specifications</span>
                     </th>
+                    <th className="">
+                      <span className="  text-darkGray text-[26px]">
+                        <PiDotsThreeCircleLight />
+                      </span>
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="  h-[200px] border border-green-500 overflow-auto">
+                <tbody className="main-table overflow-auto">
                   {pageRows
                     ?.filter((order: supplyOrderType) => !order.isDeleted)
                     .map((order: supplyOrderType, index: number) => {
@@ -316,27 +326,20 @@ export default function SupplyOrders({ orders }: any) {
                                 readOnly
                               />
                             </td>
-                            <td onClick={() => navigate(order._id)}>
-                              {order._id}
-                            </td>
-                            <td
-                              onClick={() => navigate(order._id)}
-                            >{`${order.salesOrder}`}</td>
+                            <td>{order._id}</td>
+                            <td>{`${order.salesOrder}`}</td>
 
-                            <td
-                              onClick={() => navigate(order._id)}
-                            >{`${order.price}`}</td>
-                            <td
-                              onClick={() => navigate(order._id)}
-                            >{`${order.product}`}</td>
-                            <td
-                              onClick={() => navigate(order._id)}
-                            >{`${order.supplier}`}</td>
-                            <td
-                              onClick={() => navigate(order._id)}
-                            >{`${order.createdOn}`}</td>
-                            <td onClick={() => navigate(order._id)}>
-                              {/* {order.note} */}
+                            <td>{`${order.price}`}</td>
+                            <td>{`${order.products?.name}`}</td>
+                            <td>{`${order.supplier.firstName} ${order.supplier.lastName}`}</td>
+                            <td>{`${order.createdOn}`}</td>
+                            <td>{order.description}</td>
+                            <td>
+                              <Link href={`/supply-orders/${order._id}`}>
+                                <span className=" text-[26px] text-mainBlue cursor-pointer">
+                                  <IoArrowForward />
+                                </span>
+                              </Link>
                             </td>
                           </tr>
                         );

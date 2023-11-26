@@ -6,12 +6,13 @@ import {
   EmployeeType,
   Segment,
   ValidationObject,
+  accountInitalType,
   accountType,
   accountsValidationKeys,
   accountsValidationObject,
+  contactInitalType,
   contactType,
-  contactsValidationKeys,
-  contactsValidationObject,
+  segmentType,
   validationKeys,
 } from "@/types";
 import { useTranslation } from "next-i18next";
@@ -27,242 +28,275 @@ import { HIDE_LOADER, SHOW_LOADER } from "@/redux/modules/loader-slice";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/navigation";
 import { useRouter as useNextRouter } from "next/router";
-import { createAccount } from "@/http/accountsHttp";
-
+import { log } from "console";
+import { createAccount, getAllAccounts } from "@/http/accountsHttp";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { use } from "i18next";
+import { createSupplier } from "@/http/supplierHttp";
+import countries from "@/constants/countries";
+import { getAllSegments } from "@/http/segmentsHttp";
+import { getAllProducts } from "@/http/productsHttp";
+import SelectField from "@/components/ReactSelect/SelectField";
+import { createContact, getAllContacts } from "@/http/contactsHttp";
 export const getServerSideProps = async ({ locale }: any) => {
+  const segmentsFetch = async () => {
+    return await getAllSegments();
+  };
+  const productsFetch = async () => {
+    return await getAllProducts();
+  };
+  const accountFetch = async () => {
+    return await getAllAccounts();
+  };
+
+  const [segments, products, accounts] = await Promise.all([
+    segmentsFetch(),
+    productsFetch(),
+    accountFetch(),
+  ]);
+  // console.log(segments);
+
   return {
-    props: { ...(await serverSideTranslations(locale, ["common"])) },
+    props: {
+      segments,
+      products,
+      accounts,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
   };
 };
 
-const NewContact = (props: any) => {
+const NewAccount = ({
+  segments,
+  products,
+  accounts,
+}: {
+  segments: segmentType[];
+  products: any[];
+  accounts: any[];
+}) => {
   const { t } = useTranslation("common", {
     bindI18n: "languageChanged loaded",
   });
-  const { isLoading } = useSelector((state: any) => state.loaderReducer);
-  const dispatch = useDispatch<AppDispatch>();
+
   const router = useRouter();
-  const { action, id } = useNextRouter().query;
-  console.log(action, id);
+
+  const phoneRegex = /^(\+\d{1,2}\s?)?(\(\d{1,}\)|\d{1,})([-\s]?\d{1,})+$/;
+
+  const { isLoading } = useSelector((state: any) => state.loaderReducer);
 
   //#region initialization
-  const initContact = () => ({
-    englishName: "",
-    arabicName: "",
-    websites: [{ name: "" }],
-    country: "",
-    emails: [{ name: "" }],
-    telephones: [{ name: "" }],
-    city: "",
-    ports: [{ name: "" }],
-    segments: [],
-    products: [],
 
-    account: "",
+  const validationSchema: any = Yup.object().shape({
+    firstName: Yup.string()
+      .min(3, "First Name should be between 3 and 20 letters!")
+      .max(20, "First Name should be between 3 and 20 letters!")
+      .required("First Name is required"),
+    lastName: Yup.string()
+      .min(3, "Last Name should be between 3 and 20 letters!")
+      .max(20, "Last Name should be between 3 and 20 letters!")
+      .required("Last Name is required"),
+    country: Yup.string().required("Country is required"),
+    city: Yup.string().required("City is required"),
+    account: Yup.string().required("Account is required"),
+    website: Yup.string().required("Website is required"),
+    port: Yup.string().required("port is required"),
+    segments: Yup.array().min(1, "Please Choose segments!"),
+    products: Yup.array().min(1, "Please Choose products!"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    email2: Yup.string().when("email", (value: any, schema: any) => {
+      const i = Object.keys(formik.values).filter((key) =>
+        key.startsWith("email")
+      ).length;
+      if (i >= 2) {
+        return schema.email("Invalid email").required("Email is required");
+      }
+    }),
+    email3: Yup.string().when("email", (value: any, schema: any) => {
+      const i = Object.keys(formik.values).filter((key) =>
+        key.startsWith("email")
+      ).length;
+      if (i >= 3) {
+        return schema.email("Invalid email").required("Email is required");
+      }
+    }),
+    email4: Yup.string().when("email", (value: any, schema: any) => {
+      const i = Object.keys(formik.values).filter((key) =>
+        key.startsWith("email")
+      ).length;
+      if (i >= 4) {
+        return schema.email("Invalid email").required("Email is required");
+      }
+    }),
+
+    telephone: Yup.string()
+      .matches(phoneRegex, {
+        message: "Invalid telephone",
+        excludeEmptyString: true,
+      })
+      .required("telephone is required"),
+    telephone2: Yup.string().when("telephone", (value: any, schema: any) => {
+      const i = Object.keys(formik.values).filter((key) =>
+        key.startsWith("telephone")
+      ).length;
+      if (i >= 2) {
+        return schema
+          .matches(phoneRegex, {
+            message: "Invalid telephone",
+            excludeEmptyString: true,
+          })
+          .required("telephone is required");
+      }
+    }),
+    telephone3: Yup.string().when("telephone", (value: any, schema: any) => {
+      const i = Object.keys(formik.values).filter((key) =>
+        key.startsWith("telephone")
+      ).length;
+      if (i >= 3) {
+        return schema
+          .matches(phoneRegex, {
+            message: "Invalid telephone",
+            excludeEmptyString: true,
+          })
+          .required("telephone is required");
+      }
+    }),
+    telephone4: Yup.string().when("telephone", (value: any, schema: any) => {
+      const i = Object.keys(formik.values).filter((key) =>
+        key.startsWith("telephone")
+      ).length;
+      if (i >= 4) {
+        return schema
+          .matches(phoneRegex, {
+            message: "Invalid telephone",
+            excludeEmptyString: true,
+          })
+          .required("telephone is required");
+      }
+    }),
+
+    // Dynamically added email fields validation
   });
 
-  const [newContact, setNewContact] = useState<contactType>(initContact());
+  const formik = useFormik<contactInitalType>({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      website: "",
+      country: "",
+      city: "",
+      telephone: "",
+      email: "",
+      port: "",
+      note: "",
+      account: "",
+      segments: [],
+      products: [],
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      // Handle form submission
+      const emailFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("email"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("email", "")) - parseInt(b.replace("email", ""))
+        )
+        .map((key) => values[key]);
 
-  const [validation, setValidation] = useState<contactsValidationObject>(
-    () => ({
-      englishName: {
-        regex: /^.{3,20}$/,
-        isValid: true,
-      },
-      arabicName: {
-        regex: /^.{3,20}$/,
-        isValid: true,
-      },
-      emails: {
-        regex: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/,
-        isValid: true,
-      },
-      telephones: {
-        regex: /^(\+\d{1,2}\s?)?(\(\d{1,}\)|\d{1,})([-\s]?\d{1,})+$/,
-        isValid: true,
-      },
-      country: {
-        isValid: true,
-      },
-      city: {
-        isValid: true,
-      },
-      ports: {
-        isValid: true,
-      },
+      const telephoneFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("telephone"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("telephone", "")) -
+            parseInt(b.replace("telephone", ""))
+        )
+        .map((key) => values[key]);
 
-      websites: {
-        isValid: true,
-      },
-      segments: {
-        isValid: true,
-      },
-      products: {
-        isValid: true,
-      },
-      account: {
-        isValid: true,
-      },
-    })
-  );
-  //#endregion
+      const portFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("port"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("port", "")) - parseInt(b.replace("port", ""))
+        )
+        .map((key) => values[key]);
+      const cityFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("city"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("city", "")) - parseInt(b.replace("city", ""))
+        )
+        .map((key) => values[key]);
+      const countryFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("country"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("country", "")) -
+            parseInt(b.replace("country", ""))
+        )
+        .map((key) => values[key]);
+      const websiteFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("website"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("website", "")) -
+            parseInt(b.replace("website", ""))
+        )
+        .map((key) => values[key]);
 
-  const handleInput = (
-    key: contactsValidationKeys,
-    value: string,
-    index: number = 0
-  ) => {
-    if (Object.hasOwn(validation, key)) {
-      if (
-        [
-          "country",
-          "city",
-          "ports",
-          "websites",
-          "segments",
-          "products",
-          "contacts",
-        ].includes(key)
-      ) {
-        setValidation((prev: contactsValidationObject) => ({
-          ...prev,
-          [key]: { isValid: true },
-        }));
-      } else {
-        //validate
-        console.log(validation[key], key);
+      await createContact({
+        ...values,
+        emails: emailFieldValues,
+        telephones: telephoneFieldValues,
+        countries: countryFieldValues,
+        cities: cityFieldValues,
+        ports: portFieldValues,
+        websites: websiteFieldValues,
+      });
+      router.push("/contacts");
+      console.log(values);
+    },
+  });
 
-        setValidation((prev: contactsValidationObject) => ({
-          ...prev,
-          [key]: { ...prev[key], isValid: prev[key].regex?.test(value) },
-        }));
-        console.log(validation);
-      }
-    }
+  const addField = (field: any) => {
+    const currentIndex =
+      Object.keys(formik.values).filter((key) => key.startsWith(field)).length +
+      1;
 
-    //update
-    if (
-      ["websites", "ports", "addresses", "emails", "telephones"].includes(key)
-    ) {
-      let data: any = { ...newContact };
-      data[key][index] = { name: value };
-      console.log(data);
+    const newKey = `${field}${currentIndex}`;
+    // Extend the validation schema dynamically
+    if (field === "email") {
+      console.log(currentIndex);
 
-      setNewContact(data);
+      validationSchema.fields[newKey] = Yup.string()
+        .email("Invalid email")
+        .required("Email is required");
+    } else if (field === "telephone") {
+      validationSchema.fields[newKey] = Yup.string()
+        .matches(phoneRegex, {
+          message: "Invalid telephone",
+          excludeEmptyString: true,
+        })
+        .required("telephone is required");
     } else {
-      setNewContact((prev: any) => ({ ...prev, [key]: value }));
+      validationSchema.fields[newKey] = Yup.string().required(
+        `${field} is required`
+      );
     }
+
+    currentIndex < 5 &&
+      formik.setValues({
+        ...formik.values,
+        [newKey]: "",
+      });
   };
 
   //#region modules
-  const [selectedSegments, setSelectedSegments] = useState<Segment[]>(segments);
 
-  const handleSegments = (seg: Segment) => {
-    seg.selected = !seg.selected;
-    setSelectedSegments([...segments]);
-    setValidation((prev: any) => ({ ...prev, segments: { isValid: true } }));
-    let segs = selectedSegments
-      .map((seg) => seg.selected && seg.title)
-      .filter(Boolean) as any;
-
-    setNewContact((prev) => ({ ...prev, segments: segs }));
+  const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   };
-  const [selectedProducts, setSelectedProducts] = useState<Segment[]>(segments);
-
-  const handleProducts = (prd: Segment) => {
-    prd.selected = !prd.selected;
-    setSelectedProducts([...segments]);
-    setValidation((prev: any) => ({ ...prev, products: { isValid: true } }));
-    let prds = selectedProducts
-      .map((prd) => prd.selected && prd.title)
-      .filter(Boolean) as any;
-
-    setNewContact((prev) => ({ ...prev, products: prds }));
-  };
-
-  //#endregion
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    let data: any = { ...newContact };
-    console.log(data);
-
-    // // e.target.preventDefault();
-    let isFormError = Object.keys(newContact).filter((key) => {
-      if (
-        !data[key] ||
-        data[key] == "" ||
-        data[key]?.length == 0 ||
-        data[key]?.filter((acc: any) => acc.name !== "")?.length == 0
-      ) {
-        console.log(key);
-
-        if (
-          [
-            "country",
-            "city",
-            "ports",
-            "emails",
-            "telephones",
-            "segments",
-            "products",
-            "websites",
-            "contacts",
-          ].includes(key)
-        ) {
-          setValidation((prev: any) => ({
-            ...prev,
-            [key]: { ...prev[key], isValid: false },
-          }));
-        } else {
-          handleInput(key as contactsValidationKeys, "");
-        }
-
-        return key;
-      }
-    });
-    console.log(isFormError);
-    if (isFormError.length <= 0) {
-      dispatch(SHOW_LOADER());
-      try {
-        Object.keys(newContact).forEach((key: any) => {
-          if (
-            [
-              "country",
-              "city",
-              "ports",
-              "websites",
-              "emails",
-              "telephones",
-            ].includes(key)
-          ) {
-            data[key] = data[key]?.map((item: any) => item.name);
-            setNewContact((prev: any) => ({ ...data }));
-          }
-        });
-        console.log(data);
-        // createAccount(data);
-        // router.push("/contacts");
-      } catch (e) {
-        console.log(e);
-      } finally {
-        dispatch(HIDE_LOADER());
-      }
-    } else {
-      return;
-    }
-  };
-  function handleAdd(arg0: string) {
-    setNewContact((prev: any) => {
-      console.log(prev[arg0]);
-      return {
-        ...prev,
-        [arg0]: [...prev[arg0], { name: "" }],
-      };
-    });
-    console.log(arg0);
-  }
-
   return (
     <>
       {isLoading ? (
@@ -279,7 +313,7 @@ const NewContact = (props: any) => {
             {/* data-form */}
             <form
               className="flex flex-col justify-start items-center w-full gap-10 py-5 text-darkGray"
-              onSubmit={(e) => handleSubmit(e)}
+              onSubmit={formik.handleSubmit}
               autoComplete="off"
             >
               {/* disable autocomplete */}
@@ -288,364 +322,386 @@ const NewContact = (props: any) => {
               {/* first row */}
               <div className="grid grid-cols-2 w-full text-darkGray gap-5">
                 {/* left col */}
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg" htmlFor="firstname">
-                    English Name<span className="text-red-500">*</span>
+                <div className="flex flex-col w-full gap-3 relative mb-2">
+                  <label className="text-lg h-12" htmlFor="firstName">
+                    First Name<span className="text-red-500">*</span>
                   </label>
 
                   <input
                     type="text"
-                    name="englishName"
-                    id="englishName"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.englishName.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
-                    value={newContact?.englishName}
-                    onChange={(e) => handleInput("englishName", e.target.value)}
+                    name="firstName"
+                    id="firstName"
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
+                      formik.touched.firstName && formik.errors.firstName
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
+                    }} `}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.firstName}
                   />
-
-                  <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.englishName.isValid ? "hidden" : "block"
-                    } `}
-                  >
-                    English Name is required and should be between 3 and 20
-                    letters!
-                  </small>
+                  {formik.touched.firstName && formik.errors.firstName && (
+                    <small
+                      className={`text-red-500 absolute -bottom-6 left-2 `}
+                    >
+                      {formik.errors.firstName}
+                    </small>
+                  )}
                 </div>
-
-                {/* right col */}
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg" htmlFor="lastname">
-                    Arabic Name<span className="text-red-500">*</span>
+                <div className="flex flex-col w-full gap-3 relative mb-2">
+                  <label className="text-lg h-12" htmlFor="lastName">
+                    Last Name<span className="text-red-500">*</span>
                   </label>
 
                   <input
                     type="text"
-                    name="arabicName"
-                    id="arabicName"
+                    name="lastName"
+                    id="lastName"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.arabicName.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
+                      formik.touched.lastName && formik.errors.lastName
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
                     } `}
-                    value={newContact.arabicName}
-                    onChange={(e) => handleInput("arabicName", e.target.value)}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.lastName}
                   />
-
-                  <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.arabicName.isValid ? "hidden" : "block"
-                    } `}
-                  >
-                    Arabic Name is required and should be between 3 and 20
-                    letters!
-                  </small>
+                  {formik.touched.lastName && formik.errors.lastName && (
+                    <small
+                      className={`text-red-500 absolute -bottom-6 left-2 `}
+                    >
+                      {formik.errors.lastName}
+                    </small>
+                  )}
                 </div>
-
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg" htmlFor="contacts">
+                <div className="flex flex-col w-full gap-3 relative mb-2">
+                  <label className="text-lg h-12" htmlFor="country">
                     Country<span className="text-red-500">*</span>
                   </label>
-                  <select
-                    required
-                    name="contacts"
-                    id="contacts"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      validation.country.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    }`}
-                    onChange={(e) => {
-                      handleInput("country", e.target.value);
-                    }}
-                  >
-                    <option selected disabled>
-                      Select
-                    </option>
-                    <option value="admin">Admin</option>
-                    <option value="export-manager">Export Manager</option>
-                    <option value="operation-specialist">
-                      Operation Specialist
-                    </option>
-                    <option value="logistics-specialist">
-                      Logistics-Specialist
-                    </option>
-                    <option value="accountant">Accountant</option>
-                  </select>
-                  <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.country.isValid ? "hidden" : "block"
+
+                  <input
+                    type="text"
+                    name="country"
+                    id="country"
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
+                      formik.touched.country && formik.errors.country
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
                     } `}
-                  >
-                    Please select a country!
-                  </small>
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.country}
+                  />
+                  {formik.touched.country && formik.errors.country && (
+                    <small
+                      className={`text-red-500 absolute -bottom-6 left-2 `}
+                    >
+                      {formik.errors.country}
+                    </small>
+                  )}
                 </div>
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg" htmlFor="contacts">
+                <div className="flex flex-col w-full gap-3 relative mb-2">
+                  <label className="text-lg h-12" htmlFor="city">
                     City<span className="text-red-500">*</span>
                   </label>
-                  <select
-                    required
-                    name="contacts"
-                    id="contacts"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      validation.city.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    }`}
-                    onChange={(e) => {
-                      handleInput("city", e.target.value);
-                    }}
-                  >
-                    <option selected disabled>
-                      Select
-                    </option>
-                    <option value="admin">Admin</option>
-                    <option value="export-manager">Export Manager</option>
-                    <option value="operation-specialist">
-                      Operation Specialist
-                    </option>
-                    <option value="logistics-specialist">
-                      Logistics-Specialist
-                    </option>
-                    <option value="accountant">Accountant</option>
-                  </select>
-                  <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.city.isValid ? "hidden" : "block"
+
+                  <input
+                    type="text"
+                    name="city"
+                    id="city"
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
+                      formik.touched.city && formik.errors.city
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
                     } `}
-                  >
-                    Please select a city!
-                  </small>
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.city}
+                  />
+                  {formik.touched.city && formik.errors.city && (
+                    <small
+                      className={`text-red-500 absolute -bottom-6 left-2 `}
+                    >
+                      {formik.errors.city}
+                    </small>
+                  )}
                 </div>
-                {newContact?.telephones?.map((value, index, arr) => (
-                  <div className="flex flex-col w-full gap-3 relative">
-                    <label
-                      className={`text-lg flex items-center	${
-                        index !== arr.length - 1 && "pt-2.5 pb-3.5"
-                      }`}
-                      htmlFor="telephones"
+                {Object.keys(formik.values)
+                  .filter((key) => key.startsWith("telephone"))
+                  .sort(
+                    (a, b) =>
+                      parseInt(a.replace("telephone", "")) -
+                      parseInt(b.replace("telephone", ""))
+                  )
+                  .map((key: any, i, arr) => (
+                    <div
+                      key={key}
+                      className="flex flex-col w-full gap-3 relative"
                     >
-                      Telephone<span className="text-red-500">*</span>
-                      {index === arr.length - 1 && (
-                        <Button
-                          icon={
-                            <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                              <MdOutlineAdd />
-                            </span>
-                          }
-                          title="Add"
-                          classes=" hover:bg-[#00733B] group hover:text-[white] transition mx-10"
-                          handleOnClick={() => handleAdd("telephones")}
-                        />
+                      <div className={`flex gap-10	h-12`}>
+                        <label
+                          className={`text-lg flex items-center`}
+                          htmlFor={key}
+                        >
+                          {capitalizeFirstLetter(key)}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        {i === arr.length - 1 && i !== 3 && (
+                          <Button
+                            icon={
+                              <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                <MdOutlineAdd />
+                              </span>
+                            }
+                            title="Add"
+                            classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                            handleOnClick={() => addField("telephone")}
+                          />
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        id={key}
+                        name={key}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values[key]}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
+                          formik.touched[key] && formik.errors[key]
+                            ? "border-red-500 outline-red-500"
+                            : "border-lightGray outline-lightGray"
+                        } `}
+                      />
+                      {formik.touched[key] && formik.errors[key] && (
+                        <small
+                          className={`text-red-500 absolute -bottom-6 left-2 `}
+                        >
+                          {formik.errors[key]}
+                        </small>
                       )}
-                    </label>
-                    <input
-                      type="text"
-                      name={"telephones" + index}
-                      id={"telephones" + index}
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.telephones.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
-                      } `}
-                      value={value.name}
-                      onChange={(e) =>
-                        handleInput("telephones", e.target.value, index)
-                      }
-                    />
-
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.telephones.isValid ? "hidden" : "block"
-                      } `}
+                    </div>
+                  ))}
+                {Object.keys(formik.values)
+                  .filter((key) => key.startsWith("email"))
+                  .sort(
+                    (a, b) =>
+                      parseInt(a.replace("email", "")) -
+                      parseInt(b.replace("email", ""))
+                  )
+                  .map((key, i, arr) => (
+                    <div
+                      key={key}
+                      className="flex flex-col w-full gap-3 relative"
                     >
-                      Please enter a valid Telephone Number!
-                    </small>
-                  </div>
-                ))}
-                {newContact?.emails?.map((value, index, arr) => (
-                  <div className="flex flex-col w-full gap-3 relative">
-                    <label
-                      className={`text-lg flex items-center	${
-                        index !== arr.length - 1 && "pt-2.5 pb-3.5"
-                      }`}
-                      htmlFor="emails"
-                    >
-                      Email<span className="text-red-500">*</span>
-                      {index === arr.length - 1 && (
-                        <Button
-                          icon={
-                            <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                              <MdOutlineAdd />
-                            </span>
-                          }
-                          title="Add"
-                          classes=" hover:bg-[#00733B] group hover:text-[white] transition mx-10"
-                          handleOnClick={() => handleAdd("emails")}
-                        />
+                      <div className={`flex gap-10 h-12`}>
+                        <label
+                          className={`text-lg flex items-center`}
+                          htmlFor={key}
+                        >
+                          {capitalizeFirstLetter(key)}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        {i === arr.length - 1 && i !== 3 && (
+                          <Button
+                            icon={
+                              <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                <MdOutlineAdd />
+                              </span>
+                            }
+                            title="Add"
+                            classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                            handleOnClick={() => addField("email")}
+                          />
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        id={key}
+                        name={key}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values[key]}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
+                          formik.touched[key] && formik.errors[key]
+                            ? "border-red-500 outline-red-500"
+                            : "border-lightGray outline-lightGray"
+                        } `}
+                      />
+                      {formik.touched[key] && formik.errors[key] && (
+                        <small
+                          className={`text-red-500 absolute -bottom-6 left-2 `}
+                        >
+                          {formik.errors[key]}
+                        </small>
                       )}
-                    </label>
-                    <input
-                      type="text"
-                      name={"emails" + index}
-                      id={"emails" + index}
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.emails.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
-                      } `}
-                      value={value.name}
-                      onChange={(e) =>
-                        handleInput("emails", e.target.value, index)
-                      }
-                    />
-
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.emails.isValid ? "hidden" : "block"
-                      } `}
-                    >
-                      Please enter a valid email address!
-                    </small>
-                  </div>
-                ))}
-                {newContact?.ports?.map((value, index, arr) => (
-                  <div className="flex flex-col w-full gap-3 relative">
-                    <label
-                      className={`text-lg flex items-center	${
-                        index !== arr.length - 1 && "pt-2.5 pb-3.5"
-                      }`}
-                      htmlFor="ports"
-                    >
-                      Port<span className="text-red-500">*</span>
-                      {index === arr.length - 1 && (
-                        <Button
-                          icon={
-                            <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                              <MdOutlineAdd />
-                            </span>
-                          }
-                          title="Add"
-                          classes=" hover:bg-[#00733B] group hover:text-[white] transition mx-10"
-                          handleOnClick={() => handleAdd("ports")}
-                        />
+                      {formik.touched[key] && formik.errors[key] && (
+                        <small
+                          className={`text-red-500 absolute -bottom-6 left-2 `}
+                        >
+                          {formik.errors[key]}
+                        </small>
                       )}
-                    </label>
-                    <input
-                      type="text"
-                      name={"ports" + index}
-                      id={"ports" + index}
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.ports.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
-                      } `}
-                      value={value.name}
-                      onChange={(e) =>
-                        handleInput("ports", e.target.value, index)
-                      }
-                    />
+                    </div>
+                  ))}
 
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.ports.isValid ? "hidden" : "block"
-                      } `}
+                {Object.keys(formik.values)
+                  .filter((key) => key.startsWith("port"))
+                  .sort(
+                    (a, b) =>
+                      parseInt(a.replace("port", "")) -
+                      parseInt(b.replace("port", ""))
+                  )
+                  .map((key: any, i, arr) => (
+                    <div
+                      key={key}
+                      className="flex flex-col w-full gap-3 relative"
                     >
-                      Port is required
-                    </small>
-                  </div>
-                ))}
-
-                {newContact?.websites?.map((value, index, arr) => (
-                  <div className="flex flex-col w-full gap-3 relative">
-                    <label
-                      className={`text-lg flex items-center	${
-                        index !== arr.length - 1 && "pt-2.5 pb-3.5"
-                      }`}
-                      htmlFor="websites"
-                    >
-                      Website<span className="text-red-500">*</span>
-                      {index === arr.length - 1 && (
-                        <Button
-                          icon={
-                            <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                              <MdOutlineAdd />
-                            </span>
-                          }
-                          title="Add"
-                          classes=" hover:bg-[#00733B] group hover:text-[white] transition mx-10"
-                          handleOnClick={() => handleAdd("websites")}
-                        />
+                      <div className={`flex gap-10	h-12`}>
+                        <label
+                          className={`text-lg flex items-center`}
+                          htmlFor={key}
+                        >
+                          {capitalizeFirstLetter(key)}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        {i === arr.length - 1 && i !== 3 && (
+                          <Button
+                            icon={
+                              <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                <MdOutlineAdd />
+                              </span>
+                            }
+                            title="Add"
+                            classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                            handleOnClick={() => addField("port")}
+                          />
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        id={key}
+                        name={key}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values[key]}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
+                          formik.touched[key] && formik.errors[key]
+                            ? "border-red-500 outline-red-500"
+                            : "border-lightGray outline-lightGray"
+                        } `}
+                      />
+                      {formik.touched[key] && formik.errors[key] && (
+                        <small
+                          className={`text-red-500 absolute -bottom-6 left-2 `}
+                        >
+                          {formik.errors[key]}
+                        </small>
                       )}
-                    </label>
-                    <input
-                      type="text"
-                      name={"websites" + index}
-                      id={"websites" + index}
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.websites.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
-                      } `}
-                      value={value.name}
-                      onChange={(e) =>
-                        handleInput("websites", e.target.value, index)
-                      }
-                    />
+                    </div>
+                  ))}
 
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.websites.isValid ? "hidden" : "block"
-                      } `}
+                {Object.keys(formik.values)
+                  .filter((key) => key.startsWith("website"))
+                  .sort(
+                    (a, b) =>
+                      parseInt(a.replace("website", "")) -
+                      parseInt(b.replace("website", ""))
+                  )
+                  .map((key: any, i, arr) => (
+                    <div
+                      key={key}
+                      className="flex flex-col w-full gap-3 relative"
                     >
-                      Please enter a valid Telephone Number!
-                    </small>
-                  </div>
-                ))}
+                      <div className={`flex gap-10	h-12`}>
+                        <label
+                          className={`text-lg flex items-center`}
+                          htmlFor={key}
+                        >
+                          {capitalizeFirstLetter(key)}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        {i === arr.length - 1 && i !== 3 && (
+                          <Button
+                            icon={
+                              <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                <MdOutlineAdd />
+                              </span>
+                            }
+                            title="Add"
+                            classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                            handleOnClick={() => addField("website")}
+                          />
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        id={key}
+                        name={key}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values[key]}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
+                          formik.touched[key] && formik.errors[key]
+                            ? "border-red-500 outline-red-500"
+                            : "border-lightGray outline-lightGray"
+                        } `}
+                      />
+                      {formik.touched[key] && formik.errors[key] && (
+                        <small
+                          className={`text-red-500 absolute -bottom-6 left-2 `}
+                        >
+                          {formik.errors[key]}
+                        </small>
+                      )}
+                    </div>
+                  ))}
                 <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg pt-2.5 pb-3.5" htmlFor="contacts">
-                    Account<span className="text-red-500 ">*</span>
+                  <label className="text-lg h-12" htmlFor="account">
+                    Account<span className="text-red-500">*</span>
                   </label>
-                  <select
-                    required
-                    name="account"
-                    id="account"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      validation.country.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
-                    onChange={(e) => {
-                      handleInput("account", e.target.value);
-                    }}
-                  >
-                    <option selected disabled>
-                      Select
-                    </option>
-                    <option value="admin">Admin</option>
-                    <option value="export-manager">Export Manager</option>
-                    <option value="operation-specialist">
-                      Operation Specialist
-                    </option>
-                    <option value="logistics-specialist">
-                      Logistics-Specialist
-                    </option>
-                    <option value="accountant">Accountant</option>
-                  </select>
-                  <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.country.isValid ? "hidden" : "block"
-                    } `}
-                  >
-                    Please select a account!
-                  </small>
+                  <SelectField
+                    options={accounts?.map((res: any) => {
+                      return {
+                        value: res._id,
+                        label: res.englishName,
+                      };
+                    })}
+                    value={formik.values.account}
+                    onChange={(value: any) =>
+                      formik.setFieldValue("account", value.value)
+                    }
+                    isValid={
+                      formik.touched.account && formik.errors.account
+                        ? false
+                        : true
+                    }
+                  />
+                  {formik.touched.account && formik.errors.account && (
+                    <small
+                      className={`text-red-500 absolute -bottom-6 left-2 `}
+                    >
+                      {formik.errors.account}
+                    </small>
+                  )}
                 </div>
               </div>
+              <div className="grid grid-cols-1 w-full text-darkGray gap-5">
+                <div className="flex flex-col w-full gap-3 relative mb-2">
+                  <label className="text-lg h-12" htmlFor="note">
+                    Note
+                  </label>
 
+                  <textarea
+                    name="note"
+                    id="note"
+                    rows={7}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 `}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.note}
+                  />
+                </div>
+              </div>
               {/* Accessed Segments */}
               <div className="flex flex-col justify-center items-start w-full p-5 relative">
                 {/* title */}
@@ -656,35 +712,57 @@ const NewContact = (props: any) => {
                   </h2>
                 </div>
 
-                {/* departments selection */}
+                {/* segments selection */}
                 <div
                   className={`flex justify-center items-center w-full gap-10 p-10 border ${
-                    validation.segments.isValid
-                      ? " border-lightGray "
-                      : " border-red-500"
+                    formik.touched.segments && formik.errors.segments
+                      ? " border-red-500"
+                      : " border-lightGray "
                   }`}
                 >
-                  {selectedSegments.map((segment) => (
-                    <div
+                  {segments?.map((segment: any, index) => (
+                    <label
                       key={segment.title}
                       className={`w-[250px] h-[100px] cursor-pointer transition rounded-lg ${
-                        segment.selected == true
+                        formik.values.segments.includes(segment._id)
                           ? "bg-mainBlue text-white"
                           : "bg-bgGray text-black"
                       } shadow-md flex justify-center items-center text-xl font-light capitalize `}
-                      onClick={() => handleSegments(segment)}
+                      // onClick={() => handleSegments(segment)}
                     >
-                      {segment.title}{" "}
-                    </div>
+                      {segment.name}{" "}
+                      <input
+                        type="checkbox"
+                        name="segments"
+                        id={`segments${index}`}
+                        value={segment._id}
+                        checked={formik.values.segments.includes(segment._id)}
+                        onBlur={formik.handleBlur}
+                        onChange={(event) => {
+                          if (event.target.checked) {
+                            formik.setFieldValue("segments", [
+                              ...formik.values.segments,
+                              segment._id,
+                            ]);
+                          } else {
+                            formik.setFieldValue(
+                              "segments",
+                              formik.values.segments.filter(
+                                (item) => item !== segment._id
+                              )
+                            );
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
                   ))}
                 </div>
-                <small
-                  className={`text-red-500 absolute -bottom-2 left-10 ${
-                    validation.segments.isValid ? "hidden" : "block"
-                  } `}
-                >
-                  Please Choose segments!
-                </small>
+                {formik.touched.segments && formik.errors.segments && (
+                  <small className={`text-red-500 absolute -bottom-2 left-10 `}>
+                    {formik.errors.segments}
+                  </small>
+                )}
               </div>
 
               <div className="flex flex-col justify-center items-start w-full p-5 relative">
@@ -696,40 +774,62 @@ const NewContact = (props: any) => {
                   </h2>
                 </div>
 
-                {/* departments selection */}
+                {/* poducts selection */}
                 <div
                   className={`flex justify-center items-center w-full gap-10 p-10 border ${
-                    validation.products.isValid
-                      ? " border-lightGray "
-                      : " border-red-500"
+                    formik.touched.products && formik.errors.products
+                      ? " border-red-500"
+                      : " border-lightGray "
                   }`}
                 >
-                  {selectedProducts.map((product) => (
-                    <div
+                  {products?.map((product: any, index) => (
+                    <label
                       key={product.title}
-                      className={`w-[250px] h-[100px] cursor-pointer transition rounded-lg ${
-                        product.selected == true
+                      className={`w-[182px] h-[65px] cursor-pointer transition rounded-lg ${
+                        formik.values.products.includes(product._id)
                           ? "bg-mainBlue text-white"
                           : "bg-bgGray text-black"
                       } shadow-md flex justify-center items-center text-xl font-light capitalize `}
-                      onClick={() => handleProducts(product)}
+                      // onClick={() => handleproducts(product)}
                     >
-                      {product.title}{" "}
-                    </div>
+                      {product.name}{" "}
+                      <input
+                        type="checkbox"
+                        name="products"
+                        id={`products${index}`}
+                        value={product._id}
+                        checked={formik.values.products.includes(product._id)}
+                        onChange={(event) => {
+                          if (event.target.checked) {
+                            formik.setFieldValue("products", [
+                              ...formik.values.products,
+                              product._id,
+                            ]);
+                          } else {
+                            formik.setFieldValue(
+                              "products",
+                              formik.values.products.filter(
+                                (item) => item !== product._id
+                              )
+                            );
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
                   ))}
                 </div>
-                <small
-                  className={`text-red-500 absolute -bottom-2 left-10 ${
-                    validation.products.isValid ? "hidden" : "block"
-                  } `}
-                >
-                  Please Choose products!
-                </small>
+                {formik.touched.products && formik.errors.products && (
+                  <small className={`text-red-500 absolute -bottom-2 left-10 `}>
+                    {formik.errors.products}
+                  </small>
+                )}
               </div>
 
               {/* Submit */}
               <div className="flex justify-center items-center p-5 w-full">
                 <Button
+                  type="submit"
                   title="Create"
                   icon={
                     <span className="text-3xl">
@@ -747,4 +847,4 @@ const NewContact = (props: any) => {
   );
 };
 
-export default NewContact;
+export default NewAccount;

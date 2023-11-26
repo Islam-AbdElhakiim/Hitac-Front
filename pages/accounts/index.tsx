@@ -68,6 +68,7 @@ export default function Accounts({ accounts }: any) {
 
   //#region pagination
   let startingIndex = currentPage == 1 ? 0 : (currentPage - 1) * 10;
+
   const handlePrevPagination = () => {
     if (currentPage > 1) setCurrentPage((prev: number) => prev - 1);
   };
@@ -144,10 +145,10 @@ export default function Accounts({ accounts }: any) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-10 ">
+        <div className="flex flex-col justify-center items-center px-5 h-full ">
           <PageHeader pageTitle="pages.acc" newUrl={`accounts/new`} />
           {/* Page Body */}
-          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
+          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
             {/* top control row */}
             <div className="flex justify-center items-center w-full  py-3">
               {/* top pagination
@@ -213,8 +214,8 @@ export default function Accounts({ accounts }: any) {
                     <span
                       className={` text-2xl transition ${
                         selectedAccounts.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "!text-[#E70C0C] group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       {" "}
@@ -224,8 +225,8 @@ export default function Accounts({ accounts }: any) {
                   title="Delete"
                   classes={`${
                     selectedAccounts.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedAccounts.length < 1}
                   handleOnClick={handleDelete}
@@ -354,7 +355,7 @@ export default function Accounts({ accounts }: any) {
                 <span className=" text-[#9A9A9A]  ">
                   Showing {startingIndex == 0 ? 1 : startingIndex} to{" "}
                   {currentPage * 10 > pageAccounts?.length
-                    ? pageAccounts?.length
+                    ? pageAccounts?.length - 1
                     : currentPage * 10}{" "}
                   of {pageAccounts?.length} entries
                 </span>

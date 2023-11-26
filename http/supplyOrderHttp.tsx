@@ -1,4 +1,4 @@
-import { stationType, supplyOrderType } from "@/types";
+import { stationType, supplyOrderInitalType, supplyOrderType } from "@/types";
 import {
   deleteRequest,
   getRequest,
@@ -22,11 +22,14 @@ export const deleteSupplyOrderById = async (id: string) => {
   return result;
 };
 
-export const updateSupplyOrder = async (id: string, supp: supplyOrderType) => {
+export const updateSupplyOrder = async (
+  id: string,
+  supp: supplyOrderInitalType
+) => {
   const result = await patchRequest(`supply-orders/${id}`, supp);
   return result;
 };
-export const createSupplyOrder = async (supp: supplyOrderType) => {
+export const createSupplyOrder = async (supp: supplyOrderInitalType) => {
   const result = await postRequest(`supply-orders`, supp);
   return result;
 };

@@ -24,6 +24,8 @@ import { useEffect } from "react";
 import { getAllSuppliers } from "@/http/supplierHttp";
 import { getAllProducts } from "@/http/productsHttp";
 import { createReturnRequests } from "@/http/returnRequestHttp";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 export const getServerSideProps = async (context: any) => {
   const supplyOrders = async () => {
     return await getAllSupplyOrders();
@@ -108,12 +110,12 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10  bg-white rounded-xl shadow-md ">
           {/* personal-data-section */}
-          <div className="flex flex-col items-start justify-start w-full p-5 gap-3">
+          <div className="flex flex-col items-start justify-start w-full p-5 gap-3 relative">
             {/* title */}
             <div className="text-2xl text-darkGray border-b-[1px] w-full py-3">
-              <h2>Personal Information</h2>
+              <h2>Order Information</h2>
             </div>
 
             {/* data-form */}
@@ -142,6 +144,11 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
                     value={formik.values.supplyOrder}
                     onChange={(value: any) =>
                       formik.setFieldValue("supplyOrder", value.value)
+                    }
+                    isValid={
+                      formik.touched.supplyOrder && formik.errors.supplyOrder
+                        ? false
+                        : true
                     }
                   />
                   {formik.touched.supplyOrder && formik.errors.supplyOrder && (
@@ -193,6 +200,11 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
                     onChange={(value: any) =>
                       formik.setFieldValue("supplier", value.value)
                     }
+                    isValid={
+                      formik.touched.supplier && formik.errors.supplier
+                        ? false
+                        : true
+                    }
                   />
                   {/* <select
                     name="supplier"
@@ -231,6 +243,11 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
                     value={formik.values.product}
                     onChange={(value: any) =>
                       formik.setFieldValue("product", value.value)
+                    }
+                    isValid={
+                      formik.touched.product && formik.errors.product
+                        ? false
+                        : true
                     }
                   />
 

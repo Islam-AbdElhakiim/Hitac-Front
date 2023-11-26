@@ -23,15 +23,15 @@ import { deleteUserById, getAllEmployees } from "@/http/employeeHttp";
 import { IoArrowForward } from "react-icons/io5";
 
 export const getServerSideProps = async ({ locale }: any) => {
-    const response = await fetch('http://127.0.0.1:3002/employees');
-    const data = await response.json();
-    return {
-        props: { employees: data, ...(await serverSideTranslations(locale, ['common'])) }
-    }
-}
-
-
-
+  const response = await fetch("http://127.0.0.1:3002/employees");
+  const data = await response.json();
+  return {
+    props: {
+      employees: data,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+};
 
 export default function Employees({ employees }: any) {
   const router = useRouter();
@@ -143,10 +143,10 @@ export default function Employees({ employees }: any) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.emp"  newUrl={`employees/new`} />
+        <div className="flex flex-col justify-center items-center px-10 h-full">
+          <PageHeader pageTitle="pages.emp" newUrl={`employees/new`} />
           {/* Page Body */}
-          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
+          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
             {/* top control row */}
             <div className="flex justify-center items-center w-full  py-3">
               {/* top pagination
@@ -247,51 +247,85 @@ export default function Employees({ employees }: any) {
                       />
                     </th>
 
-                                        <th className="">
-                                            <span className=" inline-block relative top-1  mr-1 "> <TbArrowsSort /> </span>
-                                            <span>ID</span>
-                                        </th>
-                                        <th className="">
-                                            <span className=" inline-block relative top-1 mr-1 "> <TbArrowsSort /> </span>
-                                            <span>Name</span>
-                                        </th>
-                                        <th className="">
-                                            <span className=" inline-block relative top-1 mr-1 "> <TbArrowsSort /> </span>
-                                            <span>Role</span>
-                                        </th>
-                                        <th className="">
-                                            <span className=" inline-block relative top-1 mr-1 "> <TbArrowsSort /> </span>
-                                            <span>Email</span>
-                                        </th>
-                                        <th className="">
-                                            <span className="  text-darkGray text-[26px]"><PiDotsThreeCircleLight /></span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="main-table overflow-auto">
-                                    {
-                                        pageEmployees.filter((emp: EmployeeType) => !emp.isDeleted && emp._id != user._id).map((emp: EmployeeType, index: number) => {
-                                            if (index >= startingIndex && index < currentPage * 10) {
-                                                return (
-                                                    <tr key={emp._id} className=" text-left h-full">
-                                                        <td className="check" onClick={() => handleClick(emp)}>
-                                                            <input type="checkbox" checked={selectedEmployees.includes(emp._id)} readOnly />
-                                                        </td>
-                                                        <td>
-                                                            {emp._id}
-                                                        </td>
-                                                        <td>
-                                                            <div className="flex justify-center items-center gap-3 w-full">
-                                                                <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
-                                                                    <Image src={`${emp.image ? emp.image : "/uploads/avatar.png"}`} fill alt="user image" />
-                                                                </div>
-                                                                <div className=" w-1/2">
-                                                                    <p className="text-xl text-darkGray  overflow-hidden max-w-full">{emp.firstName}</p>
-                                                                    <p className="text-sm text-lightGray">{emp.lastName}</p>
-
-                                                                </div>
-                                                            </div>
-                                                        </td>
+                    <th className="">
+                      <span className=" inline-block relative top-1  mr-1 ">
+                        {" "}
+                        <TbArrowsSort />{" "}
+                      </span>
+                      <span>ID</span>
+                    </th>
+                    <th className="">
+                      <span className=" inline-block relative top-1 mr-1 ">
+                        {" "}
+                        <TbArrowsSort />{" "}
+                      </span>
+                      <span>Name</span>
+                    </th>
+                    <th className="">
+                      <span className=" inline-block relative top-1 mr-1 ">
+                        {" "}
+                        <TbArrowsSort />{" "}
+                      </span>
+                      <span>Role</span>
+                    </th>
+                    <th className="">
+                      <span className=" inline-block relative top-1 mr-1 ">
+                        {" "}
+                        <TbArrowsSort />{" "}
+                      </span>
+                      <span>Email</span>
+                    </th>
+                    <th className="">
+                      <span className="  text-darkGray text-[26px]">
+                        <PiDotsThreeCircleLight />
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="main-table overflow-auto">
+                  {pageEmployees
+                    .filter(
+                      (emp: EmployeeType) =>
+                        !emp.isDeleted && emp._id != user._id
+                    )
+                    .map((emp: EmployeeType, index: number) => {
+                      if (index >= startingIndex && index < currentPage * 10) {
+                        return (
+                          <tr key={emp._id} className=" text-left h-full">
+                            <td
+                              className="check"
+                              onClick={() => handleClick(emp)}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedEmployees.includes(emp._id)}
+                                readOnly
+                              />
+                            </td>
+                            <td>{emp._id}</td>
+                            <td>
+                              <div className="flex justify-center items-center gap-3 w-full">
+                                <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
+                                  <Image
+                                    src={`${
+                                      emp.image
+                                        ? emp.image
+                                        : "/uploads/avatar.png"
+                                    }`}
+                                    fill
+                                    alt="user image"
+                                  />
+                                </div>
+                                <div className=" w-1/2">
+                                  <p className="text-xl text-darkGray  overflow-hidden max-w-full">
+                                    {emp.firstName}
+                                  </p>
+                                  <p className="text-sm text-lightGray">
+                                    {emp.lastName}
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
 
                             <td>{emp.role}</td>
                             <td>{emp.email}</td>
@@ -299,7 +333,7 @@ export default function Employees({ employees }: any) {
                             <td>
                               <Link href={`/employees/${emp._id}`}>
                                 <span className=" text-[26px] text-mainBlue cursor-pointer">
-                                <IoArrowForward />
+                                  <IoArrowForward />
                                 </span>
                               </Link>
                             </td>
@@ -315,7 +349,11 @@ export default function Employees({ employees }: any) {
             <div className="pagination-wrapper">
               <div className="flex gap-5 justify-center items-center my-3">
                 <span className=" text-[#9A9A9A]  ">
-                  Showing {startingIndex == 0 ? 1 : startingIndex} to {currentPage * 10 > pageEmployees.length? pageEmployees.length - 1 : currentPage * 10} of {pageEmployees.length - 1} entries
+                  Showing {startingIndex == 0 ? 1 : startingIndex} to{" "}
+                  {currentPage * 10 > pageEmployees.length
+                    ? pageEmployees.length - 1
+                    : currentPage * 10}{" "}
+                  of {pageEmployees.length - 1} entries
                 </span>
                 <button onClick={() => handlePrevPagination()}>&lt;</button>
                 <div className="pages">

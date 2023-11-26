@@ -27,6 +27,9 @@ import { getAllSegments } from "@/http/segmentsHttp";
 import { getAllProducts } from "@/http/productsHttp";
 import SelectField from "@/components/ReactSelect/SelectField";
 import { getAllContacts } from "@/http/contactsHttp";
+import { FaBackspace } from "react-icons/fa";
+import Link from "next/link";
+import { IoMdArrowRoundBack } from "react-icons/io";
 export const getServerSideProps = async (context: any) => {
   const id = context.params.id;
 
@@ -406,10 +409,17 @@ const Account = ({
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
+        <div className="flex flex-col items-start justify-start mt-5  bg-white rounded-xl shadow-md  px-5 gap-3">
           {/* header- wrapper */}
 
-          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
+          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
+            {/* backBtn */}
+            <Link
+              href="/accounts"
+              className="absolute top-5 left-5 text-3xl text-mainBlue"
+            >
+              <IoMdArrowRoundBack />
+            </Link>
             {/* Control */}
             <h2 className=" font-light text-3xl my-4">{`${details?.englishName}`}</h2>
 
@@ -473,7 +483,8 @@ const Account = ({
                       formik.touched.englishName && formik.errors.englishName
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }} `}
+                    } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                    disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.englishName}
@@ -499,7 +510,8 @@ const Account = ({
                       formik.touched.arabicName && formik.errors.arabicName
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } `}
+                    } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                    disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.arabicName}
@@ -525,7 +537,8 @@ const Account = ({
                       formik.touched.website && formik.errors.website
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } `}
+                    } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                    disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.website}
@@ -550,9 +563,15 @@ const Account = ({
                         label: `${res.firstName} ${res.lastName}`,
                       };
                     })}
+                    isDisabled={isEdit}
                     value={formik.values.contacts}
                     onChange={(value: any) =>
                       formik.setFieldValue("contacts", value)
+                    }
+                    isValid={
+                      formik.touched.contacts && formik.errors.contacts
+                        ? false
+                        : true
                     }
                     isMulti={true}
                   />
@@ -584,7 +603,7 @@ const Account = ({
                           {capitalizeFirstLetter(key)}{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        {i === arr.length - 1 && i !== 3 && (
+                        {!isEdit && i === arr.length - 1 && i !== 3 && (
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -604,11 +623,12 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
+                        disabled={isEdit}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        } `}
+                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -639,7 +659,7 @@ const Account = ({
                           {capitalizeFirstLetter(key)}{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        {i === arr.length - 1 && i !== 3 && (
+                        {!isEdit && i === arr.length - 1 && i !== 3 && (
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -659,11 +679,12 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
+                        disabled={isEdit}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        } `}
+                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -694,7 +715,7 @@ const Account = ({
                           {capitalizeFirstLetter(key)}{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        {i === arr.length - 1 && i !== 3 && (
+                        {!isEdit && i === arr.length - 1 && i !== 3 && (
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -714,11 +735,12 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
+                        disabled={isEdit}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        } `}
+                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -749,7 +771,7 @@ const Account = ({
                           {capitalizeFirstLetter(key)}{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        {i === arr.length - 1 && i !== 3 && (
+                        {!isEdit && i === arr.length - 1 && i !== 3 && (
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -769,11 +791,12 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
+                        disabled={isEdit}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        } `}
+                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -805,7 +828,7 @@ const Account = ({
                           {capitalizeFirstLetter(key)}{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        {i === arr.length - 1 && i !== 3 && (
+                        {!isEdit && i === arr.length - 1 && i !== 3 && (
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -825,11 +848,12 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
+                        disabled={isEdit}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        } `}
+                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -860,7 +884,7 @@ const Account = ({
                           {capitalizeFirstLetter(key)}{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        {i === arr.length - 1 && i !== 3 && (
+                        {!isEdit && i === arr.length - 1 && i !== 3 && (
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -880,11 +904,12 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
+                        disabled={isEdit}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        } `}
+                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -924,11 +949,13 @@ const Account = ({
                   {segments?.map((segment: any, index: any) => (
                     <label
                       key={segment.title}
-                      className={`w-[250px] h-[100px] cursor-pointer transition rounded-lg ${
+                      className={`w-[250px] h-[100px] transition rounded-lg ${
                         formik.values.segments.includes(segment._id)
                           ? "bg-mainBlue text-white"
-                          : "bg-bgGray text-black"
-                      } shadow-md flex justify-center items-center text-xl font-light capitalize `}
+                          : "bg-lightGray text-black"
+                      } shadow-md flex justify-center items-center text-xl font-light capitalize ${
+                        !isEdit && "cursor-pointer"
+                      }`}
                       // onClick={() => handleSegments(segment)}
                     >
                       {segment.name}{" "}
@@ -939,6 +966,7 @@ const Account = ({
                         value={segment._id}
                         checked={formik.values.segments.includes(segment._id)}
                         onBlur={formik.handleBlur}
+                        disabled={isEdit}
                         onChange={(event) => {
                           if (event.target.checked) {
                             formik.setFieldValue("segments", [
@@ -985,11 +1013,13 @@ const Account = ({
                   {products?.map((product: any, index: any) => (
                     <label
                       key={product.title}
-                      className={`w-[182px] h-[65px] cursor-pointer transition rounded-lg ${
+                      className={`w-[182px] h-[65px]  transition rounded-lg ${
                         formik.values.products.includes(product._id)
                           ? "bg-mainBlue text-white"
-                          : "bg-bgGray text-black"
-                      } shadow-md flex justify-center items-center text-xl font-light capitalize `}
+                          : "bg-lightGray text-black"
+                      } shadow-md flex justify-center items-center text-xl font-light capitalize ${
+                        !isEdit && "cursor-pointer"
+                      }`}
                       // onClick={() => handleproducts(product)}
                     >
                       {product.name}{" "}
@@ -998,6 +1028,7 @@ const Account = ({
                         name="products"
                         id={`products${index}`}
                         value={product._id}
+                        disabled={isEdit}
                         checked={formik.values.products.includes(product._id)}
                         onChange={(event) => {
                           if (event.target.checked) {

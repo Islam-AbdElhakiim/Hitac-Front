@@ -30,6 +30,8 @@ import {
   getSegmentsById,
   updateSegments,
 } from "@/http/segmentsHttp";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 export const getServerSideProps = async (context: any) => {
   const id = context.params.id;
 
@@ -159,7 +161,13 @@ const Segment = ({ details }: { details: any }) => {
         <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
           {/* header- wrapper */}
 
-          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
+          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
+            <Link
+              href="/segments"
+              className="absolute top-5 left-5 text-3xl text-mainBlue"
+            >
+              <IoMdArrowRoundBack />
+            </Link>
             <div className="image-wrapper flex justify-center items-center w-40 h-40 rounded-full p-5 relative bg-bgGray border overflow-hidden">
               <Image
                 src={filePath ? filePath : "/uploads/avatar.png"}
@@ -223,7 +231,7 @@ const Segment = ({ details }: { details: any }) => {
           <div className="flex flex-col items-start justify-start w-full p-5 gap-3 border rounded-xl mt-2">
             {/* title */}
             <div className="text-2xl text-darkGray border-b-[1px] w-full py-3">
-              <h2>Personal Information</h2>
+              <h2>Segment Information</h2>
             </div>
 
             {/* data-form */}

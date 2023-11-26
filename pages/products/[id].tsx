@@ -1,7 +1,12 @@
 import Button from "@/components/Button";
 import MyModal from "@/components/MyModal";
 
-import { productType, segmentType, stationType } from "@/types";
+import {
+  productInitalType,
+  productType,
+  segmentType,
+  stationType,
+} from "@/types";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "next/image";
@@ -36,6 +41,8 @@ import {
   getProductsById,
   updateProducts,
 } from "@/http/productsHttp";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 export const getServerSideProps = async (context: any) => {
   const id = context.params.id;
 
@@ -96,22 +103,20 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
       .max(20, "Name should be between 3 and 20 letters!")
       .required("Name is required"),
     description: Yup.string().required("Description is required"),
-    department: Yup.string().required("Department is required"),
     segment: Yup.string().required("Segment is required"),
     size: Yup.string().required("Size is required"),
     // Dynamically added email fields validation
   });
 
   const initialValues = {
-    name: details[0]?.name || "",
-    description: details[0]?.description || "",
-    department: details[0]?.department || "",
-    segment: details[0]?.segment || "",
-    size: details[0]?.size || "",
-    image: details[0]?.image || "",
+    name: details?.name || "",
+    description: details?.description || "",
+    segment: details?.segment?._id || "",
+    size: details?.size || "",
+    image: details?.image || "",
   };
 
-  const formik = useFormik<productType>({
+  const formik = useFormik<productInitalType>({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -120,7 +125,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
 
       setModalTitle(`Are you sure?`);
       setModalBody(
-        `Are you sure you want to Save all the updates ${details[0].name}`
+        `Are you sure you want to Save all the updates ${details.name}`
       );
       setIfTrue(() => save);
       setIsOpen(true);
@@ -150,7 +155,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
   };
 
   const save = async (e?: any) => {
-    await updateProducts(details[0]._id, {
+    await updateProducts(details._id, {
       ...formik.values,
     });
     router.push("/products");
@@ -177,10 +182,16 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
+        <div className="flex flex-col items-start justify-start mt-5  bg-white rounded-xl shadow-md px-5 gap-3">
           {/* header- wrapper */}
 
-          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
+          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
+            <Link
+              href="/products"
+              className="absolute top-5 left-5 text-3xl text-mainBlue"
+            >
+              <IoMdArrowRoundBack />
+            </Link>
             <div className="image-wrapper flex justify-center items-center w-40 h-40 rounded-full p-5 relative bg-bgGray border overflow-hidden">
               <Image
                 src={filePath ? filePath : "/uploads/avatar.png"}
@@ -191,7 +202,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
               {/* <input type="file" name="file" accept="image/*" /> */}
             </div>
             {/* Control */}
-            <h2 className=" font-light text-3xl my-4">{`${details[0]?.name}`}</h2>
+            <h2 className=" font-light text-3xl my-4">{`${details?.name}`}</h2>
 
             <div className="flex flex-col justify-center items-center">
               <div className="flex items-center justify-center">
@@ -212,7 +223,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                   }
                   classes="hover:bg-red-500 group transition"
                   handleOnClick={() =>
-                    deleteProduct(details[0].name, details[0]?._id)
+                    deleteProduct(details.name, details?._id)
                   }
                 />
               </div>
@@ -313,39 +324,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                     </small>
                   )}
                 </div>
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg h-12" htmlFor="department">
-                    Department<span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="department"
-                    id="department"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      formik.touched.department && formik.errors.department
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
-                    onChange={formik.handleChange}
-                    value={formik.values.department}
-                    disabled={isEdit}
-                  >
-                    <option selected hidden disabled value={""}>
-                      Select
-                    </option>
-                    {["Inventory", "Marketing", "Sales", "Accounting"].map(
-                      (res: any) => {
-                        return <option value={res}>{res}</option>;
-                      }
-                    )}
-                  </select>
-                  {formik.touched.department && formik.errors.department && (
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 `}
-                    >
-                      {formik.errors.department}
-                    </small>
-                  )}
-                </div>
+
                 <div className="flex flex-col w-full gap-3 relative">
                   <label className="text-lg h-12" htmlFor="segment">
                     Segments<span className="text-red-500">*</span>

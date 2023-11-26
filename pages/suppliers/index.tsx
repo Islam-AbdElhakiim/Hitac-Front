@@ -22,6 +22,7 @@ import { deleteUserById, getAllEmployees } from "@/http/employeeHttp";
 import { deleteAccountById, getAllAccounts } from "@/http/accountsHttp";
 import { GETALLACCOUNTS } from "@/redux/modules/accounts-slice";
 import { deleteSupplierById, getAllSuppliers } from "@/http/supplierHttp";
+import { IoArrowForward } from "react-icons/io5";
 
 export const getServerSideProps = async ({ locale }: any) => {
   const data = await getAllSuppliers();
@@ -147,10 +148,10 @@ export default function Suppliers({ suplliers }: any) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.contact" />
+        <div className="flex flex-col justify-center items-center px-5 h-full">
+          <PageHeader pageTitle="pages.supplier" newUrl={`suppliers/new`} />
           {/* Page Body */}
-          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
+          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
             {/* top control row */}
             <div className="flex justify-center items-center w-full  py-3">
               {/* top pagination
@@ -193,8 +194,8 @@ export default function Suppliers({ suplliers }: any) {
                     <span
                       className={` text-2xl transition ${
                         selectedSuplliers.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "text-mainBlue group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       <MdModeEdit />
@@ -203,8 +204,8 @@ export default function Suppliers({ suplliers }: any) {
                   title="Update"
                   classes={`${
                     selectedSuplliers.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedSuplliers.length != 1}
                   handleOnClick={() =>
@@ -216,8 +217,8 @@ export default function Suppliers({ suplliers }: any) {
                     <span
                       className={` text-2xl transition ${
                         selectedSuplliers.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "!text-[#E70C0C] group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       {" "}
@@ -227,8 +228,8 @@ export default function Suppliers({ suplliers }: any) {
                   title="Delete"
                   classes={`${
                     selectedSuplliers.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedSuplliers.length < 1}
                   handleOnClick={handleDelete}
@@ -237,7 +238,7 @@ export default function Suppliers({ suplliers }: any) {
             </div>
 
             {/* Table */}
-            <div className="w-full h-[80%] overflow-auto">
+            <div className="main-table w-full h-[80%] overflow-auto">
               <table className={` w-full`}>
                 <thead className=" bg-bgGray ">
                   <tr className="  text-left ">
@@ -295,7 +296,7 @@ export default function Suppliers({ suplliers }: any) {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="  h-[200px] border border-green-500 overflow-auto">
+                <tbody className="main-table overflow-auto">
                   {pageSuplliers
                     ?.filter((supp: supplierType) => !supp.isDeleted)
                     .map((supp: supplierType, index: number) => {
@@ -315,14 +316,14 @@ export default function Suppliers({ suplliers }: any) {
                             <td>{supp._id}</td>
                             <td>{`${supp.firstName} ${supp.lastName}`}</td>
 
-                            <td></td>
-                            <td></td>
-                            <td>{supp.note}</td>
+                            <td>{supp?.type || "-"}</td>
+                            <td>{supp.dept || "-"}</td>
+                            <td>{supp.note || "-"}</td>
 
                             <td>
                               <Link href={`/suppliers/${supp._id}`}>
                                 <span className=" text-[26px] text-mainBlue cursor-pointer">
-                                  <TbTextDirectionLtr />
+                                  <IoArrowForward />
                                 </span>
                               </Link>
                             </td>

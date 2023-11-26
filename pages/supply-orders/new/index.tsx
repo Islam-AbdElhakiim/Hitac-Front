@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import countries from "@/constants/countries";
-import { productType, supplyOrderType } from "@/types";
+import { productType, supplyOrderInitalType, supplyOrderType } from "@/types";
 import { createSupplyOrder } from "@/http/supplyOrderHttp";
 import Select from "react-select";
 import { StylesConfig } from "react-select";
@@ -19,6 +19,8 @@ import SelectField from "@/components/ReactSelect/SelectField";
 import { useEffect } from "react";
 import { getAllSuppliers } from "@/http/supplierHttp";
 import { getAllProducts } from "@/http/productsHttp";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 export const getServerSideProps = async (context: any) => {
   const supplierFetch = async () => {
     return await getAllSuppliers();
@@ -53,6 +55,7 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
   const router = useRouter();
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
+  const user = useSelector((state: any) => state.authReducer);
 
   //#region initialization
 
@@ -60,19 +63,20 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
     salesOrder: Yup.string().required("Sales Order is required"),
     supplier: Yup.string().required("Supplier is required"),
     createdOn: Yup.string().required("Created On is required"),
-    product: Yup.array().required("Product is required"),
+    products: Yup.array().min(1, "Product is required"),
     price: Yup.string().required("Price is required"),
     description: Yup.string().required("Description is required"),
 
     // Dynamically added email fields validation
   });
 
-  const formik = useFormik<supplyOrderType>({
+  const formik = useFormik<supplyOrderInitalType>({
     initialValues: {
-      salesOrder: "qq",
+      salesOrder: "",
       supplier: "",
       createdOn: "",
-      product: [],
+      createdBy: user._id,
+      products: [],
       price: "",
 
       description: "",
@@ -96,12 +100,12 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10 bg-white rounded-xl shadow-md ">
           {/* personal-data-section */}
-          <div className="flex flex-col items-start justify-start w-full p-5 gap-3">
+          <div className="flex flex-col items-start justify-start w-full p-5 gap-3 relative">
             {/* title */}
             <div className="text-2xl text-darkGray border-b-[1px] w-full py-3">
-              <h2>Personal Information</h2>
+              <h2>Order Information</h2>
             </div>
 
             {/* data-form */}
@@ -130,6 +134,11 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     value={formik.values.salesOrder}
                     onChange={(value: any) =>
                       formik.setFieldValue("salesOrder", value.value)
+                    }
+                    isValid={
+                      formik.touched.salesOrder && formik.errors.salesOrder
+                        ? false
+                        : true
                     }
                   />
                   {formik.touched.salesOrder && formik.errors.salesOrder && (
@@ -181,6 +190,11 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     onChange={(value: any) =>
                       formik.setFieldValue("supplier", value.value)
                     }
+                    isValid={
+                      formik.touched.supplier && formik.errors.supplier
+                        ? false
+                        : true
+                    }
                   />
                   {/* <select
                     name="supplier"
@@ -216,18 +230,23 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     options={products?.map((res: any) => {
                       return { value: res._id, label: res.name };
                     })}
-                    value={formik.values.product}
+                    value={formik.values.products}
                     onChange={(value: any) =>
-                      formik.setFieldValue("product", value)
+                      formik.setFieldValue("products", value)
                     }
                     isMulti={true}
+                    isValid={
+                      formik.touched.products && formik.errors.products
+                        ? false
+                        : true
+                    }
                   />
 
-                  {formik.touched.product && formik.errors.product && (
+                  {formik.touched.products && formik.errors.products && (
                     <small
                       className={`text-red-500 absolute -bottom-6 left-2 `}
                     >
-                      {formik.errors.product}
+                      {formik.errors.products}
                     </small>
                   )}
                 </div>
@@ -269,7 +288,11 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     name="description"
                     id="description"
                     rows={7}
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 `}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
+                      formik.touched.description && formik.errors.description
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
+                    }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}

@@ -18,6 +18,7 @@ import Loader from "@/components/Loader";
 import MyModal from "@/components/MyModal";
 import Link from "next/link";
 import { deleteSegmentsById, getAllSegments } from "@/http/segmentsHttp";
+import { IoArrowForward } from "react-icons/io5";
 
 export const getServerSideProps = async ({ locale }: any) => {
   const data = await getAllSegments();
@@ -142,10 +143,11 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.segments" />
+        <div className="flex flex-col justify-center items-center px-5 h-full ">
+          <PageHeader pageTitle="pages.segments" newUrl={`segments/new`} />
+
           {/* Page Body */}
-          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
+          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
             {/* top control row */}
             <div className="flex justify-center items-center w-full  py-3">
               {/* top pagination
@@ -188,8 +190,8 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
                     <span
                       className={` text-2xl transition ${
                         selectedSegments.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "text-mainBlue group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       <MdModeEdit />
@@ -198,8 +200,8 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
                   title="Update"
                   classes={`${
                     selectedSegments.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedSegments.length != 1}
                   handleOnClick={() =>
@@ -211,8 +213,8 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
                     <span
                       className={` text-2xl transition ${
                         selectedSegments.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "!text-[#E70C0C] group-hover:!text-white"
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       {" "}
@@ -222,8 +224,8 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
                   title="Delete"
                   classes={`${
                     selectedSegments.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white"
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
                   }  group `}
                   isDisabled={selectedSegments.length < 1}
                   handleOnClick={handleDelete}
@@ -232,7 +234,7 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
             </div>
 
             {/* Table */}
-            <div className="w-full h-[80%] overflow-auto">
+            <div className="main-table w-full h-[80%] overflow-auto">
               <table className={` w-full`}>
                 <thead className=" bg-bgGray ">
                   <tr className="  text-left ">
@@ -267,9 +269,14 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
                       </span>
                       <span>Description</span>
                     </th>
+                    <th className="">
+                      <span className="  text-darkGray text-[26px]">
+                        <PiDotsThreeCircleLight />
+                      </span>
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="  h-[200px] border border-green-500 overflow-auto">
+                <tbody className="main-table overflow-auto">
                   {pageSegments
                     ?.filter((segment: segmentType) => !segment.isDeleted)
                     .map((segment: segmentType, index: number) => {
@@ -286,20 +293,16 @@ export default function Segments({ segments }: { segments: segmentType[] }) {
                                 readOnly
                               />
                             </td>
-                            <td
-                              className="cursor-pointer"
-                              onClick={() => navigate(segment._id)}
-                            >
-                              {segment._id}
+                            <td className="cursor-pointer">{segment._id}</td>
+                            <td className="cursor-pointer">{`${segment.name}`}</td>
+                            <td className="cursor-pointer">{`${segment.description}`}</td>
+                            <td>
+                              <Link href={`/segments/${segment._id}`}>
+                                <span className=" text-[26px] text-mainBlue cursor-pointer">
+                                  <IoArrowForward />
+                                </span>
+                              </Link>
                             </td>
-                            <td
-                              className="cursor-pointer"
-                              onClick={() => navigate(segment._id)}
-                            >{`${segment.name}`}</td>
-                            <td
-                              className="cursor-pointer"
-                              onClick={() => navigate(segment._id)}
-                            >{`${segment.description}`}</td>
                           </tr>
                         );
                       }

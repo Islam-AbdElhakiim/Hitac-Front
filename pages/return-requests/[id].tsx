@@ -76,9 +76,12 @@ import {
 } from "@/http/supplyOrderHttp";
 import SelectField from "@/components/ReactSelect/SelectField";
 import {
+  deleteReturnRequestsById,
   getReturnRequestsById,
   updateReturnRequests,
 } from "@/http/returnRequestHttp";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 export const getServerSideProps = async (context: any) => {
   const id = context.params.id;
 
@@ -115,7 +118,7 @@ export const getServerSideProps = async (context: any) => {
   };
 };
 
-const Station = ({
+const ReturnRequests = ({
   details,
   supplyOrder,
   supplier,
@@ -147,7 +150,7 @@ const Station = ({
   const [ifTrue, setIfTrue] = useState<() => void>(() => {});
 
   useEffect(() => {
-    setIsEdit(searchParams.get("isEdit") !== "true");
+    setIsEdit(searchParams.get("isEdit") === "true");
   }, [searchParams]);
 
   // Handle remove User
@@ -156,7 +159,7 @@ const Station = ({
     supplyOrder: Yup.string().required("Supply Order is required"),
     supplier: Yup.string().required("Supplier is required"),
     createdOn: Yup.string().required("Created On is required"),
-    product: Yup.array().required("Product is required"),
+    product: Yup.string().required("Product is required"),
     price: Yup.string().required("Price is required"),
     description: Yup.string().required("Description is required"),
 
@@ -182,7 +185,7 @@ const Station = ({
 
       setModalTitle(`Are you sure?`);
       setModalBody(
-        `Are you sure you want to Save all the updates ${details.englishName}`
+        `Are you sure you want to Save all the updates ${details._id}`
       );
       setIfTrue(() => save);
       setIsOpen(true);
@@ -195,8 +198,8 @@ const Station = ({
     const Delete = async () => {
       dispatch(SHOW_LOADER());
       try {
-        await deleteStationById(_id);
-        router.push("/stations");
+        await deleteReturnRequestsById(_id);
+        router.push("/return-requests");
       } catch (e) {
       } finally {
         dispatch(HIDE_LOADER());
@@ -225,9 +228,15 @@ const Station = ({
         <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
           {/* header- wrapper */}
 
-          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
+          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
+            <Link
+              href="/return-requests"
+              className="absolute top-5 left-5 text-3xl text-mainBlue"
+            >
+              <IoMdArrowRoundBack />
+            </Link>
             {/* Control */}
-            <h2 className=" font-light text-3xl my-4">{`${details?.englishName}`}</h2>
+            <h2 className=" font-light text-3xl my-4">{`${details?._id}`}</h2>
 
             <div className="flex flex-col justify-center items-center">
               <div className="flex items-center justify-center">
@@ -247,9 +256,7 @@ const Station = ({
                     </span>
                   }
                   classes="hover:bg-red-500 group transition"
-                  handleOnClick={() =>
-                    deleteRow(details.englishName, details?._id)
-                  }
+                  handleOnClick={() => deleteRow(details._id, details?._id)}
                 />
               </div>
             </div>
@@ -262,7 +269,7 @@ const Station = ({
           <div className="flex flex-col items-start justify-start w-full p-5 gap-3">
             {/* title */}
             <div className="text-2xl text-darkGray border-b-[1px] w-full py-3">
-              <h2>Personal Information</h2>
+              <h2>Order Information</h2>
             </div>
 
             {/* data-form */}
@@ -290,7 +297,8 @@ const Station = ({
                       formik.touched.id && formik.errors.id
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } `}
+                    } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                    disabled={true}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.id}
@@ -318,6 +326,12 @@ const Station = ({
                     onChange={(value: any) =>
                       formik.setFieldValue("supplyOrder", value.value)
                     }
+                    isDisabled={!isEdit}
+                    isValid={
+                      formik.touched.supplyOrder && formik.errors.supplyOrder
+                        ? false
+                        : true
+                    }
                   />
                   {formik.touched.supplyOrder && formik.errors.supplyOrder && (
                     <small
@@ -340,7 +354,8 @@ const Station = ({
                       formik.touched.createdOn && formik.errors.createdOn
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } `}
+                    } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                    disabled={!isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.createdOn}
@@ -367,6 +382,12 @@ const Station = ({
                     value={formik.values.supplier}
                     onChange={(value: any) =>
                       formik.setFieldValue("supplier", value.value)
+                    }
+                    isDisabled={!isEdit}
+                    isValid={
+                      formik.touched.supplier && formik.errors.supplier
+                        ? false
+                        : true
                     }
                   />
                   {/* <select
@@ -407,6 +428,12 @@ const Station = ({
                     onChange={(value: any) =>
                       formik.setFieldValue("product", value.value)
                     }
+                    isDisabled={!isEdit}
+                    isValid={
+                      formik.touched.product && formik.errors.product
+                        ? false
+                        : true
+                    }
                   />
 
                   {formik.touched.product && formik.errors.product && (
@@ -430,7 +457,8 @@ const Station = ({
                       formik.touched.price && formik.errors.price
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } `}
+                    } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                    disabled={!isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.price}
@@ -455,7 +483,10 @@ const Station = ({
                     name="description"
                     id="description"
                     rows={7}
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 `}
+                    disabled={!isEdit}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
+                      isEdit ? "bg-white " : "bg-lightGray"
+                    }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}
@@ -521,4 +552,4 @@ const Station = ({
   );
 };
 
-export default Station;
+export default ReturnRequests;

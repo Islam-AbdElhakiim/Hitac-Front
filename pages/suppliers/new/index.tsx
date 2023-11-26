@@ -199,10 +199,28 @@ const NewContact = ({
             parseInt(b.replace("telephone", ""))
         )
         .map((key) => values[key]);
+      const countriesFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("countries"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("countries", "")) -
+            parseInt(b.replace("countries", ""))
+        )
+        .map((key) => values[key]);
+      const citiesFieldValues: any = Object.keys(values)
+        .filter((key) => key.startsWith("cities"))
+        .sort(
+          (a, b) =>
+            parseInt(a.replace("cities", "")) -
+            parseInt(b.replace("cities", ""))
+        )
+        .map((key) => values[key]);
       await createSupplier({
         ...values,
         emails: emailFieldValues,
         telephones: telephoneFieldValues,
+        countries: countriesFieldValues,
+        cities: citiesFieldValues,
       });
       router.push("/suppliers");
       console.log(values);
@@ -248,7 +266,7 @@ const NewContact = ({
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10 bg-white rounded-xl shadow-md ">
           {/* personal-data-section */}
           <div className="flex flex-col items-start justify-start w-full p-5 gap-3">
             {/* title */}
@@ -325,24 +343,19 @@ const NewContact = ({
                   <label className="text-lg h-12" htmlFor="countries">
                     Country<span className="text-red-500">*</span>
                   </label>
-                  <select
+                  <input
+                    type="text"
                     name="countries"
                     id="countries"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                       formik.touched.countries && formik.errors.countries
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }`}
+                    } `}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.countries}
-                  >
-                    <option selected disabled value={""}>
-                      Select
-                    </option>
-                    {countryList.map((res: any) => {
-                      return <option value={res}>{res}</option>;
-                    })}
-                  </select>
+                  />
                   {formik.touched.countries && formik.errors.countries && (
                     <small
                       className={`text-red-500 absolute -bottom-6 left-2 `}
@@ -355,25 +368,19 @@ const NewContact = ({
                   <label className="text-lg h-12" htmlFor="cities">
                     City<span className="text-red-500">*</span>
                   </label>
-                  <select
+                  <input
+                    type="text"
                     name="cities"
                     id="cities"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                       formik.touched.cities && formik.errors.cities
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }`}
+                    } `}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.cities}
-                    disabled={formik.values.countries ? false : true}
-                  >
-                    <option selected disabled value={""}>
-                      Select
-                    </option>
-                    {countries[formik.values.countries]?.map((res: any) => {
-                      return <option value={res}>{res}</option>;
-                    })}
-                  </select>
+                  />
                   {formik.touched.cities && formik.errors.cities && (
                     <small
                       className={`text-red-500 absolute -bottom-6 left-2 `}

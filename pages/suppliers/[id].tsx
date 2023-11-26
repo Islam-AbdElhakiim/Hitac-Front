@@ -60,6 +60,8 @@ import countries from "@/constants/countries";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PiDotsThreeCircleLight } from "react-icons/pi";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 export const getServerSideProps = async (context: any) => {
   const id = context.params.id;
 
@@ -105,7 +107,7 @@ const Supplier = ({
   const searchParams = useSearchParams();
   const [isEdit, setIsEdit] = useState(false);
 
-  const [contact, setContact] = useState<contactType>(details[0]);
+  const [contact, setContact] = useState<contactType>(details);
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const dispatch = useDispatch<AppDispatch>();
   const phoneRegex = /^(\+\d{1,2}\s?)?(\(\d{1,}\)|\d{1,})([-\s]?\d{1,})+$/;
@@ -216,7 +218,7 @@ const Supplier = ({
 
     // Dynamically added email fields validation
   });
-  const telephones = details[0].telephones.reduce(
+  const telephones = details.telephones.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["telephones"] = currentValue)
@@ -225,7 +227,7 @@ const Supplier = ({
     },
     {}
   );
-  const emails = details[0].emails.reduce(
+  const emails = details.emails.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["emails"] = currentValue)
@@ -236,15 +238,15 @@ const Supplier = ({
   );
 
   const initialValues = {
-    firstName: details[0].firstName || "",
-    lastName: details[0].lastName || "",
-    countries: details[0].countries[0] || "",
-    cities: details[0].cities[0] || "",
+    firstName: details.firstName || "",
+    lastName: details.lastName || "",
+    countries: details.countries[0] || "",
+    cities: details.cities[0] || "",
     ...telephones,
     ...emails,
-    note: details[0].note || "",
-    segments: details[0].segments || [],
-    products: details[0].products || [],
+    note: details.note || "",
+    segments: details.segments._id || [],
+    products: details.products._id || [],
   };
 
   const formik = useFormik<supplierType>({
@@ -255,7 +257,7 @@ const Supplier = ({
 
       setModalTitle(`Are you sure?`);
       setModalBody(
-        `Are you sure you want to Save all the updates ${details[0].firstName}`
+        `Are you sure you want to Save all the updates ${details.firstName}`
       );
       setIfTrue(() => save);
       setIsOpen(true);
@@ -333,11 +335,29 @@ const Supplier = ({
           parseInt(b.replace("telephone", ""))
       )
       .map((key) => formik.values[key]);
-    await updateSupplier(details[0]._id, {
+    const countriesFieldValues: any = Object.keys(formik.values)
+      .filter((key) => key.startsWith("countries"))
+      .sort(
+        (a, b) =>
+          parseInt(a.replace("countries", "")) -
+          parseInt(b.replace("countries", ""))
+      )
+      .map((key) => formik.values[key]);
+    const citiesFieldValues: any = Object.keys(formik.values)
+      .filter((key) => key.startsWith("cities"))
+      .sort(
+        (a, b) =>
+          parseInt(a.replace("cities", "")) - parseInt(b.replace("cities", ""))
+      )
+      .map((key) => formik.values[key]);
+    await updateSupplier(details._id, {
       ...formik.values,
       emails: emailFieldValues,
       telephones: telephoneFieldValues,
+      countries: countriesFieldValues,
+      cities: citiesFieldValues,
     });
+
     router.push("/suppliers");
   };
 
@@ -346,12 +366,18 @@ const Supplier = ({
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
+        <div className="flex flex-col items-start justify-start mt-5  bg-white rounded-xl shadow-md px-5 gap-3">
           {/* header- wrapper */}
 
-          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
+          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
             {/* Control */}
-            <h2 className=" font-light text-3xl my-4">{`${details[0]?.firstName} ${details[0]?.lastName}`}</h2>
+            <Link
+              href="/suppliers"
+              className="absolute top-5 left-5 text-3xl text-mainBlue"
+            >
+              <IoMdArrowRoundBack />
+            </Link>
+            <h2 className=" font-light text-3xl my-4">{`${details?.firstName} ${details?.lastName}`}</h2>
 
             <div className="flex flex-col justify-center items-center">
               <div className="flex items-center justify-center">
@@ -372,7 +398,7 @@ const Supplier = ({
                   }
                   classes="hover:bg-red-500 group transition"
                   handleOnClick={() =>
-                    deleteAccount(details[0].englishName, details[0]?._id)
+                    deleteAccount(details.englishName, details?._id)
                   }
                 />
               </div>
@@ -483,25 +509,20 @@ const Supplier = ({
                       <label className="text-lg h-12" htmlFor="countries">
                         Country<span className="text-red-500">*</span>
                       </label>
-                      <select
+                      <input
+                        type="text"
                         name="countries"
                         id="countries"
-                        className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched.countries && formik.errors.countries
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
                         } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
-                        onChange={formik.handleChange}
-                        value={formik.values.countries}
                         disabled={isEdit}
-                      >
-                        <option selected disabled value={""}>
-                          Select
-                        </option>
-                        {countryList.map((res: any) => {
-                          return <option value={res}>{res}</option>;
-                        })}
-                      </select>
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.countries}
+                      />
                       {formik.touched.countries && formik.errors.countries && (
                         <small
                           className={`text-red-500 absolute -bottom-6 left-2 `}
@@ -514,27 +535,20 @@ const Supplier = ({
                       <label className="text-lg h-12" htmlFor="cities">
                         City<span className="text-red-500">*</span>
                       </label>
-                      <select
+                      <input
+                        type="text"
                         name="cities"
                         id="cities"
-                        className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched.cities && formik.errors.cities
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
                         } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                        disabled={isEdit}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         value={formik.values.cities}
-                        disabled={
-                          formik.values.countries && isEdit ? false : true
-                        }
-                      >
-                        <option selected disabled value={""}>
-                          Select
-                        </option>
-                        {countries[formik.values.countries]?.map((res: any) => {
-                          return <option value={res}>{res}</option>;
-                        })}
-                      </select>
+                      />
                       {formik.touched.cities && formik.errors.cities && (
                         <small
                           className={`text-red-500 absolute -bottom-6 left-2 `}

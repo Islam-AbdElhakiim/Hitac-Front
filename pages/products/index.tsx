@@ -25,6 +25,7 @@ import MyModal from "@/components/MyModal";
 import Link from "next/link";
 import { deleteSegmentsById, getAllSegments } from "@/http/segmentsHttp";
 import { deleteProductsById, getAllProducts } from "@/http/productsHttp";
+import { IoArrowForward } from "react-icons/io5";
 
 export const getServerSideProps = async ({ locale }: any) => {
   const data = await getAllProducts();
@@ -56,7 +57,7 @@ export default function Products({ products }: { products: productType[] }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
+  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -150,7 +151,7 @@ export default function Products({ products }: { products: productType[] }) {
         <Loader />
       ) : (
         <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.products" newUrl="" />
+          <PageHeader pageTitle="pages.products" newUrl={"products/new"} />
           {/* Page Body */}
           <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
             {/* top control row */}
@@ -193,19 +194,21 @@ export default function Products({ products }: { products: productType[] }) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${selectedProducts.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "text-mainBlue group-hover:!text-white"
-                        } `}
+                      className={` text-2xl transition ${
+                        selectedProducts.length != 1
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
+                      } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${selectedProducts.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
-                    }  group `}
+                  classes={`${
+                    selectedProducts.length != 1
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
+                  }  group `}
                   isDisabled={selectedProducts.length != 1}
                   handleOnClick={() =>
                     router.push(`products/${selectedProducts[0]}?isEdit=true`)
@@ -214,20 +217,22 @@ export default function Products({ products }: { products: productType[] }) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${selectedProducts.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "!text-[#E70C0C] group-hover:!text-white"
-                        } `}
+                      className={` text-2xl transition ${
+                        selectedProducts.length < 1
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
+                      } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${selectedProducts.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white"
-                    }  group `}
+                  classes={`${
+                    selectedProducts.length < 1
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
+                  }  group `}
                   isDisabled={selectedProducts.length < 1}
                   handleOnClick={handleDelete}
                 />
@@ -235,7 +240,7 @@ export default function Products({ products }: { products: productType[] }) {
             </div>
 
             {/* Table */}
-            <div className="w-full h-[80%] overflow-auto">
+            <div className="main-table w-full h-[80%] overflow-auto">
               <table className={` w-full`}>
                 <thead className=" bg-bgGray ">
                   <tr className="  text-left ">
@@ -277,9 +282,14 @@ export default function Products({ products }: { products: productType[] }) {
                       </span>
                       <span>Segment</span>
                     </th>
+                    <th className="">
+                      <span className="  text-darkGray text-[26px]">
+                        <PiDotsThreeCircleLight />
+                      </span>
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="  h-[200px] border border-green-500 overflow-auto">
+                <tbody className="main-table overflow-auto">
                   {pageProducts
                     ?.filter((product: productType) => !product.isDeleted)
                     .map((product: productType, index: number) => {
@@ -296,24 +306,17 @@ export default function Products({ products }: { products: productType[] }) {
                                 readOnly
                               />
                             </td>
-                            <td
-                              className="cursor-pointer"
-                              onClick={() => navigate(product._id)}
-                            >
-                              {product._id}
+                            <td className="cursor-pointer">{product._id}</td>
+                            <td className="cursor-pointer">{`${product.name}`}</td>
+                            <td className="cursor-pointer">{`${product.description}`}</td>
+                            <td className="cursor-pointer">{`${product.segment.name}`}</td>
+                            <td>
+                              <Link href={`/products/${product._id}`}>
+                                <span className=" text-[26px] text-mainBlue cursor-pointer">
+                                  <IoArrowForward />
+                                </span>
+                              </Link>
                             </td>
-                            <td
-                              className="cursor-pointer"
-                              onClick={() => navigate(product._id)}
-                            >{`${product.name}`}</td>
-                            <td
-                              className="cursor-pointer"
-                              onClick={() => navigate(product._id)}
-                            >{`${product.description}`}</td>
-                            <td
-                              className="cursor-pointer"
-                              onClick={() => navigate(product._id)}
-                            >{`${product.segment}`}</td>
                           </tr>
                         );
                       }

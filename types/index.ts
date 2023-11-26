@@ -108,14 +108,51 @@ export type accountInitalType = {
 };
 export type contactType = {
     _id?: string;
-    englishName:string,
-    arabicName:string,
-    websites:{[key: string]: string}[],
+    firstName:string,
+    lastName:string,
+    websites:string[],
+    countries:string[] |string,
+    emails:string[],
+    telephones:string[],
+    cities:string[] |string,
+    ports: string[],
+    note:string,
+    segments: {[key: string]: string}[],
+    products: {[key: string]: string}[],
+
+    account: {[key: string]: string},
+    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[] |{[key: string]: string}; // Adding an index signature
+
+};
+export type contactInitalType = {
+    _id?: string;
+    firstName:string,
+    lastName:string,
+    website:string,
     country:string,
-    emails:{[key: string]: string}[],
-    telephones:{[key: string]: string}[],
+    email:string,
+    telephone:string,
     city:string,
-    ports: {[key: string]: string}[],
+    port: string,
+    note:string,
+    segments: string[],
+    products: string[],
+
+    account: string,
+    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+
+};
+export type contactinterface = {
+    _id?: string;
+    firstName:string,
+    lastName:string,
+    websites:string[],
+    countries:string[],
+    emails:string[],
+    telephones:string[],
+    cities:string[],
+    ports: string[],
+    note:string,
     segments: string[],
     products: string[],
 
@@ -155,9 +192,21 @@ export type stationType = {
 export type supplyOrderType = {
     _id?: string;
     salesOrder:string,
+    supplier:{[key: string]: string},
+    createdOn:string,
+    products:{[key: string]: string},
+    price:string,
+    description:string,
+    [key: string]: string | number | undefined  | string[] |{[key: string]: string} ; // Adding an index signature
+
+};
+export type supplyOrderInitalType = {
+    _id?: string;
+    salesOrder:string,
     supplier:string,
     createdOn:string,
-    product:string[],
+    createdB?:string,
+    products:string[],
     price:string,
     description:string,
     [key: string]: string | number | undefined  | string[] ; // Adding an index signature
@@ -199,8 +248,19 @@ export type productType ={
     name:string,
     description:string,
     size:string,
+    segment:{[key: string]: string},
     image?:string,
-    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+    [key: string]: string | number | undefined  | string[] | {[key: string]: string} ; // Adding an index signature
+
+}
+export type productInitalType ={
+    _id?: string;
+    name:string,
+    description:string,
+    size:string,
+    segment:string,
+    image?:string,
+    [key: string]: string | number | undefined  | string[]  ; // Adding an index signature
 
 }
 

@@ -158,6 +158,12 @@
     "pages": {
         "emp": "Employees",
         "acc": "Accounts",
-        "contact": "Contacts"
+        "contact": "Contacts",
+        "supplier": "Suppliers",
+        "station": "Stations",
+        "segments": "Segments",
+        "supply-orders": "Supply Orders",
+        "return-requests": "Return Requests",
+        "products": "Products"
     }
 }

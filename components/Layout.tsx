@@ -34,10 +34,10 @@ const Layout = ({
       dispatch(HIDE_LOADER());
     }
 
-        //check if the user is logged in by session cookie
-        const sessionCookie = document.cookie.includes('session');
-        console.log(document.cookie.split(";"), "cookies");
-        console.log("session", sessionCookie);
+    //check if the user is logged in by session cookie
+    const sessionCookie = document.cookie.includes("session");
+    console.log(document.cookie.split(";"), "cookies");
+    console.log("session", sessionCookie);
 
     if (!sessionCookie && component != "Login") {
       dispatch(SHOW_LOADER());
@@ -51,51 +51,44 @@ const Layout = ({
       setIsLocalLoading(false);
     }
 
-        //check for store user data, if not exists fetch him
-        //if not exists fetch it 
-        if (component != "Login") {
-
-            if (Object.keys(user).length < 1 && component != "Login") {
-                let fetchUser = async () => {
-                    try {
-                        // setLoader(true)
-                        // setIsLocalLoading(true)
-                        const userSession = checkCookie('user');
-                        console.log("session2", userSession);
-                        if (userSession) {
-                            const user = await getUserById(userSession);
-                            // console.log(user)
-                            if (user) {
-                                dispatch(LOGIN({ user }));
-                                return setIsLocalLoading(false);
-                            } else {
-                                throw new Error(" couldn't fetch the user at layout fetchUser method");
-                            }
-
-                        } else {
-                            console.log("can't find sessin")
-                            router.push('/login')
-                        }
-                    } catch (e) {
-                        console.log(e)
-                        router.push('/login')
-
-                    } finally {
-                        setIsLocalLoading(false)
-                    }
-                }
-                fetchUser();
+    //check for store user data, if not exists fetch him
+    //if not exists fetch it
+    if (component != "Login") {
+      if (Object.keys(user).length < 1 && component != "Login") {
+        let fetchUser = async () => {
+          try {
+            // setLoader(true)
+            // setIsLocalLoading(true)
+            const userSession = checkCookie("user");
+            console.log("session2", userSession);
+            if (userSession) {
+              const user = await getUserById(userSession);
+              // console.log(user)
+              if (user) {
+                dispatch(LOGIN({ user }));
+                return setIsLocalLoading(false);
+              } else {
+                throw new Error(
+                  " couldn't fetch the user at layout fetchUser method"
+                );
+              }
             } else {
-                setIsLocalLoading(false);
+              console.log("can't find sessin");
+              router.push("/login");
             }
-        }
-
-    }, [])
-
-
-
-
-
+          } catch (e) {
+            console.log(e);
+            router.push("/login");
+          } finally {
+            setIsLocalLoading(false);
+          }
+        };
+        fetchUser();
+      } else {
+        setIsLocalLoading(false);
+      }
+    }
+  }, []);
 
   return (
     <div className="div">
@@ -105,14 +98,16 @@ const Layout = ({
         <>
           {component != "Login" ? (
             <section
-              className={` w-full h-screen rounded-3xl flex justify-center items-center px-10 gap-10 bg-bgGray ${
+              className={`grid grid-cols-5 gap-2 h-screen ${
                 direction == "rtl" && "rtl-rdirection"
               }`}
             >
-              <Navigation />
-              <section className="flex-[4.5] rounded-2xl h-[95vh]">
+              <div className="col-span-1 p-4">
+                <Navigation />
+              </div>
+              <section className="col-span-4 p-4 h-screen ">
                 <Header />
-                <main>{children}</main>
+                <main className="h-[86vh]">{children}</main>
               </section>
             </section>
           ) : (

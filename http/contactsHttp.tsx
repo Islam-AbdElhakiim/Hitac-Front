@@ -1,5 +1,10 @@
-import { CreateEmployeeDTO } from "@/types";
-import { deleteRequest, getRequest, patchRequest } from "./requests";
+import { contactinterface } from "@/types";
+import {
+  deleteRequest,
+  getRequest,
+  patchRequest,
+  postRequest,
+} from "./requests";
 
 export const getAllContacts = async () => {
   const result = await getRequest(`contacts`);
@@ -16,7 +21,12 @@ export const deleteContactById = async (id: string) => {
   return result;
 };
 
-export const updateContact = async (id: string, newEmp: CreateEmployeeDTO) => {
-  const result = await patchRequest(`contacts/${id}`, newEmp);
+export const updateContact = async (id: string, cont: contactinterface) => {
+  const result = await patchRequest(`contacts/${id}`, cont);
+  return result;
+};
+
+export const createContact = async (cont: contactinterface) => {
+  const result = await postRequest(`contacts`, cont);
   return result;
 };

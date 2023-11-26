@@ -66,6 +66,8 @@ import {
   getStationById,
   updateStation,
 } from "@/http/stationsHttp";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Link from "next/link";
 export const getServerSideProps = async (context: any) => {
   const id = context.params.id;
 
@@ -117,9 +119,13 @@ const Station = ({ details }: { details: any }) => {
 
   const validationSchema: any = Yup.object().shape({
     englishName: Yup.string()
-      .min(3, "First Name should be between 3 and 20 letters!")
-      .max(20, "First Name should be between 3 and 20 letters!")
-      .required("First Name is required"),
+      .min(3, "English Name should be between 3 and 20 letters!")
+      .max(20, "English Name should be between 3 and 20 letters!")
+      .required("English Name is required"),
+    arabicName: Yup.string()
+      .min(3, "Arabic Name should be between 3 and 20 letters!")
+      .max(20, "Arabic Name should be between 3 and 20 letters!")
+      .required("Arabic Name is required"),
     address: Yup.string().required("Address is required"),
     countries: Yup.string().required("Country is required"),
     cities: Yup.string().required("City is required"),
@@ -197,7 +203,7 @@ const Station = ({ details }: { details: any }) => {
 
     // Dynamically added email fields validation
   });
-  const telephones = details[0].telephones.reduce(
+  const telephones = details.telephones.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["telephones"] = currentValue)
@@ -206,7 +212,7 @@ const Station = ({ details }: { details: any }) => {
     },
     {}
   );
-  const emails = details[0].emails.reduce(
+  const emails = details.emails.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["emails"] = currentValue)
@@ -217,14 +223,14 @@ const Station = ({ details }: { details: any }) => {
   );
 
   const initialValues = {
-    englishName: details[0].englishName || "",
-    address: details[0].address || "",
-    arabicName: details[0].arabicName || "",
-    countries: details[0].countries[0] || "",
-    cities: details[0].cities[0] || "",
+    englishName: details.englishName || "",
+    address: details.address || "",
+    arabicName: details.arabicName || "",
+    countries: details.countries[0] || "",
+    cities: details.cities[0] || "",
     ...telephones,
     ...emails,
-    note: details[0].note || "",
+    note: details.note || "",
   };
 
   const formik = useFormik<stationType>({
@@ -235,7 +241,7 @@ const Station = ({ details }: { details: any }) => {
 
       setModalTitle(`Are you sure?`);
       setModalBody(
-        `Are you sure you want to Save all the updates ${details[0].englishName}`
+        `Are you sure you want to Save all the updates ${details.englishName}`
       );
       setIfTrue(() => save);
       setIsOpen(true);
@@ -313,7 +319,7 @@ const Station = ({ details }: { details: any }) => {
           parseInt(b.replace("telephone", ""))
       )
       .map((key) => formik.values[key]);
-    await updateStation(details[0]._id, {
+    await updateStation(details._id, {
       ...formik.values,
       emails: emailFieldValues,
       telephones: telephoneFieldValues,
@@ -326,12 +332,18 @@ const Station = ({ details }: { details: any }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
+        <div className="flex flex-col items-start justify-start mt-5 bg-white rounded-xl shadow-md px-5 gap-3">
           {/* header- wrapper */}
 
-          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
+          <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
+            <Link
+              href="/stations"
+              className="absolute top-5 left-5 text-3xl text-mainBlue"
+            >
+              <IoMdArrowRoundBack />
+            </Link>
             {/* Control */}
-            <h2 className=" font-light text-3xl my-4">{`${details[0]?.englishName}`}</h2>
+            <h2 className=" font-light text-3xl my-4">{`${details?.englishName}`}</h2>
 
             <div className="flex flex-col justify-center items-center">
               <div className="flex items-center justify-center">
@@ -352,7 +364,7 @@ const Station = ({ details }: { details: any }) => {
                   }
                   classes="hover:bg-red-500 group transition"
                   handleOnClick={() =>
-                    deleteStation(details[0].englishName, details[0]?._id)
+                    deleteStation(details.englishName, details?._id)
                   }
                 />
               </div>
@@ -434,6 +446,34 @@ const Station = ({ details }: { details: any }) => {
                         )}
                     </div>
                     <div className="flex flex-col w-full gap-3 relative mb-2">
+                      <label className="text-lg h-12" htmlFor="arabicName">
+                        English Name<span className="text-red-500">*</span>
+                      </label>
+
+                      <input
+                        type="text"
+                        name="arabicName"
+                        id="arabicName"
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
+                          formik.touched.arabicName && formik.errors.arabicName
+                            ? "border-red-500 outline-red-500"
+                            : "border-lightGray outline-lightGray"
+                        } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.arabicName}
+                        disabled={isEdit}
+                      />
+                      {formik.touched.arabicName &&
+                        formik.errors.arabicName && (
+                          <small
+                            className={`text-red-500 absolute -bottom-6 left-2 `}
+                          >
+                            {formik.errors.arabicName}
+                          </small>
+                        )}
+                    </div>
+                    <div className="flex flex-col w-full gap-3 relative mb-2">
                       <label className="text-lg h-12" htmlFor="address">
                         Address<span className="text-red-500">*</span>
                       </label>
@@ -465,25 +505,20 @@ const Station = ({ details }: { details: any }) => {
                       <label className="text-lg h-12" htmlFor="countries">
                         Country<span className="text-red-500">*</span>
                       </label>
-                      <select
+                      <input
+                        type="text"
                         name="countries"
                         id="countries"
-                        className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched.countries && formik.errors.countries
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
                         } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
-                        onChange={formik.handleChange}
-                        value={formik.values.countries}
                         disabled={isEdit}
-                      >
-                        <option selected disabled value={""}>
-                          Select
-                        </option>
-                        {countryList.map((res: any) => {
-                          return <option value={res}>{res}</option>;
-                        })}
-                      </select>
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.countries}
+                      />
                       {formik.touched.countries && formik.errors.countries && (
                         <small
                           className={`text-red-500 absolute -bottom-6 left-2 `}
@@ -496,27 +531,20 @@ const Station = ({ details }: { details: any }) => {
                       <label className="text-lg h-12" htmlFor="cities">
                         City<span className="text-red-500">*</span>
                       </label>
-                      <select
+                      <input
+                        type="text"
                         name="cities"
                         id="cities"
-                        className={`w-full h-12 rounded-md shadow-md  px-2 border ${
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
                           formik.touched.cities && formik.errors.cities
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
                         } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                        disabled={isEdit}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         value={formik.values.cities}
-                        disabled={
-                          formik.values.countries && isEdit ? false : true
-                        }
-                      >
-                        <option selected disabled value={""}>
-                          Select
-                        </option>
-                        {countries[formik.values.countries]?.map((res: any) => {
-                          return <option value={res}>{res}</option>;
-                        })}
-                      </select>
+                      />
                       {formik.touched.cities && formik.errors.cities && (
                         <small
                           className={`text-red-500 absolute -bottom-6 left-2 `}

@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { Account, EmployeeType } from "@/types";
+import { Account, EmployeeType, accountType, contactType } from "@/types";
 import { HIDE_LOADER, SHOW_LOADER } from "@/redux/modules/loader-slice";
 import Loader from "@/components/Loader";
 import MyModal from "@/components/MyModal";
@@ -21,9 +21,11 @@ import { getRequest } from "@/http/requests";
 import { deleteUserById, getAllEmployees } from "@/http/employeeHttp";
 import { deleteAccountById, getAllAccounts } from "@/http/accountsHttp";
 import { GETALLACCOUNTS } from "@/redux/modules/accounts-slice";
+import { IoArrowForward } from "react-icons/io5";
+import { deleteContactById, getAllContacts } from "@/http/contactsHttp";
 
 export const getServerSideProps = async ({ locale }: any) => {
-  const data = await getAllAccounts();
+  const data = await getAllContacts();
   return {
     props: {
       contacts: data,
@@ -32,22 +34,22 @@ export const getServerSideProps = async ({ locale }: any) => {
   };
 };
 
-export default function Contacts({ contacts }: any) {
+export default function Accounts({ contacts }: any) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation("common", {
     bindI18n: "languageChanged loaded",
   });
+  console.log(contacts);
 
   const user = useSelector((state: any) => state.authReducer);
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
 
   // const [allEmployees, setAllEmployees] = useState<EmployeeType[]>(employees);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageContacts, setPageContacts] = useState(contacts?.slice());
-  console.log(pageContacts);
+  const [pageRow, setPageRow] = useState(contacts?.slice());
 
-  const [selectedContacts, setSelectedContacts] = useState(new Array());
+  const [selectedRow, setSelectedRow] = useState(new Array());
 
   // modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -60,13 +62,14 @@ export default function Contacts({ contacts }: any) {
   }, []);
 
   //#region dispatch employees to the store
-  if (contacts && contacts?.length > 0) {
-    dispatch(GETALLACCOUNTS({ contacts }));
-  }
+  // if (contacts && contacts?.length > 0) {
+  //   dispatch(GETALLACCOUNTS({ contacts }));
+  // }
   //#endregion
 
   //#region pagination
   let startingIndex = currentPage == 1 ? 0 : (currentPage - 1) * 10;
+
   const handlePrevPagination = () => {
     if (currentPage > 1) setCurrentPage((prev: number) => prev - 1);
   };
@@ -77,51 +80,46 @@ export default function Contacts({ contacts }: any) {
   //#endregion
 
   //#region handle selecting employee Account
-  const handleClick = (emp: any) => {
-    if (!selectedContacts.includes(emp._id)) {
-      setSelectedContacts([...selectedContacts, emp._id]);
+  const handleClick = (res: any) => {
+    if (!selectedRow.includes(res._id)) {
+      setSelectedRow([...selectedRow, res._id]);
     } else {
-      setSelectedContacts(
-        selectedContacts.filter((accounts) => accounts != emp._id)
-      );
+      setSelectedRow(selectedRow.filter((row) => row != res._id));
     }
   };
   //selecting all emplyee
   const selectAll = () => {
-    setSelectedContacts(contacts.map((acc: any) => acc._id));
-    if (selectedContacts?.length == contacts?.length) {
-      setSelectedContacts([]);
+    setSelectedRow(contacts.map((acc: any) => acc._id));
+    if (selectedRow?.length == contacts?.length) {
+      setSelectedRow([]);
     }
   };
   //#endregion
 
   //#region handle interna search method
   const handleSearch = (value: string) => {
-    // console.log(value)
     if (value) {
-      setPageContacts(
-        pageContacts.filter((acc: { englishName: string }) =>
-          acc.englishName.startsWith(value)
+      setPageRow(
+        pageRow.filter((acc: { firstName: string }) =>
+          acc.firstName.startsWith(value)
         )
       );
     } else {
-      setPageContacts(contacts?.slice());
+      setPageRow(contacts?.slice());
     }
   };
   //#endregion
 
   //#region handleDelete
   const handleDelete = async () => {
-    const deleteAccounts = async () => {
+    const deletes = async () => {
       dispatch(SHOW_LOADER());
       try {
-        selectedContacts
-          .filter((id) => id != user._id)
-          .forEach(async (_id) => {
-            await deleteAccountById(_id);
-          });
-        setPageContacts((prev: Account[]) =>
-          prev.filter((acc) => !selectedContacts.includes(acc._id))
+        selectedRow.forEach(async (_id) => {
+          await deleteContactById(_id);
+        });
+        setPageRow((prev: contactType[]) =>
+          prev.filter((acc) => !selectedRow.includes(acc._id))
         );
       } catch (e) {
         console.log("error in deleting account", e);
@@ -132,9 +130,9 @@ export default function Contacts({ contacts }: any) {
 
     setModalTitle("Are you sure?");
     setModalBody(
-      "Deleteing the selected account/s will ERASE THEM FOREVER from the database! "
+      "Deleteing the selected contact/s will ERASE THEM FOREVER from the database! "
     );
-    setModalTrue(() => deleteAccounts);
+    setModalTrue(() => deletes);
     setIsOpen(true);
     //#endregion
   };
@@ -144,10 +142,10 @@ export default function Contacts({ contacts }: any) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-10 ">
-          <PageHeader pageTitle="pages.contact" />
+        <div className="flex flex-col justify-center items-center px-5 h-full ">
+          <PageHeader pageTitle="pages.contact" newUrl={`contacts/new`} />
           {/* Page Body */}
-          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-[770px] px-10 ">
+          <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
             {/* top control row */}
             <div className="flex justify-center items-center w-full  py-3">
               {/* top pagination
@@ -189,9 +187,9 @@ export default function Contacts({ contacts }: any) {
                   icon={
                     <span
                       className={` text-2xl transition ${
-                        selectedContacts.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "text-mainBlue group-hover:!text-white"
+                        selectedRow.length != 1
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       <MdModeEdit />
@@ -199,22 +197,22 @@ export default function Contacts({ contacts }: any) {
                   }
                   title="Update"
                   classes={`${
-                    selectedContacts.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white"
+                    selectedRow.length != 1
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
                   }  group `}
-                  isDisabled={selectedContacts.length != 1}
+                  isDisabled={selectedRow.length != 1}
                   handleOnClick={() =>
-                    router.push(`contacts/${selectedContacts[0]}?isEdit=true`)
+                    router.push(`contacts/${selectedRow[0]}?isEdit=true`)
                   }
                 />
                 <Button
                   icon={
                     <span
                       className={` text-2xl transition ${
-                        selectedContacts.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray"
-                          : "!text-[#E70C0C] group-hover:!text-white"
+                        selectedRow.length < 1
+                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
                       } `}
                     >
                       {" "}
@@ -223,18 +221,18 @@ export default function Contacts({ contacts }: any) {
                   }
                   title="Delete"
                   classes={`${
-                    selectedContacts.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray "
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white"
+                    selectedRow.length < 1
+                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
                   }  group `}
-                  isDisabled={selectedContacts.length < 1}
+                  isDisabled={selectedRow.length < 1}
                   handleOnClick={handleDelete}
                 />
               </div>
             </div>
 
             {/* Table */}
-            <div className="w-full h-[80%] overflow-auto">
+            <div className="main-table w-full h-[80%] overflow-auto">
               <table className={` w-full`}>
                 <thead className=" bg-bgGray ">
                   <tr className="  text-left ">
@@ -242,7 +240,7 @@ export default function Contacts({ contacts }: any) {
                       <input
                         type="checkbox"
                         className=" cursor-pointer"
-                        checked={selectedContacts?.length == contacts?.length}
+                        checked={selectedRow?.length == contacts?.length}
                         onClick={() => selectAll()}
                         readOnly
                       />
@@ -274,9 +272,8 @@ export default function Contacts({ contacts }: any) {
                         {" "}
                         <TbArrowsSort />{" "}
                       </span>
-                      <span>City</span>
+                      <span>city</span>
                     </th>
-
                     <th className="">
                       <span className=" inline-block relative top-1 mr-1 ">
                         {" "}
@@ -289,7 +286,7 @@ export default function Contacts({ contacts }: any) {
                         {" "}
                         <TbArrowsSort />{" "}
                       </span>
-                      <span>PHone</span>
+                      <span>Phone</span>
                     </th>
                     <th className="">
                       <span className=" inline-block relative top-1 mr-1 ">
@@ -298,7 +295,6 @@ export default function Contacts({ contacts }: any) {
                       </span>
                       <span>Account</span>
                     </th>
-
                     <th className="">
                       <span className="  text-darkGray text-[26px]">
                         <PiDotsThreeCircleLight />
@@ -306,10 +302,10 @@ export default function Contacts({ contacts }: any) {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="  h-[200px] border border-green-500 overflow-auto">
-                  {pageContacts
-                    ?.filter((acc: Account) => !acc.isDeleted)
-                    .map((acc: Account, index: number) => {
+                <tbody className="main-table overflow-auto">
+                  {pageRow
+                    ?.filter((acc: contactType) => !acc.isDeleted)
+                    .map((acc: contactType, index: number) => {
                       if (index >= startingIndex && index < currentPage * 10) {
                         return (
                           <tr key={acc._id} className=" text-left h-full">
@@ -319,31 +315,25 @@ export default function Contacts({ contacts }: any) {
                             >
                               <input
                                 type="checkbox"
-                                checked={selectedContacts.includes(acc._id)}
+                                checked={selectedRow.includes(acc._id)}
                                 readOnly
                               />
                             </td>
-                            <td>{acc._id}</td>
+                            <td>{acc?._id}</td>
                             <td>
-                              <div className="flex justify-center items-center gap-3 w-full">
-                                <div className=" w-1/2">
-                                  <p className="text-xl text-darkGray  overflow-hidden max-w-full">
-                                    {acc.englishName}
-                                  </p>
-                                </div>
-                              </div>
+                              {acc?.firstName} {acc?.lastName}
                             </td>
 
-                            <td>{acc.countries[0]}</td>
-                            <td>{acc.telephones}</td>
-                            <td>{acc.emails[0]}</td>
-                            <td>{acc.contacts[0]}</td>
-                            <td>{acc.segments[0]}</td>
+                            <td>{acc?.countries[0]}</td>
+                            <td>{acc?.cities[0]}</td>
+                            <td>{acc?.emails[0]}</td>
+                            <td>{acc?.telephones[0]}</td>
+                            <td>{acc?.account?.englishName}</td>
 
                             <td>
-                              <Link href={`/accounts/${acc._id}`}>
+                              <Link href={`/contacts/${acc._id}`}>
                                 <span className=" text-[26px] text-mainBlue cursor-pointer">
-                                  <TbTextDirectionLtr />
+                                  <IoArrowForward />
                                 </span>
                               </Link>
                             </td>
@@ -360,10 +350,10 @@ export default function Contacts({ contacts }: any) {
               <div className="flex gap-5 justify-center items-center my-3">
                 <span className=" text-[#9A9A9A]  ">
                   Showing {startingIndex == 0 ? 1 : startingIndex} to{" "}
-                  {currentPage * 10 > pageContacts?.length
-                    ? pageContacts?.length
+                  {currentPage * 10 > pageRow?.length
+                    ? pageRow?.length - 1
                     : currentPage * 10}{" "}
-                  of {pageContacts?.length} entries
+                  of {pageRow?.length} entries
                 </span>
                 <button onClick={() => handlePrevPagination()}>&lt;</button>
                 <div className="pages">
