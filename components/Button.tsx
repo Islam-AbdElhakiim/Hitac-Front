@@ -28,7 +28,7 @@ const Button = ({
         <button
           type={type}
           disabled={isDisabled}
-          className={`flex justify-center items-center p-2 bg-lightGray text-darkGray rounded-md m-2 text-sm  gap-3 cursor-pointer transition  ${classes}`}
+          className={`flex justify-center items-center p-2 bg-lightGray text-darkGray rounded-md m-2 text-sm  gap-1 cursor-pointer transition  ${classes}`}
           onClick={handleOnClick}
         >
           {icon && (

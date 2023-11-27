@@ -2,83 +2,101 @@
     "navLinks": {
         "emp": {
             "title": "Employees",
+            "urlTitle": "Employees",
             "icon": "employees",
             "target": "/employees"
         },
         "accounts": {
             "title": "Clients (Accounts)",
+            "urlTitle": "Accounts",
             "icon": "accounts",
             "target": "/accounts"
         },
         "contacts": {
             "title": "Clients (Contacts)",
+            "urlTitle": "Contacts",
             "icon": "contacts",
             "target": "/contacts"
         },
         "suppliers": {
             "title": "Suppliers",
+            "urlTitle": "Suppliers",
             "icon": "suppliers",
             "target": "/suppliers"
         },
         "stations": {
             "title": "Stations",
+            "urlTitle": "Stations",
             "icon": "stations",
             "target": "/stations"
         },
         "products": {
             "title": "Products",
             "icon": "products",
+            "target": "sub-products",
             "children": {
                 "segments": {
                     "title": "Segments",
+                    "urlTitle": "Segments",
                     "target": "/segments"
                 },
                 "products": {
                     "title": "Products",
+                    "urlTitle": "Products",
                     "target": "/products"
                 }
             }
         },
         "supply": {
             "title": "Supply Management",
+            "urlTitle": "Supply Management",
             "icon": "supply",
             "children": {
                 "supplyOrders": {
-                    "title": "Supply Orders",
+                    "title": "Supply-Orders",
+                    "urlTitle": "Supply-Orders",
                     "target": "/supply-orders"
                 },
                 "returnRequests": {
-                    "title": "Return Requests",
+                    "title": "Return-Requests",
+                    "urlTitle": "Return-Requests",
                     "target": "/return-requests"
                 }
             }
         },
         "inventory": {
             "title": "Inventory",
+            "urlTitle": "Inventory",
             "icon": "inventory",
             "children": {
                 "products": {
                     "title": "Products",
+                    "urlTitle": "Products",
                     "children": {
                         "inStock": {
                             "title": "In-Stock",
+                            "urlTitle": "In-Stock",
                             "target": "/prodcuts/in-stock"
                         },
                         "fulfilled": {
                             "title": "Fulfilled",
+                            "urlTitle": "Fulfilled",
                             "target": "/prodcuts/fullfilled"
                         }
                     }
                 },
                 "equipments": {
                     "title": "Equipments",
+                    "urlTitle": "Equipments",
                     "children": {
                         "inStock": {
                             "title": "In-Stock",
+                            "urlTitle": "In-Stock",
                             "target": "/equipments/in-stock"
                         },
                         "fulfilled": {
                             "title": "Fulfilled",
+                            "urlTitle": "Fulfilled",
                             "target": "/equipments/fullfilled"
                         }
                     }
@@ -87,62 +105,76 @@
         },
         "sales": {
             "title": "Sales",
+            "urlTitle": "Sales",
             "icon": "sales",
             "children": {
                 "cases": {
                     "title": "Cases",
+                    "urlTitle": "Cases",
                     "target": "/sales"
                 }
             }
         },
         "marketing": {
             "title": "Marketing",
+            "urlTitle": "Marketing",
             "icon": "marketing",
             "children": {
                 "emails": {
                     "title": "Emails",
+                    "urlTitle": "Emails",
                     "target": "/emails"
                 },
                 "whatsapp": {
                     "title": "Whatsapp",
+                    "urlTitle": "Whatsapp",
                     "target": "/whatsapp"
                 },
                 "socialPosts": {
                     "title": "Social Posts",
+                    "urlTitle": "Social Posts",
                     "target": "/social-posts"
                 }
             }
         },
         "accounting": {
             "title": "Accounting",
+            "urlTitle": "Accounting",
             "icon": "accounting",
             "children": {
                 "debitAccount": {
                     "title": "Debit Account",
+                    "urlTitle": "Debit Account",
                     "children": {
                         "suppliers": {
                             "title": "Suppliers",
+                            "urlTitle": "Suppliers",
                             "target": "/accounting/debit/suppliers"
                         },
                         "stations": {
                             "title": "Stations",
+                            "urlTitle": "Stations",
                             "target": "/accounting/debit/stations"
                         },
                         "expenses": {
                             "title": "Expenses",
+                            "urlTitle": "Expenses",
                             "target": "/accounting/debit/expenses"
                         }
                     }
                 },
                 "creditAccount": {
                     "title": "Credit Account",
+                    "urlTitle": "Credit Account",
                     "children": {
                         "revenue": {
                             "title": "Revenue",
+                            "urlTitle": "Revenue",
                             "target": "/accounting/credit/revenue"
                         },
                         "returnRequests": {
                             "title": "Return Requests",
+                            "urlTitle": "Return Requests",
                             "target": "/accounting/credit/return-requests"
                         }
                     }
@@ -150,11 +182,13 @@
             }
         }
     },
-
     "labels": {
-        "logout": "Logout"
-    },
+        "logout": "Logout",
+        "addAtrribute" : "Title",
+        "addOptions" : "Add options",
+        "attribute": "Attribute "
 
+    },
     "pages": {
         "emp": "Employees",
         "acc": "Accounts",
