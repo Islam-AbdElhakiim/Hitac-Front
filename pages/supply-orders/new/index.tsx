@@ -21,6 +21,8 @@ import { getAllSuppliers } from "@/http/supplierHttp";
 import { getAllProducts } from "@/http/productsHttp";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Link from "next/link";
+import { SHOW_LOADER } from "@/redux/modules/loader-slice";
+import { AppDispatch } from "@/redux/store";
 export const getServerSideProps = async (context: any) => {
   const supplierFetch = async () => {
     return await getAllSuppliers();
@@ -56,6 +58,7 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const user = useSelector((state: any) => state.authReducer);
+  const dispatch = useDispatch<AppDispatch>();
 
   //#region initialization
 
@@ -85,11 +88,19 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
     onSubmit: async (values) => {
       // Handle form submission
 
-      await createSupplyOrder({
-        ...values,
-      });
-      router.push("/supply-orders");
+
       console.log(values);
+
+      dispatch(SHOW_LOADER());
+      try {
+        await createSupplyOrder({
+          ...values,
+        });
+        router.push("/supply-orders");
+      } catch (e) {
+      } finally {
+        // dispatch(HIDE_LOADER());
+      }
     },
   });
 
@@ -158,11 +169,10 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     type="date"
                     name="createdOn"
                     id="createdOn"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.createdOn && formik.errors.createdOn
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.createdOn && formik.errors.createdOn
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.createdOn}
@@ -259,11 +269,10 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     type="text"
                     name="price"
                     id="price"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.price && formik.errors.price
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.price && formik.errors.price
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.price}
@@ -288,11 +297,10 @@ const NewSupplyOrder = ({ supplier, products }: any) => {
                     name="description"
                     id="description"
                     rows={7}
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.description && formik.errors.description
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    }`}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}

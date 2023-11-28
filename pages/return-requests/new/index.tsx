@@ -26,6 +26,8 @@ import { getAllProducts } from "@/http/productsHttp";
 import { createReturnRequests } from "@/http/returnRequestHttp";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Link from "next/link";
+import { SHOW_LOADER } from "@/redux/modules/loader-slice";
+import { AppDispatch } from "@/redux/store";
 export const getServerSideProps = async (context: any) => {
   const supplyOrders = async () => {
     return await getAllSupplyOrders();
@@ -66,6 +68,7 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const user = useSelector((state: any) => state.authReducer);
+  const dispatch = useDispatch<AppDispatch>();
 
   //#region initialization
 
@@ -94,11 +97,18 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
     onSubmit: async (values) => {
       // Handle form submission
 
-      await createReturnRequests({
-        ...values,
-      });
-      router.push("/return-requests");
-      console.log(values);
+
+
+      dispatch(SHOW_LOADER());
+      try {
+        await createReturnRequests({
+          ...values,
+        });
+        router.push("/return-requests");
+      } catch (e) {
+      } finally {
+        // dispatch(HIDE_LOADER());
+      }
     },
   });
   console.log(formik.values, formik.errors);
@@ -168,11 +178,10 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
                     type="date"
                     name="createdOn"
                     id="createdOn"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.createdOn && formik.errors.createdOn
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.createdOn && formik.errors.createdOn
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.createdOn}
@@ -268,11 +277,10 @@ const NewReturnRequest = ({ supplier, products, supplyOrder }: any) => {
                     type="text"
                     name="price"
                     id="price"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.price && formik.errors.price
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.price && formik.errors.price
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.price}

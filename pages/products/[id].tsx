@@ -154,10 +154,16 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
   };
 
   const save = async (e?: any) => {
-    await updateProducts(details._id, {
-      ...formik.values,
-    });
-    router.push("/products");
+    dispatch(SHOW_LOADER());
+    try {
+      await updateProducts(details._id, {
+        ...formik.values,
+      });
+      router.push("/products");
+    } catch (e) {
+    } finally {
+      // dispatch(HIDE_LOADER());
+    }
   };
   const handleImageUpload = async (e: any) => {
     const files = e.target.files;
@@ -364,8 +370,8 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                 {/* left col */}
                 {details.attributes?.map((res: any) => {
                   console.log(Object.entries(res)[0][0]);
-                  const key = Object.entries(res)[0][0]
-                  const value = Object.entries(res)[0][1]
+                  const key: any = Object.entries(res)[0][0]
+                  const value: any = Object.entries(res)[0][1]
 
                   return (
 

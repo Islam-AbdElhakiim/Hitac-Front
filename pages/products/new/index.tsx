@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { createProducts } from "@/http/productsHttp";
+import { SHOW_LOADER } from "@/redux/modules/loader-slice";
+import { AppDispatch } from "@/redux/store";
 export const getServerSideProps = async (context: any) => {
   const segmentsFetch = async () => {
     return await getAllSegments();
@@ -44,6 +46,7 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const [filePath, setFilePath] = useState("/avatar.png");
+  const dispatch = useDispatch<AppDispatch>();
 
   //#region initialization
 
@@ -73,11 +76,20 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
       Object.keys(formik.values).filter((key) => key.startsWith("key")).map((key, i) => {
         attributes.push({ [`${formik.values[key]}`]: `${formik.values[`value${i + 1}`]}`.split(",") })
       })
-      await createProducts({
-        ...values,
-        attributes
-      });
-      router.push("/products");
+
+
+      dispatch(SHOW_LOADER());
+
+      try {
+        await createProducts({
+          ...values,
+          attributes
+        });
+        router.push("/products");
+      } catch (e) {
+      } finally {
+        // dispatch(HIDE_LOADER());
+      }
       console.log(values);
     },
   });
@@ -90,7 +102,7 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
     console.log(files[0]);
     const formData = new FormData();
     formData.append("image", files[0]);
-    const res = await fetch("http://localhost:3000/api/upload", {
+    const res = await fetch("https://localhost:3000/api/upload", {
       method: "POST",
       body: formData,
     });

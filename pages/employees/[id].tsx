@@ -96,7 +96,7 @@ const Employee = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [ifTrue, setIfTrue] = useState<() => void>(() => {});
+  const [ifTrue, setIfTrue] = useState<() => void>(() => { });
   //#endregion
 
   //#region image
@@ -526,9 +526,8 @@ const Employee = ({
               {/* Image */}
               <div className="image-wrapper flex justify-center items-center w-40 h-40 rounded-full p-5 relative bg-bgGray border overflow-hidden">
                 <Image
-                  src={`${
-                    employee.image ? employee.image : "/uploads/avatar.png"
-                  }`}
+                  src={`${employee.image ? employee.image : "/uploads/avatar.png"
+                    }`}
                   alt="employee-image"
                   fill
                 />
@@ -590,19 +589,17 @@ const Employee = ({
                       type="text"
                       name="firstname"
                       id="firstname"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.firstName.isValid
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.firstName.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      } `}
+                        } `}
                       value={emp.firstName}
                       onChange={(e) => handleInput("firstName", e.target.value)}
                     />
 
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.firstName.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.firstName.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Firstname is required and should be between 3 and 20
                       letters!
@@ -619,19 +616,17 @@ const Employee = ({
                       type="text"
                       name="lastname"
                       id="lastname"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.lastName.isValid
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.lastName.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      } `}
+                        } `}
                       value={emp.lastName}
                       onChange={(e) => handleInput("lastName", e.target.value)}
                     />
 
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.lastName.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.lastName.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Lastname is required and should be between 3 and 20
                       letters!
@@ -651,19 +646,17 @@ const Employee = ({
                       type="email"
                       name="email123"
                       id="email123"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.email.isValid
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.email.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      } `}
+                        } `}
                       value={emp.email}
                       onChange={(e) => handleInput("email", e.target.value)}
                     />
 
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.email.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.email.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Please enter a valid email address!
                     </small>
@@ -679,19 +672,17 @@ const Employee = ({
                       type="telephone"
                       name="telephone"
                       id="telephone"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.telephone.isValid
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.telephone.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      } `}
+                        } `}
                       value={emp.telephone}
                       onChange={(e) => handleInput("telephone", e.target.value)}
                     />
 
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.telephone.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.telephone.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Please enter a valid Telephone Number!
                     </small>
@@ -710,19 +701,17 @@ const Employee = ({
                       type="age"
                       name="age"
                       id="age"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.age.isValid
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.age.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      } `}
+                        } `}
                       value={emp.age}
                       onChange={(e) => handleInput("age", e.target.value)}
                     />
 
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.age.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.age.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Age should be between 10 and 80 years!
                     </small>
@@ -738,19 +727,17 @@ const Employee = ({
                       type="salary"
                       name="salary"
                       id="salary"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.salary.isValid
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.salary.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      } `}
+                        } `}
                       value={emp.salary}
                       onChange={(e) => handleInput("salary", e.target.value)}
                     />
 
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.salary.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.salary.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Please enter a valid salary!
                     </small>
@@ -768,11 +755,10 @@ const Employee = ({
                       required
                       name="role"
                       id="role"
-                      className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                        validation.role.isValid
+                      className={`w-full h-12 rounded-md shadow-md  px-2 border ${validation.role.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      }`}
+                        }`}
                       onChange={(e) => {
                         handleInput("role", e.target.value);
                       }}
@@ -792,9 +778,8 @@ const Employee = ({
                       <option value="accountant">Accountant</option>
                     </select>
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.role.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.role.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Please select a role!
                     </small>
@@ -836,18 +821,16 @@ const Employee = ({
                       type="password"
                       name="userpassword"
                       id="userpassword"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        validation.password.isValid
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.password.isValid
                           ? "border-lightGray outline-lightGray"
                           : "border-red-500 outline-red-500"
-                      } `}
+                        } `}
                       onChange={(e) => handleInput("password", e.target.value)}
                     />
 
                     <small
-                      className={`text-red-500 absolute -bottom-6 left-2 ${
-                        validation.password.isValid ? "hidden" : "block"
-                      } `}
+                      className={`text-red-500 absolute -bottom-6 left-2 ${validation.password.isValid ? "hidden" : "block"
+                        } `}
                     >
                       Password should be more than 8 letters!
                     </small>
@@ -894,9 +877,8 @@ const Employee = ({
                       name="firstname"
                       id="firstname"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={emp.firstName}
                       onChange={(e) =>
                         setEmp({ ...emp, firstName: e.target.value })
@@ -914,9 +896,8 @@ const Employee = ({
                       name="lastname"
                       id="lastname"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={employee.lastName}
                     />
                   </div>
@@ -934,9 +915,8 @@ const Employee = ({
                       name="email"
                       id="email"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={employee.email}
                     />
                   </div>
@@ -951,9 +931,8 @@ const Employee = ({
                       name="telephone"
                       id="telephone"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={employee.telephone}
                     />
                   </div>
@@ -971,9 +950,8 @@ const Employee = ({
                       name="age"
                       id="age"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={employee.age}
                     />
                   </div>
@@ -988,9 +966,8 @@ const Employee = ({
                       name="salary"
                       id="salary"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={employee.salary}
                     />
                   </div>
@@ -1008,9 +985,8 @@ const Employee = ({
                       name="hiring-date"
                       id="hiring-date"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={employee.hiringDate}
                     />
                   </div>
@@ -1025,9 +1001,8 @@ const Employee = ({
                       name="notes"
                       id="notes"
                       disabled={!isEdit}
-                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }  px-2`}
+                      className={`w-full h-12 rounded-md outline-lightGray border border-lightGray shadow-md ${isEdit ? "bg-white " : "bg-lightGray"
+                        }  px-2`}
                       value={employee.notes}
                     />
                   </div>
@@ -1048,13 +1023,11 @@ const Employee = ({
               {AccessedDepartments.map((department: Department) => (
                 <div
                   key={department.title}
-                  className={`w-[250px] h-[100px] rounded-lg ${
-                    department.selected == true
+                  className={`w-[250px] h-[100px] rounded-lg ${department.selected == true
                       ? "bg-mainBlue text-white"
                       : "bg-lightGray text-black"
-                  } shadow-md flex justify-center items-center text-xl font-light capitalize ${
-                    isEdit && "cursor-pointer"
-                  } `}
+                    } shadow-md flex justify-center items-center text-xl font-light capitalize ${isEdit && "cursor-pointer"
+                    } `}
                   onClick={() => setDepartments(department)}
                 >
                   {department.title}{" "}
@@ -1077,9 +1050,8 @@ const Employee = ({
 
               {/* CRUD Operations */}
               <div
-                className={`flex justify-center items-cente ${
-                  isEdit ? "flex" : "hidden"
-                }`}
+                className={`flex justify-center items-cente ${isEdit ? "flex" : "hidden"
+                  }`}
               >
                 <Button
                   icon={
@@ -1152,73 +1124,70 @@ const Employee = ({
               <tbody className="h-full">
                 {!isEdit
                   ? accessedAccounts.map((account: Account) => (
-                      <tr
-                        key={account.englishName + Math.random()}
-                        className=" text-left bg-lightGray"
-                      >
-                        <td className={`check ${isEdit ? "block" : "hidden"}`}>
-                          <input
-                            type="checkbox"
-                            onClick={() => handleClick(account._id)}
-                            checked={selectedAccounts.includes(account._id)}
-                            readOnly
-                          />
-                        </td>
-                        <td>{account.englishName}</td>
+                    <tr
+                      key={account.englishName + Math.random()}
+                      className=" text-left bg-lightGray"
+                    >
+                      <td className={`check ${isEdit ? "block" : "hidden"}`}>
+                        <input
+                          type="checkbox"
+                          onClick={() => handleClick(account._id)}
+                          checked={selectedAccounts.includes(account._id)}
+                          readOnly
+                        />
+                      </td>
+                      <td>{account.englishName}</td>
 
-                        <td>{account.countries?.join(",")}</td>
-                        <td>{account.segments?.join(",")}</td>
-                      </tr>
-                    ))
+                      <td>{account.countries?.join(",")}</td>
+                      <td>{account.segments?.join(",")}</td>
+                    </tr>
+                  ))
                   : searchedAccounts.map((account: Account) => (
-                      <tr
-                        key={account.englishName + Math.random()}
-                        className=" text-left"
-                      >
-                        <td className={``}>
-                          <input
-                            type="checkbox"
-                            onClick={() => handleClick(account._id)}
-                            checked={selectedAccounts.includes(account._id)}
-                            readOnly
-                          />
-                        </td>
-                        <td>{account.englishName}</td>
+                    <tr
+                      key={account.englishName + Math.random()}
+                      className=" text-left"
+                    >
+                      <td className={``}>
+                        <input
+                          type="checkbox"
+                          onClick={() => handleClick(account._id)}
+                          checked={selectedAccounts.includes(account._id)}
+                          readOnly
+                        />
+                      </td>
+                      <td>{account.englishName}</td>
 
-                        <td>{account.countries?.join(",")}</td>
-                        <td>{account.segments?.join(",")}</td>
-                        <td>
-                          <span
-                            className={`${
-                              emp.accessedAccounts?.includes(account._id)
-                                ? "block"
-                                : "hidden"
+                      <td>{account.countries?.join(",")}</td>
+                      <td>{account.segments.map((seg: any) => seg.name)?.join(",")}</td>
+                      <td>
+                        <span
+                          className={`${emp.accessedAccounts?.includes(account._id)
+                              ? "block"
+                              : "hidden"
                             }`}
-                          >
-                            <IoCheckmarkCircleOutline />
-                          </span>
+                        >
+                          <IoCheckmarkCircleOutline />
+                        </span>
 
-                          <span
-                            className={`${
-                              !emp.accessedAccounts?.includes(account._id)
-                                ? "block"
-                                : "hidden"
+                        <span
+                          className={`${!emp.accessedAccounts?.includes(account._id)
+                              ? "block"
+                              : "hidden"
                             }`}
-                          >
-                            <MdOutlineRadioButtonUnchecked />
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                        >
+                          <MdOutlineRadioButtonUnchecked />
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
 
           {/* Edit */}
           <div
-            className={`flex justify-center items-center p-5 w-full ${
-              isEdit ? "hidden" : "flex"
-            }`}
+            className={`flex justify-center items-center p-5 w-full ${isEdit ? "hidden" : "flex"
+              }`}
           >
             {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
             <Button
@@ -1235,9 +1204,8 @@ const Employee = ({
 
           {/* Submit */}
           <div
-            className={`flex justify-center items-center p-5 w-full ${
-              isEdit ? "flex" : "hidden"
-            }`}
+            className={`flex justify-center items-center p-5 w-full ${isEdit ? "flex" : "hidden"
+              }`}
           >
             {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
             <Button

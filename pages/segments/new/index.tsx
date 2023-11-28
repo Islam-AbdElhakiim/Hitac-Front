@@ -12,6 +12,8 @@ import { createSegments } from "@/http/segmentsHttp";
 import { BsCloudUpload } from "react-icons/bs";
 import { useState } from "react";
 import Image from "next/image";
+import { SHOW_LOADER } from "@/redux/modules/loader-slice";
+import { AppDispatch } from "@/redux/store";
 
 const NewStation = () => {
   const { t } = useTranslation("common", {
@@ -22,6 +24,7 @@ const NewStation = () => {
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const [filePath, setFilePath] = useState("/avatar.png");
+  const dispatch = useDispatch<AppDispatch>();
 
   //#region initialization
 
@@ -44,11 +47,17 @@ const NewStation = () => {
     onSubmit: async (values) => {
       // Handle form submission
 
-      await createSegments({
-        ...values,
-      });
-      router.push("/segments");
-      console.log(values);
+
+      dispatch(SHOW_LOADER());
+      try {
+        await createSegments({
+          ...values,
+        });
+        router.push("/segments");
+      } catch (e) {
+      } finally {
+        // dispatch(HIDE_LOADER());
+      }
     },
   });
 
@@ -135,11 +144,10 @@ const NewStation = () => {
                     type="text"
                     name="name"
                     id="name"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
-                      formik.touched.name && formik.errors.name
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    }} `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      }} `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -161,11 +169,10 @@ const NewStation = () => {
                     rows={8}
                     name="description"
                     id="description"
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.description && formik.errors.description
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}

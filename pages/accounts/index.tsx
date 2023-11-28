@@ -54,7 +54,7 @@ export default function Accounts({ accounts }: any) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
+  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -189,21 +189,19 @@ export default function Accounts({ accounts }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedAccounts.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedAccounts.length != 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "text-mainBlue group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${
-                    selectedAccounts.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedAccounts.length != 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                    : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedAccounts.length != 1}
                   handleOnClick={() =>
                     router.push(`accounts/${selectedAccounts[0]}?isEdit=true`)
@@ -212,22 +210,20 @@ export default function Accounts({ accounts }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedAccounts.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedAccounts.length < 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${
-                    selectedAccounts.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedAccounts.length < 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                    : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedAccounts.length < 1}
                   handleOnClick={handleDelete}
                 />
@@ -325,14 +321,14 @@ export default function Accounts({ accounts }: any) {
                             <td>{acc?._id}</td>
                             <td>{acc?.englishName}</td>
 
-                            <td>{acc?.countries[0]}</td>
+                            <td>{acc?.countries.join(',')}</td>
                             <td>{acc?.telephones[0]}</td>
                             <td>{acc?.emails[0]}</td>
                             <td>
                               {acc?.contacts[0]?.firstName}{" "}
                               {acc?.contacts[0]?.lastName}
                             </td>
-                            <td>{acc?.segments[0]?.name}</td>
+                            <td>{acc?.segments.map((seg: any) => seg.name).join(',')}</td>
 
                             <td>
                               <Link href={`/accounts/${acc._id}`}>

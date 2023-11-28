@@ -147,7 +147,7 @@ const ReturnRequests = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [ifTrue, setIfTrue] = useState<() => void>(() => {});
+  const [ifTrue, setIfTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     setIsEdit(searchParams.get("isEdit") === "true");
@@ -214,10 +214,18 @@ const ReturnRequests = ({
   };
 
   const save = async (e?: any) => {
-    await updateReturnRequests(details._id, {
-      ...formik.values,
-    });
-    router.push("/return-requests");
+
+
+    dispatch(SHOW_LOADER());
+    try {
+      await updateReturnRequests(details._id, {
+        ...formik.values,
+      });
+      router.push("/return-requests");
+    } catch (e) {
+    } finally {
+      // dispatch(HIDE_LOADER());
+    }
   };
 
   return (
@@ -293,11 +301,10 @@ const ReturnRequests = ({
                     type="text"
                     name="id"
                     id="id"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.id && formik.errors.id
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.id && formik.errors.id
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={true}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -350,11 +357,10 @@ const ReturnRequests = ({
                     type="date"
                     name="createdOn"
                     id="createdOn"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.createdOn && formik.errors.createdOn
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.createdOn && formik.errors.createdOn
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={!isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -453,11 +459,10 @@ const ReturnRequests = ({
                     type="text"
                     name="price"
                     id="price"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.price && formik.errors.price
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.price && formik.errors.price
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={!isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -484,9 +489,8 @@ const ReturnRequests = ({
                     id="description"
                     rows={7}
                     disabled={!isEdit}
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                      isEdit ? "bg-white " : "bg-lightGray"
-                    }`}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${isEdit ? "bg-white " : "bg-lightGray"
+                      }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}

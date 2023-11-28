@@ -109,7 +109,7 @@ const Station = ({ details }: { details: any }) => {
   const [isProfile, setIsProfile] = useState<boolean>(true);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [ifTrue, setIfTrue] = useState<() => void>(() => {});
+  const [ifTrue, setIfTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     setIsEdit(searchParams.get("isEdit") !== "true");
@@ -277,6 +277,23 @@ const Station = ({ details }: { details: any }) => {
       });
   };
 
+  const removeField = (field: any) => {
+    const keys = Object.keys(formik.values).filter((key) => key.startsWith(field));
+
+    if (keys.length > 1) {
+      const lastKey = keys[keys.length - 1];
+
+      // Remove the last email field from the validation schema
+      delete validationSchema.fields[lastKey];
+
+      // Remove the last email field from formik values
+      const newValues = { ...formik.values };
+      delete newValues[lastKey];
+
+      formik.setValues(newValues);
+    }
+  };
+
   //#region modules
 
   const capitalizeFirstLetter = (str: string) => {
@@ -319,12 +336,20 @@ const Station = ({ details }: { details: any }) => {
           parseInt(b.replace("telephone", ""))
       )
       .map((key) => formik.values[key]);
-    await updateStation(details._id, {
-      ...formik.values,
-      emails: emailFieldValues,
-      telephones: telephoneFieldValues,
-    });
-    router.push("/stations");
+
+
+    dispatch(SHOW_LOADER());
+    try {
+      await updateStation(details._id, {
+        ...formik.values,
+        emails: emailFieldValues,
+        telephones: telephoneFieldValues,
+      });
+      router.push("/stations");
+    } catch (e) {
+    } finally {
+      // dispatch(HIDE_LOADER());
+    }
   };
 
   return (
@@ -371,21 +396,19 @@ const Station = ({ details }: { details: any }) => {
             </div>
             <div className="flex flex-row gap-3 justify-center items-center">
               <div
-                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${
-                  isProfile
-                    ? "bg-mainBlue text-white"
-                    : "bg-lightGray text-black"
-                } shadow-md flex justify-center items-center text-xl font-light capitalize `}
+                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${isProfile
+                  ? "bg-mainBlue text-white"
+                  : "bg-lightGray text-black"
+                  } shadow-md flex justify-center items-center text-xl font-light capitalize `}
                 onClick={() => setIsProfile(true)}
               >
                 Profile
               </div>
               <div
-                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${
-                  !isProfile
-                    ? "bg-mainBlue text-white"
-                    : "bg-lightGray text-black"
-                } shadow-md flex justify-center items-center text-xl font-light capitalize `}
+                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${!isProfile
+                  ? "bg-mainBlue text-white"
+                  : "bg-lightGray text-black"
+                  } shadow-md flex justify-center items-center text-xl font-light capitalize `}
                 onClick={() => setIsProfile(false)}
               >
                 Transactions
@@ -425,12 +448,11 @@ const Station = ({ details }: { details: any }) => {
                         type="text"
                         name="englishName"
                         id="englishName"
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
-                          formik.touched.englishName &&
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.englishName &&
                           formik.errors.englishName
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
-                        } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
+                          } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.englishName}
@@ -454,11 +476,10 @@ const Station = ({ details }: { details: any }) => {
                         type="text"
                         name="arabicName"
                         id="arabicName"
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
-                          formik.touched.arabicName && formik.errors.arabicName
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
-                        } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.arabicName && formik.errors.arabicName
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
+                          } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.arabicName}
@@ -482,11 +503,10 @@ const Station = ({ details }: { details: any }) => {
                         type="text"
                         name="address"
                         id="address"
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                          formik.touched.address && formik.errors.address
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
-                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.address && formik.errors.address
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
+                          } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.address}
@@ -509,11 +529,10 @@ const Station = ({ details }: { details: any }) => {
                         type="text"
                         name="countries"
                         id="countries"
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                          formik.touched.countries && formik.errors.countries
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
-                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.countries && formik.errors.countries
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
+                          } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                         disabled={isEdit}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -535,11 +554,10 @@ const Station = ({ details }: { details: any }) => {
                         type="text"
                         name="cities"
                         id="cities"
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                          formik.touched.cities && formik.errors.cities
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
-                        } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.cities && formik.errors.cities
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
+                          } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                         disabled={isEdit}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -575,16 +593,29 @@ const Station = ({ details }: { details: any }) => {
                               <span className="text-red-500">*</span>
                             </label>
                             {i === arr.length - 1 && i !== 3 && (
-                              <Button
-                                icon={
-                                  <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                                    <MdOutlineAdd />
-                                  </span>
-                                }
-                                title="Add"
-                                classes=" hover:bg-[#00733B] group hover:text-[white] transition "
-                                handleOnClick={() => addField("telephones")}
-                              />
+                              <div className="flex gap-1">
+                                <Button
+                                  icon={
+                                    <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                      <MdOutlineAdd />
+                                    </span>
+                                  }
+                                  title="Add"
+                                  classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                                  handleOnClick={() => addField("telephones")}
+                                />
+                                {i === 1 && <Button
+                                  icon={
+                                    <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                      <RiDeleteBin6Line />
+                                    </span>
+                                  }
+                                  classes="hover:bg-red-500 group transition"
+                                  handleOnClick={() =>
+                                    removeField("telephones")
+                                  }
+                                />}
+                              </div>
                             )}
                           </div>
                           <input
@@ -595,11 +626,10 @@ const Station = ({ details }: { details: any }) => {
                             onBlur={formik.handleBlur}
                             value={formik.values[key]}
                             disabled={isEdit}
-                            className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                              formik.touched[key] && formik.errors[key]
-                                ? "border-red-500 outline-red-500"
-                                : "border-lightGray outline-lightGray"
-                            } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                            className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
+                              ? "border-red-500 outline-red-500"
+                              : "border-lightGray outline-lightGray"
+                              } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                           />
                           {formik.touched[key] && formik.errors[key] && (
                             <small
@@ -631,16 +661,29 @@ const Station = ({ details }: { details: any }) => {
                               <span className="text-red-500">*</span>
                             </label>
                             {i === arr.length - 1 && i !== 3 && (
-                              <Button
-                                icon={
-                                  <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                                    <MdOutlineAdd />
-                                  </span>
-                                }
-                                title="Add"
-                                classes=" hover:bg-[#00733B] group hover:text-[white] transition "
-                                handleOnClick={() => addField("emails")}
-                              />
+                              <div className="flex gap-1">
+                                <Button
+                                  icon={
+                                    <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                      <MdOutlineAdd />
+                                    </span>
+                                  }
+                                  title="Add"
+                                  classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                                  handleOnClick={() => addField("emails")}
+                                />
+                                {i === 1 && <Button
+                                  icon={
+                                    <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                      <RiDeleteBin6Line />
+                                    </span>
+                                  }
+                                  classes="hover:bg-red-500 group transition"
+                                  handleOnClick={() =>
+                                    removeField("emails")
+                                  }
+                                />}
+                              </div>
                             )}
                           </div>
                           <input
@@ -651,11 +694,10 @@ const Station = ({ details }: { details: any }) => {
                             onBlur={formik.handleBlur}
                             value={formik.values[key]}
                             disabled={isEdit}
-                            className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                              formik.touched[key] && formik.errors[key]
-                                ? "border-red-500 outline-red-500"
-                                : "border-lightGray outline-lightGray"
-                            } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                            className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
+                              ? "border-red-500 outline-red-500"
+                              : "border-lightGray outline-lightGray"
+                              } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                           />
                           {formik.touched[key] && formik.errors[key] && (
                             <small
@@ -684,9 +726,8 @@ const Station = ({ details }: { details: any }) => {
                         name="note"
                         id="note"
                         rows={7}
-                        className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                          !isEdit ? "bg-white " : "bg-lightGray"
-                        }`}
+                        className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${!isEdit ? "bg-white " : "bg-lightGray"
+                          }`}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.note}
@@ -698,9 +739,8 @@ const Station = ({ details }: { details: any }) => {
                   {/* Submit */}
                   {/* Edit */}
                   <div
-                    className={`flex justify-center items-center p-5 w-full ${
-                      !isEdit ? "hidden" : "flex"
-                    }`}
+                    className={`flex justify-center items-center p-5 w-full ${!isEdit ? "hidden" : "flex"
+                      }`}
                   >
                     {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
                     <Button
@@ -717,9 +757,8 @@ const Station = ({ details }: { details: any }) => {
 
                   {/* Submit */}
                   <div
-                    className={`flex justify-center items-center p-5 w-full ${
-                      !isEdit ? "flex" : "hidden"
-                    }`}
+                    className={`flex justify-center items-center p-5 w-full ${!isEdit ? "flex" : "hidden"
+                      }`}
                   >
                     {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
                     <Button
@@ -841,7 +880,7 @@ const Station = ({ details }: { details: any }) => {
                                 <tr key={acc._id} className=" text-left h-full">
                                   <td
                                     className="check"
-                                    // onClick={() => handleClick(acc)}
+                                  // onClick={() => handleClick(acc)}
                                   >
                                     <input type="checkbox" readOnly />
                                   </td>

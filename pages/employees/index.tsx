@@ -52,7 +52,7 @@ export default function Employees({ employees }: any) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
+  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -143,7 +143,7 @@ export default function Employees({ employees }: any) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-10 h-full">
+        <div className="flex flex-col justify-center items-center px-5 h-full">
           <PageHeader pageTitle="pages.emp" newUrl={`employees/new`} />
           {/* Page Body */}
           <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
@@ -187,21 +187,19 @@ export default function Employees({ employees }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedEmployees.length != 1
+                      className={` text-2xl transition ${selectedEmployees.length != 1
                           ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
                           : "text-mainBlue group-hover:!text-white pointer-events-auto"
-                      } `}
+                        } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${
-                    selectedEmployees.length != 1
+                  classes={`${selectedEmployees.length != 1
                       ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
                       : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
-                  }  group `}
+                    }  group `}
                   isDisabled={selectedEmployees.length != 1}
                   handleOnClick={() =>
                     router.push(`employees/${selectedEmployees[0]}?isEdit=true`)
@@ -210,22 +208,20 @@ export default function Employees({ employees }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedEmployees.length < 1
+                      className={` text-2xl transition ${selectedEmployees.length < 1
                           ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
                           : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
-                      } `}
+                        } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${
-                    selectedEmployees.length < 1
+                  classes={`${selectedEmployees.length < 1
                       ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
                       : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
-                  }  group `}
+                    }  group `}
                   isDisabled={selectedEmployees.length < 1}
                   handleOnClick={handleDelete}
                 />
@@ -307,11 +303,10 @@ export default function Employees({ employees }: any) {
                               <div className="flex justify-center items-center gap-3 w-full">
                                 <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
                                   <Image
-                                    src={`${
-                                      emp.image
+                                    src={`${emp.image
                                         ? emp.image
                                         : "/uploads/avatar.png"
-                                    }`}
+                                      }`}
                                     fill
                                     alt="user image"
                                   />

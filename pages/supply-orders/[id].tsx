@@ -138,7 +138,7 @@ const SupplyOrder = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [ifTrue, setIfTrue] = useState<() => void>(() => {});
+  const [ifTrue, setIfTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     setIsEdit(searchParams.get("isEdit") === "true");
@@ -205,10 +205,18 @@ const SupplyOrder = ({
   };
 
   const save = async (e?: any) => {
-    await updateSupplyOrder(details._id, {
-      ...formik.values,
-    });
-    router.push("/supply-orders");
+
+
+    dispatch(SHOW_LOADER());
+    try {
+      await updateSupplyOrder(details._id, {
+        ...formik.values,
+      });
+      router.push("/supply-orders");
+    } catch (e) {
+    } finally {
+      // dispatch(HIDE_LOADER());
+    }
   };
 
   return (
@@ -253,21 +261,19 @@ const SupplyOrder = ({
             </div>
             <div className="flex flex-row gap-3 justify-center items-center">
               <div
-                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${
-                  isProfile
+                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${isProfile
                     ? "bg-mainBlue text-white"
                     : "bg-lightGray text-black"
-                } shadow-md flex justify-center items-center text-xl font-light capitalize `}
+                  } shadow-md flex justify-center items-center text-xl font-light capitalize `}
                 onClick={() => setIsProfile(true)}
               >
                 Order
               </div>
               <div
-                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${
-                  !isProfile
+                className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${!isProfile
                     ? "bg-mainBlue text-white"
                     : "bg-lightGray text-black"
-                } shadow-md flex justify-center items-center text-xl font-light capitalize `}
+                  } shadow-md flex justify-center items-center text-xl font-light capitalize `}
                 onClick={() => setIsProfile(false)}
               >
                 Transactions
@@ -307,11 +313,10 @@ const SupplyOrder = ({
                       type="text"
                       name="id"
                       id="id"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        formik.touched.id && formik.errors.id
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.id && formik.errors.id
                           ? "border-red-500 outline-red-500"
                           : "border-lightGray outline-lightGray"
-                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                        } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                       value={formik.values.id}
                       disabled={true}
                     />
@@ -362,11 +367,10 @@ const SupplyOrder = ({
                       type="date"
                       name="createdOn"
                       id="createdOn"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        formik.touched.createdOn && formik.errors.createdOn
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.createdOn && formik.errors.createdOn
                           ? "border-red-500 outline-red-500"
                           : "border-lightGray outline-lightGray"
-                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                        } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                       disabled={!isEdit}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -466,11 +470,10 @@ const SupplyOrder = ({
                       type="text"
                       name="price"
                       id="price"
-                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                        formik.touched.price && formik.errors.price
+                      className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.price && formik.errors.price
                           ? "border-red-500 outline-red-500"
                           : "border-lightGray outline-lightGray"
-                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
+                        } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                       disabled={!isEdit}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -497,9 +500,8 @@ const SupplyOrder = ({
                       id="description"
                       rows={7}
                       disabled={!isEdit}
-                      className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                        isEdit ? "bg-white " : "bg-lightGray"
-                      }`}
+                      className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${isEdit ? "bg-white " : "bg-lightGray"
+                        }`}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.description}
@@ -660,7 +662,7 @@ const SupplyOrder = ({
                                 <tr key={acc._id} className=" text-left h-full">
                                   <td
                                     className="check"
-                                    // onClick={() => handleClick(acc)}
+                                  // onClick={() => handleClick(acc)}
                                   >
                                     <input type="checkbox" readOnly />
                                   </td>

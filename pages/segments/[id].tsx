@@ -72,7 +72,7 @@ const Segment = ({ details }: { details: any }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [ifTrue, setIfTrue] = useState<() => void>(() => {});
+  const [ifTrue, setIfTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     setIsEdit(searchParams.get("isEdit") !== "true");
@@ -131,10 +131,18 @@ const Segment = ({ details }: { details: any }) => {
   };
 
   const save = async (e?: any) => {
-    await updateSegments(details._id, {
-      ...formik.values,
-    });
-    router.push("/segments");
+
+
+    dispatch(SHOW_LOADER());
+    try {
+      await updateSegments(details._id, {
+        ...formik.values,
+      });
+      router.push("/segments");
+    } catch (e) {
+    } finally {
+      // dispatch(HIDE_LOADER());
+    }
   };
   const handleImageUpload = async (e: any) => {
     const files = e.target.files;
@@ -255,11 +263,10 @@ const Segment = ({ details }: { details: any }) => {
                     type="text"
                     name="name"
                     id="name"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
-                      formik.touched.name && formik.errors.name
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                      } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -282,11 +289,10 @@ const Segment = ({ details }: { details: any }) => {
                     rows={8}
                     name="description"
                     id="description"
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.description && formik.errors.description
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                      } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}

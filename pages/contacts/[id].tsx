@@ -99,7 +99,7 @@ const Account = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [ifTrue, setIfTrue] = useState<() => void>(() => {});
+  const [ifTrue, setIfTrue] = useState<() => void>(() => { });
 
   const validationSchema: any = Yup.object().shape({
     firstName: Yup.string()
@@ -221,11 +221,11 @@ const Account = ({
 
   const websites = details.websites
     ? details.websites.reduce((acc: any, currentValue: any, index: any) => {
-        index == 0
-          ? (acc["website"] = currentValue)
-          : (acc[`website${index + 1}`] = currentValue);
-        return acc;
-      }, {})
+      index == 0
+        ? (acc["website"] = currentValue)
+        : (acc[`website${index + 1}`] = currentValue);
+      return acc;
+    }, {})
     : { website: "" };
 
   const initialValues = {
@@ -295,17 +295,17 @@ const Account = ({
   };
   const removeField = (field: any) => {
     const keys = Object.keys(formik.values).filter((key) => key.startsWith(field));
-  
+
     if (keys.length > 1) {
       const lastKey = keys[keys.length - 1];
-  
+
       // Remove the last email field from the validation schema
       delete validationSchema.fields[lastKey];
-  
+
       // Remove the last email field from formik values
       const newValues = { ...formik.values };
       delete newValues[lastKey];
-  
+
       formik.setValues(newValues);
     }
   };
@@ -372,17 +372,28 @@ const Account = ({
           parseInt(b.replace("website", ""))
       )
       .map((key) => formik.values[key]);
-    await updateContact(details._id, {
-      ...formik.values,
-      emails: emailFieldValues,
-      telephones: telephoneFieldValues,
-      countries: countryFieldValues,
-      cities: cityFieldValues,
-      ports: portFieldValues,
-      websites: websiteFieldValues,
-    });
-    router.push("/contacts");
+    dispatch(SHOW_LOADER());
+
+    try {
+      await updateContact(details._id, {
+        ...formik.values,
+        emails: emailFieldValues,
+        telephones: telephoneFieldValues,
+        countries: countryFieldValues,
+        cities: cityFieldValues,
+        ports: portFieldValues,
+        websites: websiteFieldValues,
+      });
+      router.push("/contacts");
+    } catch (e) {
+    } finally {
+      // dispatch(HIDE_LOADER());
+    }
   };
+
+
+
+
 
   //#endregion
 
@@ -487,11 +498,10 @@ const Account = ({
                     type="text"
                     name="firstName"
                     id="firstName"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
-                      formik.touched.firstName && formik.errors.firstName
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.firstName && formik.errors.firstName
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }  ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                      }  ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                     disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -514,11 +524,10 @@ const Account = ({
                     type="text"
                     name="lastName"
                     id="lastName"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.lastName && formik.errors.lastName
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.lastName && formik.errors.lastName
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                      }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -541,11 +550,10 @@ const Account = ({
                     type="text"
                     name="country"
                     id="country"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.country && formik.errors.country
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.country && formik.errors.country
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                      }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -568,11 +576,10 @@ const Account = ({
                     type="text"
                     name="city"
                     id="city"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.city && formik.errors.city
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.city && formik.errors.city
                         ? "border-red-500 outline-red-500"
                         : "border-lightGray outline-lightGray"
-                    }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                      }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -608,28 +615,28 @@ const Account = ({
                         </label>
                         {!isEdit && i === arr.length - 1 && i !== 3 && (
                           <div className="flex gap-1">
-                          <Button
-                            icon={
-                              <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                                <MdOutlineAdd />
-                              </span>
-                            }
-                            title="Add"
-                            classes=" hover:bg-[#00733B] group hover:text-[white] transition "
-                            handleOnClick={() => addField("telephone")}
-                          />
-                          { i === 1 && <Button
-                            icon={
-                              <span className="text-red-500 text-2xl group-hover:text-white transition">
-                                <RiDeleteBin6Line />
-                              </span>
-                           }
-                           classes="hover:bg-red-500 group transition"
-                            handleOnClick={() =>
-                              removeField("telephone")
-                            }
-                          />}
-                        </div>
+                            <Button
+                              icon={
+                                <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                  <MdOutlineAdd />
+                                </span>
+                              }
+                              title="Add"
+                              classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                              handleOnClick={() => addField("telephone")}
+                            />
+                            {i === 1 && <Button
+                              icon={
+                                <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                  <RiDeleteBin6Line />
+                                </span>
+                              }
+                              classes="hover:bg-red-500 group transition"
+                              handleOnClick={() =>
+                                removeField("telephone")
+                              }
+                            />}
+                          </div>
                         )}
                       </div>
                       <input
@@ -640,11 +647,10 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                          formik.touched[key] && formik.errors[key]
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                          }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -676,29 +682,29 @@ const Account = ({
                           <span className="text-red-500">*</span>
                         </label>
                         {!isEdit && i === arr.length - 1 && i !== 3 && (
-                        <div className="flex gap-1">
-                          <Button
-                            icon={
-                              <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                                <MdOutlineAdd />
-                              </span>
-                            }
-                            title="Add"
-                            classes=" hover:bg-[#00733B] group hover:text-[white] transition "
-                            handleOnClick={() => addField("email")}
-                          />
-                          { i === 1 && <Button
-                            icon={
-                              <span className="text-red-500 text-2xl group-hover:text-white transition">
-                                <RiDeleteBin6Line />
-                              </span>
-                           }
-                           classes="hover:bg-red-500 group transition"
-                            handleOnClick={() =>
-                              removeField("email")
-                            }
-                          />}
-                        </div>
+                          <div className="flex gap-1">
+                            <Button
+                              icon={
+                                <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                  <MdOutlineAdd />
+                                </span>
+                              }
+                              title="Add"
+                              classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                              handleOnClick={() => addField("email")}
+                            />
+                            {i === 1 && <Button
+                              icon={
+                                <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                  <RiDeleteBin6Line />
+                                </span>
+                              }
+                              classes="hover:bg-red-500 group transition"
+                              handleOnClick={() =>
+                                removeField("email")
+                              }
+                            />}
+                          </div>
                         )}
                       </div>
                       <input
@@ -709,11 +715,10 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                          formik.touched[key] && formik.errors[key]
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                          }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -753,29 +758,29 @@ const Account = ({
                           <span className="text-red-500">*</span>
                         </label>
                         {!isEdit && i === arr.length - 1 && i !== 3 && (
-                           <div className="flex gap-1">
-                          <Button
-                            icon={
-                              <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                                <MdOutlineAdd />
-                              </span>
-                            }
-                            title="Add"
-                            classes=" hover:bg-[#00733B] group hover:text-[white] transition "
-                            handleOnClick={() => addField("port")}
-                          />
-                          { i === 1 && <Button
-                            icon={
-                              <span className="text-red-500 text-2xl group-hover:text-white transition">
-                                <RiDeleteBin6Line />
-                              </span>
-                           }
-                           classes="hover:bg-red-500 group transition"
-                            handleOnClick={() =>
-                              removeField("port")
-                            }
-                          />}
-                        </div>
+                          <div className="flex gap-1">
+                            <Button
+                              icon={
+                                <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                  <MdOutlineAdd />
+                                </span>
+                              }
+                              title="Add"
+                              classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                              handleOnClick={() => addField("port")}
+                            />
+                            {i === 1 && <Button
+                              icon={
+                                <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                  <RiDeleteBin6Line />
+                                </span>
+                              }
+                              classes="hover:bg-red-500 group transition"
+                              handleOnClick={() =>
+                                removeField("port")
+                              }
+                            />}
+                          </div>
                         )}
                       </div>
                       <input
@@ -786,11 +791,10 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                          formik.touched[key] && formik.errors[key]
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                          } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -823,29 +827,29 @@ const Account = ({
                           <span className="text-red-500">*</span>
                         </label>
                         {!isEdit && i === arr.length - 1 && i !== 3 && (
-                           <div className="flex gap-1">
-                           <Button
-                             icon={
-                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
-                                 <MdOutlineAdd />
-                               </span>
-                             }
-                             title="Add"
-                             classes=" hover:bg-[#00733B] group hover:text-[white] transition "
-                             handleOnClick={() => addField("website")}
-                           />
-                           { i === 1 && <Button
-                             icon={
-                               <span className="text-red-500 text-2xl group-hover:text-white transition">
-                                 <RiDeleteBin6Line />
-                               </span>
-                            }
-                            classes="hover:bg-red-500 group transition"
-                             handleOnClick={() =>
-                               removeField("website")
-                             }
-                           />}
-                         </div>
+                          <div className="flex gap-1">
+                            <Button
+                              icon={
+                                <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                                  <MdOutlineAdd />
+                                </span>
+                              }
+                              title="Add"
+                              classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                              handleOnClick={() => addField("website")}
+                            />
+                            {i === 1 && <Button
+                              icon={
+                                <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                  <RiDeleteBin6Line />
+                                </span>
+                              }
+                              classes="hover:bg-red-500 group transition"
+                              handleOnClick={() =>
+                                removeField("website")
+                              }
+                            />}
+                          </div>
                         )}
                       </div>
                       <input
@@ -856,11 +860,10 @@ const Account = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
-                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                          formik.touched[key] && formik.errors[key]
+                        className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
                             ? "border-red-500 outline-red-500"
                             : "border-lightGray outline-lightGray"
-                        }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                          }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
                         <small
@@ -913,9 +916,8 @@ const Account = ({
                     name="note"
                     id="note"
                     rows={7}
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2   ${
-                      !isEdit ? "bg-white " : "bg-lightGray"
-                    }`}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2   ${!isEdit ? "bg-white " : "bg-lightGray"
+                      }`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -935,23 +937,20 @@ const Account = ({
 
                 {/* segments selection */}
                 <div
-                  className={`flex justify-center items-center w-full gap-10 p-10 border ${
-                    formik.touched.segments && formik.errors.segments
+                  className={`flex justify-center items-center w-full gap-10 p-10 border ${formik.touched.segments && formik.errors.segments
                       ? " border-red-500"
                       : " border-lightGray "
-                  }`}
+                    }`}
                 >
                   {segments?.map((segment: any, index: any) => (
                     <label
                       key={segment.title}
-                      className={`w-[250px] h-[100px] transition rounded-lg ${
-                        formik.values.segments.includes(segment._id)
+                      className={`w-[250px] h-[100px] transition rounded-lg ${formik.values.segments.includes(segment._id)
                           ? "bg-mainBlue text-white"
                           : "bg-bgGray text-black"
-                      } shadow-md flex justify-center items-center text-xl font-light capitalize ${
-                        !isEdit && "cursor-pointer"
-                      }`}
-                      // onClick={() => handleSegments(segment)}
+                        } shadow-md flex justify-center items-center text-xl font-light capitalize ${!isEdit && "cursor-pointer"
+                        }`}
+                    // onClick={() => handleSegments(segment)}
                     >
                       {segment.name}{" "}
                       <input
@@ -1000,23 +999,20 @@ const Account = ({
 
                 {/* poducts selection */}
                 <div
-                  className={`flex justify-center items-center w-full gap-10 p-10 border ${
-                    formik.touched.products && formik.errors.products
+                  className={`flex justify-center items-center w-full gap-10 p-10 border ${formik.touched.products && formik.errors.products
                       ? " border-red-500"
                       : " border-lightGray "
-                  }`}
+                    }`}
                 >
                   {products?.map((product: any, index: any) => (
                     <label
                       key={product.title}
-                      className={`w-[182px] h-[65px] transition rounded-lg ${
-                        formik.values.products.includes(product._id)
+                      className={`w-[182px] h-[65px] transition rounded-lg ${formik.values.products.includes(product._id)
                           ? "bg-mainBlue text-white"
                           : "bg-bgGray text-black"
-                      } shadow-md flex justify-center items-center text-xl font-light capitalize ${
-                        !isEdit && "cursor-pointer"
-                      }`}
-                      // onClick={() => handleproducts(product)}
+                        } shadow-md flex justify-center items-center text-xl font-light capitalize ${!isEdit && "cursor-pointer"
+                        }`}
+                    // onClick={() => handleproducts(product)}
                     >
                       {product.name}{" "}
                       <input
