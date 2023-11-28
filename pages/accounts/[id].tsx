@@ -573,6 +573,7 @@ const Account = ({
                         ? false
                         : true
                     }
+                    isLink={true}
                     isMulti={true}
                   />
                   {formik.touched.contacts && formik.errors.contacts && (

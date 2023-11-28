@@ -89,7 +89,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [ifTrue, setIfTrue] = useState<() => void>(() => {});
+  const [ifTrue, setIfTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     setIsEdit(searchParams.get("isEdit") !== "true");
@@ -104,7 +104,6 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
       .required("Name is required"),
     description: Yup.string().required("Description is required"),
     segment: Yup.string().required("Segment is required"),
-    size: Yup.string().required("Size is required"),
     // Dynamically added email fields validation
   });
 
@@ -165,7 +164,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
     console.log(files[0]);
     const formData = new FormData();
     formData.append("image", files[0]);
-    const res = await fetch("http://localhost:3000/api/upload", {
+    const res = await fetch("https://localhost:3000/api/upload", {
       method: "POST",
       body: formData,
     });
@@ -279,11 +278,10 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                     type="text"
                     name="name"
                     id="name"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
-                      formik.touched.name && formik.errors.name
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -306,11 +304,10 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                     rows={8}
                     name="description"
                     id="description"
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.description && formik.errors.description
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}
@@ -332,11 +329,10 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                   <select
                     name="segment"
                     id="segment"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      formik.touched.segment && formik.errors.segment
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${formik.touched.segment && formik.errors.segment
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     onChange={formik.handleChange}
                     value={formik.values.segment}
                     disabled={isEdit}
@@ -366,38 +362,45 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
               {/* first row */}
               <div className="grid grid-cols-1 w-full text-darkGray gap-5">
                 {/* left col */}
+                {details.attributes?.map((res: any) => {
+                  console.log(Object.entries(res)[0][0]);
+                  const key = Object.entries(res)[0][0]
+                  const value = Object.entries(res)[0][1]
 
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg h-12" htmlFor="size">
-                    Size<span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="size"
-                    id="size"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      formik.touched.size && formik.errors.size
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
-                    onChange={formik.handleChange}
-                    value={formik.values.size}
-                    disabled={isEdit}
-                  >
-                    <option selected hidden disabled value={""}>
-                      Select
-                    </option>
-                    {["42", "48"].map((res: any) => {
-                      return <option value={res}>{res}</option>;
-                    })}
-                  </select>
-                  {formik.touched.size && formik.errors.size && (
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 `}
-                    >
-                      {formik.errors.size}
-                    </small>
-                  )}
-                </div>
+                  return (
+
+                    <div className="flex flex-col w-full gap-3 relative">
+                      <label className="text-lg h-12" htmlFor="size">
+                        {key}<span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="size"
+                        id="size"
+                        className={`w-full h-12 rounded-md shadow-md  px-2 border ${formik.touched.size && formik.errors.size
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
+                          } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                        onChange={formik.handleChange}
+                        value={formik.values.size}
+                        disabled={isEdit}
+                      >
+                        <option selected hidden disabled value={""}>
+                          Select
+                        </option>
+                        {value?.map((res: any) => {
+                          return <option value={res}>{res}</option>;
+                        })}
+                      </select>
+                      {formik.touched.size && formik.errors.size && (
+                        <small
+                          className={`text-red-500 absolute -bottom-6 left-2 `}
+                        >
+                          {formik.errors.size}
+                        </small>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
               {/* Submit */}
               {/* Edit */}

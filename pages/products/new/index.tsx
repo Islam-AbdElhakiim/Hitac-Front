@@ -54,7 +54,6 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
       .required("Name is required"),
     description: Yup.string().required("Description is required"),
     segment: Yup.string().required("Segment is required"),
-    size: Yup.string().required("Size is required"),
     // Dynamically added email fields validation
   });
 
@@ -70,9 +69,13 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
     onSubmit: async (values) => {
       // Handle form submission
       console.log(values);
-
+      const attributes: any = [];
+      Object.keys(formik.values).filter((key) => key.startsWith("key")).map((key, i) => {
+        attributes.push({ [`${formik.values[key]}`]: `${formik.values[`value${i + 1}`]}`.split(",") })
+      })
       await createProducts({
         ...values,
+        attributes
       });
       router.push("/products");
       console.log(values);
@@ -80,6 +83,7 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
   });
   useEffect(() => {
     console.log(formik.values, formik.errors);
+
   }, [formik.values]);
   const handleImageUpload = async (e: any) => {
     const files = e.target.files;
@@ -97,6 +101,28 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
       setFilePath(data.filePath.slice(8));
       formik.setFieldValue("image", data.filePath.slice(8));
     }
+  };
+
+  const addField = (e: any) => {
+    e.preventDefault();
+    const currentKeyIndex =
+      Object.keys(formik.values).filter((key) => key.startsWith('key')).length +
+      1;
+    const currenValueIndex =
+      Object.keys(formik.values).filter((key) => key.startsWith('value')).length +
+      1;
+
+    const newKey = `key${currentKeyIndex}`;
+    const newValue = `value${currentKeyIndex}`;
+    // Extend the validation schema dynamically
+
+
+
+    formik.setValues({
+      ...formik.values,
+      [newKey]: "",
+      [newValue]: "",
+    });
   };
   return (
     <>
@@ -164,11 +190,10 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
                     type="text"
                     name="name"
                     id="name"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
-                      formik.touched.name && formik.errors.name
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    }  `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      }  `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -190,11 +215,10 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
                     rows={8}
                     name="description"
                     id="description"
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
-                      formik.touched.description && formik.errors.description
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}
@@ -215,11 +239,10 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
                   <select
                     name="segment"
                     id="segment"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      formik.touched.segment && formik.errors.segment
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
+                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${formik.touched.segment && formik.errors.segment
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
+                      } `}
                     onChange={formik.handleChange}
                     value={formik.values.segment}
                   >
@@ -242,42 +265,69 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
               {/* title */}
               <div className="text-2xl text-darkGray border-b-[1px] w-full py-3">
                 <h2>Product specifications</h2>
+                <Button
+                  icon={
+                    <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                      <MdOutlineAdd />
+                    </span>
+                  }
+                  title="Add"
+                  classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                  handleOnClick={(e) => addField(e)}
+                />
               </div>
 
               {/* first row */}
-              <div className="grid grid-cols-1 w-full text-darkGray gap-5">
+              <div className="grid grid-cols-4 w-full text-darkGray gap-5">
                 {/* left col */}
 
-                <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg h-12" htmlFor="size">
-                    Size<span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="size"
-                    id="size"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      formik.touched.size && formik.errors.size
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
-                    } `}
-                    onChange={formik.handleChange}
-                    value={formik.values.size}
-                  >
-                    <option selected hidden disabled value={""}>
-                      Select
-                    </option>
-                    {["42", "48"].map((res: any) => {
-                      return <option value={res}>{res}</option>;
-                    })}
-                  </select>
-                  {formik.touched.size && formik.errors.size && (
-                    <small
-                      className={`text-red-500 absolute -bottom-6 left-2 `}
-                    >
-                      {formik.errors.size}
-                    </small>
+                {Object.keys(formik.values).filter((key) => key.startsWith("key"))
+                  .sort(
+                    (a, b) =>
+                      parseInt(a.replace("key", "")) -
+                      parseInt(b.replace("key", ""))
+                  ).map((key: any, i, arr) => (
+                    <>
+                      <div className="col-span-1 flex flex-col w-full gap-3 relative">
+                        <label className="text-lg h-12" htmlFor="size">
+                          {key}<span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name={key}
+                          id={key}
+                          className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
+                            ? "border-red-500 outline-red-500"
+                            : "border-lightGray outline-lightGray"
+                            }  `}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values[key]}
+                        />
+
+                      </div>
+                      <div className="col-span-3 flex flex-col w-full gap-3 relative">
+                        <label className="text-lg h-12" htmlFor="size">
+                          {`value${i + 1}`}<span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name={`value${i + 1}`}
+                          id={`value${i + 1}`}
+                          className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
+                            ? "border-red-500 outline-red-500"
+                            : "border-lightGray outline-lightGray"
+                            }  `}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values[`value${i + 1}`]}
+                        />
+
+                      </div>
+                    </>
+                  )
                   )}
-                </div>
+
               </div>
               <div className="flex justify-center items-center p-5 w-full">
                 <Button
@@ -292,8 +342,8 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
                 />
               </div>
             </form>
-          </div>
-        </div>
+          </div >
+        </div >
       )}
     </>
   );

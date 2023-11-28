@@ -39,6 +39,7 @@ import { getAllSegments } from "@/http/segmentsHttp";
 import { getAllProducts } from "@/http/productsHttp";
 import SelectField from "@/components/ReactSelect/SelectField";
 import { createContact, getAllContacts } from "@/http/contactsHttp";
+import { RiDeleteBin6Line } from "react-icons/ri";
 export const getServerSideProps = async ({ locale }: any) => {
   const segmentsFetch = async () => {
     return await getAllSegments();
@@ -292,6 +293,22 @@ const NewAccount = ({
       });
   };
 
+  const removeField = (field: any) => {
+    const keys = Object.keys(formik.values).filter((key) => key.startsWith(field));
+  
+    if (keys.length > 1) {
+      const lastKey = keys[keys.length - 1];
+  
+      // Remove the last email field from the validation schema
+      delete validationSchema.fields[lastKey];
+  
+      // Remove the last email field from formik values
+      const newValues = { ...formik.values };
+      delete newValues[lastKey];
+  
+      formik.setValues(newValues);
+    }
+  };
   //#region modules
 
   const capitalizeFirstLetter = (str: string) => {
@@ -447,6 +464,7 @@ const NewAccount = ({
                           <span className="text-red-500">*</span>
                         </label>
                         {i === arr.length - 1 && i !== 3 && (
+                          <div className="flex gap-1">
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -457,6 +475,18 @@ const NewAccount = ({
                             classes=" hover:bg-[#00733B] group hover:text-[white] transition "
                             handleOnClick={() => addField("telephone")}
                           />
+                          { i === 1 && <Button
+                            icon={
+                              <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                <RiDeleteBin6Line />
+                              </span>
+                           }
+                           classes="hover:bg-red-500 group transition"
+                            handleOnClick={() =>
+                              removeField("telephone")
+                            }
+                          />}
+                        </div>
                         )}
                       </div>
                       <input
@@ -502,6 +532,7 @@ const NewAccount = ({
                           <span className="text-red-500">*</span>
                         </label>
                         {i === arr.length - 1 && i !== 3 && (
+                          <div className="flex gap-1">
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -512,6 +543,18 @@ const NewAccount = ({
                             classes=" hover:bg-[#00733B] group hover:text-[white] transition "
                             handleOnClick={() => addField("email")}
                           />
+                          { i === 1 && <Button
+                            icon={
+                              <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                <RiDeleteBin6Line />
+                              </span>
+                           }
+                           classes="hover:bg-red-500 group transition"
+                            handleOnClick={() =>
+                              removeField("email")
+                            }
+                          />}
+                        </div>
                         )}
                       </div>
                       <input
@@ -565,6 +608,7 @@ const NewAccount = ({
                           <span className="text-red-500">*</span>
                         </label>
                         {i === arr.length - 1 && i !== 3 && (
+                          <div className="flex gap-1">
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -575,6 +619,18 @@ const NewAccount = ({
                             classes=" hover:bg-[#00733B] group hover:text-[white] transition "
                             handleOnClick={() => addField("port")}
                           />
+                          { i === 1 && <Button
+                            icon={
+                              <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                <RiDeleteBin6Line />
+                              </span>
+                           }
+                           classes="hover:bg-red-500 group transition"
+                            handleOnClick={() =>
+                              removeField("port")
+                            }
+                          />}
+                        </div>
                         )}
                       </div>
                       <input
@@ -621,6 +677,7 @@ const NewAccount = ({
                           <span className="text-red-500">*</span>
                         </label>
                         {i === arr.length - 1 && i !== 3 && (
+                          <div className="flex gap-1">
                           <Button
                             icon={
                               <span className="text-[#00733B] transition group-hover:text-white text-xl">
@@ -631,6 +688,18 @@ const NewAccount = ({
                             classes=" hover:bg-[#00733B] group hover:text-[white] transition "
                             handleOnClick={() => addField("website")}
                           />
+                          { i === 1 && <Button
+                            icon={
+                              <span className="text-red-500 text-2xl group-hover:text-white transition">
+                                <RiDeleteBin6Line />
+                              </span>
+                           }
+                           classes="hover:bg-red-500 group transition"
+                            handleOnClick={() =>
+                              removeField("website")
+                            }
+                          />}
+                        </div>
                         )}
                       </div>
                       <input
