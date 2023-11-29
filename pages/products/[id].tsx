@@ -1,48 +1,27 @@
 import Button from "@/components/Button";
 import MyModal from "@/components/MyModal";
-
-import {
-  productInitalType,
-  productType,
-  segmentType,
-  stationType,
-} from "@/types";
+import { Attribute, productInitalType, productType } from "@/types";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiOutlineSave } from "react-icons/ai";
 import { BsCloudUpload } from "react-icons/bs";
-import { MdModeEdit, MdOutlineAdd } from "react-icons/md";
+import { MdDelete, MdModeEdit, MdOutlineAdd } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { TbArrowsSort } from "react-icons/tb";
 import { HIDE_LOADER, SHOW_LOADER } from "@/redux/modules/loader-slice";
 import Loader from "@/components/Loader";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import countries from "@/constants/countries";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { PiDotsThreeCircleLight } from "react-icons/pi";
-import {
-  deleteStationById,
-  getStationById,
-  updateStation,
-} from "@/http/stationsHttp";
-import {
-  deleteSegmentsById,
-  getAllSegments,
-  getSegmentsById,
-  updateSegments,
-} from "@/http/segmentsHttp";
-import {
-  deleteProductsById,
-  getProductsById,
-  updateProducts,
-} from "@/http/productsHttp";
+import { getAllSegments } from "@/http/segmentsHttp";
+import { deleteProductsById, getProductsById, updateProducts, } from "@/http/productsHttp";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Link from "next/link";
+
+
 export const getServerSideProps = async (context: any) => {
   const id = context.params.id;
 
@@ -69,12 +48,14 @@ export const getServerSideProps = async (context: any) => {
   };
 };
 
-const Product = ({ details, segments }: { details: any; segments: any }) => {
-  console.log(details, segments);
+
+const Product = ({ details, segments }: { details: productType; segments: any }) => {
+
+  console.log(details)
 
   const searchParams = useSearchParams();
   const [isEdit, setIsEdit] = useState(false);
-  const [filePath, setFilePath] = useState("/avatar.png");
+  const [filePath, setFilePath] = useState(details?.image);
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const dispatch = useDispatch<AppDispatch>();
@@ -82,6 +63,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
   const { t } = useTranslation("common", {
     bindI18n: "languageChanged loaded",
   });
+
 
   const router = useRouter();
 
@@ -92,7 +74,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
   const [ifTrue, setIfTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
-    setIsEdit(searchParams.get("isEdit") !== "true");
+    setIsEdit(searchParams.get("isEdit") === "true");
   }, [searchParams]);
 
   // Handle remove User
@@ -111,7 +93,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
     name: details?.name || "",
     description: details?.description || "",
     segment: details?.segment?._id || "",
-    size: details?.size || "",
+    specifications: details?.specifications || [],
     image: details?.image || "",
   };
 
@@ -142,7 +124,6 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
         router.push("/products");
       } catch (e) {
       } finally {
-        dispatch(HIDE_LOADER());
       }
     };
     setModalTitle(`Are you sure?`);
@@ -153,18 +134,6 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
     setIfTrue(() => deleteProd);
   };
 
-  const save = async (e?: any) => {
-    dispatch(SHOW_LOADER());
-    try {
-      await updateProducts(details._id, {
-        ...formik.values,
-      });
-      router.push("/products");
-    } catch (e) {
-    } finally {
-      // dispatch(HIDE_LOADER());
-    }
-  };
   const handleImageUpload = async (e: any) => {
     const files = e.target.files;
     console.log(files[0]);
@@ -182,6 +151,72 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
       formik.setFieldValue("image", data.filePath.slice(8));
     }
   };
+
+  //#region handle dynamic attributes
+  const [attributes, setAttributes] = useState<Attribute[]>(details.specifications);
+
+  const addAttribute = () => {
+    let temp = new Attribute();
+    setAttributes((prev) => [...prev, temp]);
+  }
+
+  const addOptions = (_index: number) => {
+    setAttributes((prev) => {
+      let newValue = prev.map((attr, index) => {
+        if (index == _index) attr.values.push("");
+        return attr;
+      })
+      // console.log(newValue);
+      return newValue;
+    })
+
+  }
+
+  const deleteAttribute = (_index: number) => {
+    setAttributes(prev => prev.filter((val, index) => index != _index));
+  }
+
+  const updateOptionValue = (_attributeIndex: number, _valueIndex: number, e: any) => {
+
+    setAttributes((prev) => {
+      let newValue = prev.map((attr, attributeIndex) => {
+        // find attribute
+        if (attributeIndex == _attributeIndex) {
+          attr.values.map((value, valueIndex) => {
+            // find option value
+            if (valueIndex == _valueIndex) {
+              // update it
+              attr.values[valueIndex] = e.target.value
+            }
+          })
+        }
+        return attr;
+      })
+      // console.log(newValue);
+      return newValue;
+    })
+
+  }
+  //#endregion
+
+  const save = async (e?: any) => {
+    dispatch(SHOW_LOADER());
+
+    try {
+
+      //append the attributes
+      await updateProducts(details._id, {
+        ...formik.values,
+        specifications: attributes
+      });
+      router.push("/products");
+      // console.log(formik.values)
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
+
   return (
     <>
       {isLoading ? (
@@ -232,7 +267,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                   }
                 />
               </div>
-              {!isEdit && (
+              {isEdit && (
                 <form method="post" encType="multipart/form-data">
                   <label
                     htmlFor="file-upload"
@@ -276,7 +311,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
               <div className="grid grid-cols-1 w-full text-darkGray gap-5">
                 {/* left col */}
                 <div className="flex flex-col w-full gap-3 relative mb-2">
-                  <label className="text-lg h-12" htmlFor="name">
+                  <label className="text-lg" htmlFor="name">
                     Name<span className="text-red-500">*</span>
                   </label>
 
@@ -287,11 +322,11 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
                       ? "border-red-500 outline-red-500"
                       : "border-lightGray outline-lightGray"
-                      } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
+                      } ${isEdit ? "bg-white " : "bg-lightGray"} `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
-                    disabled={isEdit}
+                    disabled={!isEdit}
                   />
                   {formik.touched.name && formik.errors.name && (
                     <small
@@ -302,7 +337,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                   )}
                 </div>
                 <div className="flex flex-col w-full gap-3 relative mb-2">
-                  <label className="text-lg h-12" htmlFor="description">
+                  <label className="text-lg" htmlFor="description">
                     Description<span className="text-red-500">*</span>
                   </label>
 
@@ -313,11 +348,11 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                     className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
                       ? "border-red-500 outline-red-500"
                       : "border-lightGray outline-lightGray"
-                      } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}
-                    disabled={isEdit}
+                    disabled={!isEdit}
                   />
                   {formik.touched.description && formik.errors.description && (
                     <small
@@ -329,7 +364,7 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                 </div>
 
                 <div className="flex flex-col w-full gap-3 relative">
-                  <label className="text-lg h-12" htmlFor="segment">
+                  <label className="text-lg" htmlFor="segment">
                     Segments<span className="text-red-500">*</span>
                   </label>
                   <select
@@ -338,10 +373,10 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                     className={`w-full h-12 rounded-md shadow-md  px-2 border ${formik.touched.segment && formik.errors.segment
                       ? "border-red-500 outline-red-500"
                       : "border-lightGray outline-lightGray"
-                      } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
+                      } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     onChange={formik.handleChange}
                     value={formik.values.segment}
-                    disabled={isEdit}
+                    disabled={!isEdit}
                   >
                     <option selected hidden disabled value={""}>
                       Select
@@ -359,58 +394,95 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                   )}
                 </div>
               </div>
-              {/* title */}
-              <div className="text-2xl text-darkGray border-b-[1px] w-full py-3">
+
+              {/* start Product specifications */}
+              <div className="text-2xl text-darkGray border-b-[1px] w-full py-3 flex gap-3 items-center">
                 <h2>Product specifications</h2>
+                {isEdit && (
+                  <Button
+                    type="button"
+                    icon={
+                      <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                        <MdOutlineAdd />
+                      </span>
+                    }
+                    title="Add"
+                    classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                    handleOnClick={() => addAttribute()}
+                  />
+                )}
               </div>
+              {isEdit ? (
+                //write mood
+                <div className="grid grid-cols-2 w-full text-darkGray gap-5">
+                  {attributes?.map((attribute, attributeIndex) => (
+                    <div className="flex flex-col w-full gap-3 mb-4 relative">
+                      <div className="flex justify-start items-center gap-3">
+                        <label className="text-lg" htmlFor="title">{t("labels.attribute") + (attributeIndex + 1)} </label>
+                        {/* delete btn */}
+                        <Button
+                          type="button"
+                          icon={
+                            <span className="text-red-500 transition group-hover:text-white text-xl">
+                              <MdDelete />
+                            </span>
+                          }
+                          title={t("delete attribute")}
+                          classes=" hover:bg-red-500 group hover:text-[white] transition "
+                          handleOnClick={() => deleteAttribute(attributeIndex)}
+                        />
+                      </div>
+                      <input placeholder="title" type="text" name="title" className="w-full h-12 rounded-md shadow-md  px-3 border border-lightGray outline-lightGray" value={attribute.key} onChange={(e) => setAttributes(attributes.map((attr, ind) => {
+                        if (ind == attributeIndex) {
+                          attr.key = e.target.value;
+                        }
+                        return attr;
+                      }))} />
+                      < div className="w-1/4" >
+                        <Button
+                          type="button"
+                          icon={
+                            <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                              <MdOutlineAdd />
+                            </span>
+                          }
+                          title={t("Add Options ")}
+                          classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                          handleOnClick={() => addOptions(attributeIndex)}
+                        />
+                      </div>
+                      {/* options */}
+                      {attribute.values.map((value, valueIndex) => (
+                        < input type="text" placeholder="add option" value={value} name="option" className="w-full h-12 rounded-md shadow-md  px-3 border border-lightGray outline-lightGray" onChange={(e) => updateOptionValue(attributeIndex, valueIndex, e)} />
+                      ))}
 
-              {/* data-form */}
-              {/* first row */}
-              <div className="grid grid-cols-1 w-full text-darkGray gap-5">
-                {/* left col */}
-                {details.attributes?.map((res: any) => {
-                  console.log(Object.entries(res)[0][0]);
-                  const key: any = Object.entries(res)[0][0]
-                  const value: any = Object.entries(res)[0][1]
-
-                  return (
-
-                    <div className="flex flex-col w-full gap-3 relative">
-                      <label className="text-lg h-12" htmlFor="size">
-                        {key}<span className="text-red-500">*</span>
-                      </label>
-                      <select
-                        name="size"
-                        id="size"
-                        className={`w-full h-12 rounded-md shadow-md  px-2 border ${formik.touched.size && formik.errors.size
-                          ? "border-red-500 outline-red-500"
-                          : "border-lightGray outline-lightGray"
-                          } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
-                        onChange={formik.handleChange}
-                        value={formik.values.size}
-                        disabled={isEdit}
-                      >
-                        <option selected hidden disabled value={""}>
-                          Select
-                        </option>
-                        {value?.map((res: any) => {
-                          return <option value={res}>{res}</option>;
-                        })}
-                      </select>
-                      {formik.touched.size && formik.errors.size && (
-                        <small
-                          className={`text-red-500 absolute -bottom-6 left-2 `}
-                        >
-                          {formik.errors.size}
-                        </small>
-                      )}
                     </div>
-                  )
-                })}
-              </div>
-              {/* Submit */}
-              {/* Edit */}
-              {isEdit && (
+                  ))}
+
+                </div>
+              ) : (
+                // read-only mode
+                <div className="grid grid-flow-dense w-full text-darkGray gap-5 grid-cols-2 shadow-md bg-lightGray p-2 rounded-md">
+                  {attributes?.length > 0 ? attributes.map((attribute, attributeIndex) => (
+                    <div className="flex flex-col w-full gap-3 mb-4 relative">
+                      {/* <label className="text-lg" htmlFor="title">{t("labels.attribute") + (attributeIndex + 1)} </label> */}
+                      <div className="w-full border flex flex-col items-start justify-center ">
+                        <h2 className=" border-b-2 w-full p-2 font-bold text-xl  "> {attribute.key}</h2>
+                        {attribute.values.map((value, valueIndex) => (
+                          <span className=" p-2 w-full">{value}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )) : (
+                    <span>No Attributes</span>
+                  )}
+
+                </div>
+              )}
+              {/* End Product specifications */}
+
+              {/* edit */}
+              {!isEdit && (
                 <div className={`flex justify-center items-center p-5 w-full`}>
                   {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
                   <Button
@@ -421,24 +493,24 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                     }}
                     icon={
                       <span className="text-3xl">
-                        <MdModeEdit />{" "}
+                        <MdModeEdit />
                       </span>
                     }
                     classes="px-5 py-2 bg-lightGray text-mainBlue text-xl hover:bg-mainBlue hover:text-white transition"
                   />
                 </div>
-              )}
+              )
+              }
 
               {/* Submit */}
               {!isEdit && (
                 <div className={`flex justify-center items-center p-5 w-full `}>
-                  {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
                   <Button
                     title="Save"
                     type="submit"
                     icon={
                       <span className="text-3xl">
-                        <AiOutlineSave />{" "}
+                        <AiOutlineSave />
                       </span>
                     }
                     classes="px-5 py-2 bg-mainOrange text-white text-xl hover:bg-mainOrange"
@@ -446,18 +518,16 @@ const Product = ({ details, segments }: { details: any; segments: any }) => {
                 </div>
               )}
             </form>
-          </div>
-          <div className="flex flex-col items-start justify-start w-full p-5 gap-3 border rounded-xl mt-2"></div>
-
+          </div >
           {/* Modal */}
-          <MyModal
+          < MyModal
             setIsOpen={setIsOpen}
             isOpen={isOpen}
             title={modalTitle}
             body={modalBody}
             ifTrue={ifTrue}
           />
-        </div>
+        </div >
       )}
     </>
   );

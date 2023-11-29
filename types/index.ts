@@ -7,6 +7,21 @@ export type SearchParams = {
     onSearch: (value: string) => void
 }
 
+export type NavigationLink = {
+    link: any;
+    openSecondLevelMenu: (val: string) => void;
+    secondLevelMenuOpened: string;
+    openThirdLevelMenu: (val: string) => void
+    thirdLevelMenuOpened: string;
+    pathName: string;
+    isActive: boolean;
+}
+
+export class Attribute {
+    key: string = "";
+    values: string[] = [];
+}
+
 export type ButtonParams = {
     title?: any;
     icon?: ReactElement;
@@ -72,195 +87,195 @@ export type EmployeeType = {
 };
 export type accountType = {
     _id?: string;
-    englishName:string,
-    arabicName:string,
-    website:string,
-    countries:string[],
-    emails:string[],
-    addresses:string[],
-    telephones:string[],
+    englishName: string,
+    arabicName: string,
+    website: string,
+    countries: string[],
+    emails: string[],
+    addresses: string[],
+    telephones: string[],
     cities: string[],
     ports: string[],
-    segments:  {[key: string]: string}[],
-    products:  {[key: string]: string}[],
+    segments: { [key: string]: string }[],
+    products: { [key: string]: string }[],
 
-    contacts: {[key: string]: string}[],
-    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[]; // Adding an index signature
+    contacts: { [key: string]: string }[],
+    [key: string]: string | number | undefined | boolean | string[] | { [key: string]: string }[]; // Adding an index signature
 
 };
 export type accountInitalType = {
     _id?: string;
-    englishName:string,
-    arabicName:string,
-    website:string,
-    country:string,
-    email:string,
-    address:string,
-    telephone:string,
+    englishName: string,
+    arabicName: string,
+    website: string,
+    country: string,
+    email: string,
+    address: string,
+    telephone: string,
     city: string,
     port: string,
     segments: string[],
     products: string[],
 
     contacts: string[],
-    [key: string]: string | number | undefined  | string[]// Adding an index signature
+    [key: string]: string | number | undefined | string[]// Adding an index signature
 
 };
 export type contactType = {
     _id?: string;
-    firstName:string,
-    lastName:string,
-    websites:string[],
-    countries:string[] |string,
-    emails:string[],
-    telephones:string[],
-    cities:string[] |string,
+    firstName: string,
+    lastName: string,
+    websites: string[],
+    countries: string[] | string,
+    emails: string[],
+    telephones: string[],
+    cities: string[] | string,
     ports: string[],
-    note:string,
-    segments: {[key: string]: string}[],
-    products: {[key: string]: string}[],
+    note: string,
+    segments: { [key: string]: string }[],
+    products: { [key: string]: string }[],
 
-    account: {[key: string]: string},
-    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[] |{[key: string]: string}; // Adding an index signature
+    account: { [key: string]: string },
+    [key: string]: string | number | undefined | boolean | string[] | { [key: string]: string }[] | { [key: string]: string }; // Adding an index signature
 
 };
 export type contactInitalType = {
     _id?: string;
-    firstName:string,
-    lastName:string,
-    website:string,
-    country:string,
-    email:string,
-    telephone:string,
-    city:string,
+    firstName: string,
+    lastName: string,
+    website: string,
+    country: string,
+    email: string,
+    telephone: string,
+    city: string,
     port: string,
-    note:string,
+    note: string,
     segments: string[],
     products: string[],
 
     account: string,
-    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
 export type contactinterface = {
     _id?: string;
-    firstName:string,
-    lastName:string,
-    websites:string[],
-    countries:string[],
-    emails:string[],
-    telephones:string[],
-    cities:string[],
+    firstName: string,
+    lastName: string,
+    websites: string[],
+    countries: string[],
+    emails: string[],
+    telephones: string[],
+    cities: string[],
     ports: string[],
-    note:string,
+    note: string,
     segments: string[],
     products: string[],
 
     account: string,
-    [key: string]: string | number | undefined | boolean | string[] |{[key: string]: string}[]; // Adding an index signature
+    [key: string]: string | number | undefined | boolean | string[] | { [key: string]: string }[]; // Adding an index signature
 
 };
 export type supplierType = {
     _id?: string;
-    firstName:string,
-    lastName:string,
-    countries:string,
-    emails:string[],
-    telephones:string[],
-    cities:string,
+    firstName: string,
+    lastName: string,
+    countries: string,
+    emails: string[],
+    telephones: string[],
+    cities: string,
     segments: string[],
     products: string[],
-    note:string,
+    note: string,
 
-    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
 export type stationType = {
     _id?: string;
-    englishName:string,
-    arabicName:string,
-    address:string,
-    countries:string,
-    emails:string[],
-    telephones:string[],
-    cities:string,
-    note:string,
+    englishName: string,
+    arabicName: string,
+    address: string,
+    countries: string,
+    emails: string[],
+    telephones: string[],
+    cities: string,
+    note: string,
 
-    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
 export type supplyOrderType = {
     _id?: string;
-    salesOrder:string,
-    supplier:{[key: string]: string},
-    createdOn:string,
-    products:{[key: string]: string},
-    price:string,
-    description:string,
-    [key: string]: string | number | undefined  | string[] |{[key: string]: string} ; // Adding an index signature
+    salesOrder: string,
+    supplier: { [key: string]: string },
+    createdOn: string,
+    products: { [key: string]: string },
+    price: string,
+    description: string,
+    [key: string]: string | number | undefined | string[] | { [key: string]: string }; // Adding an index signature
 
 };
 export type supplyOrderInitalType = {
     _id?: string;
-    salesOrder:string,
-    supplier:string,
-    createdOn:string,
-    createdB?:string,
-    products:string[],
-    price:string,
-    description:string,
-    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+    salesOrder: string,
+    supplier: string,
+    createdOn: string,
+    createdB?: string,
+    products: string[],
+    price: string,
+    description: string,
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
 export type returnRequestsType = {
     _id?: string;
-    supplyOrder:    {[key: string]: string},
-    supplier:{[key: string]: string},
-    createdOn:string,
-    product: {[key: string]: string},
-    price:string,
-    description:string,
-    [key: string]: string | number | undefined  | string[] |{[key: string]: string} ; // Adding an index signature
+    supplyOrder: { [key: string]: string },
+    supplier: { [key: string]: string },
+    createdOn: string,
+    product: { [key: string]: string },
+    price: string,
+    description: string,
+    [key: string]: string | number | undefined | string[] | { [key: string]: string }; // Adding an index signature
 
 };
 export type returnRequestsInitalType = {
     _id?: string;
-    supplyOrder:    string,
-    supplier:string,
-    createdOn:string,
+    supplyOrder: string,
+    supplier: string,
+    createdOn: string,
     product: string,
-    price:string,
-    description:string,
-    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+    price: string,
+    description: string,
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
 
-export type segmentType ={
+export type segmentType = {
     _id?: string;
-    name:string,
-    description:string,
-    image?:string,
-    [key: string]: string | number | undefined  | string[] ; // Adding an index signature
+    name: string,
+    description: string,
+    image?: string,
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 }
-export type productType ={
-    _id?: string;
-    name:string,
-    description:string,
-    size:string,
-    segment:{[key: string]: string},
-    image?:string,
-    [key: string]: string | number | undefined  | string[] | {[key: string]: string} ; // Adding an index signature
+export type productType = {
+    _id: string;
+    name: string,
+    description: string,
+    size: string,
+    segment: { [key: string]: string },
+    image?: string,
+    specifications: Attribute[],
 
 }
-export type productInitalType ={
+export type productInitalType = {
     _id?: string;
-    name:string,
-    description:string,
-    size:string,
-    segment:string,
-    image?:string,
-    [key: string]: string | number | undefined  | string[]  ; // Adding an index signature
+    name: string,
+    description: string,
+    segment: string,
+    image?: string,
+    specifications: Attribute[],
+
 
 }
 

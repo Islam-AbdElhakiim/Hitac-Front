@@ -12,7 +12,7 @@ export const config = {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     // pages/api/upload.js
-    console.log(req)
+    // console.log(req)
     const form = formidable({ uploadDir: "./public/uploads" });
 
     let files:any, fields;

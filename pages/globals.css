@@ -8,11 +8,11 @@
 
 td,
 th {
-  @apply px-8 py-2 max-w-[200px] min-w-[170px]
+  @apply px-8 py-2 max-w-[160px]
 }
 
 th {
-  @apply font-medium text-[18px]
+  @apply font-medium text-[14px]
 }
 
 td {
@@ -30,7 +30,7 @@ td {
 
 .fs-md {
   font-size: clamp(1.0rem, 1vw + 0.6rem, 12rem);
-}
+} 
 
 .fs-sm {
   font-size: clamp(0.5rem, 1vw + 0.2rem, 6rem);
