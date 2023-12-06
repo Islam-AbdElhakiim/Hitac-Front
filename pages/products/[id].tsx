@@ -503,7 +503,7 @@ const Product = ({ details, segments }: { details: productType; segments: any })
               }
 
               {/* Submit */}
-              {!isEdit && (
+              {isEdit && (
                 <div className={`flex justify-center items-center p-5 w-full `}>
                   <Button
                     title="Save"

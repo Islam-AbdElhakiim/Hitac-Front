@@ -202,7 +202,6 @@ const ReturnRequests = ({
         router.push("/return-requests");
       } catch (e) {
       } finally {
-        dispatch(HIDE_LOADER());
       }
     };
     setModalTitle(`Are you sure?`);
@@ -233,7 +232,7 @@ const ReturnRequests = ({
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
+        <div className="flex flex-col items-start justify-start mt-5 bg-white rounded-xl shadow-md px-5 gap-3">
           {/* header- wrapper */}
 
           <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
@@ -302,8 +301,8 @@ const ReturnRequests = ({
                     name="id"
                     id="id"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.id && formik.errors.id
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={true}
                     onChange={formik.handleChange}
@@ -358,8 +357,8 @@ const ReturnRequests = ({
                     name="createdOn"
                     id="createdOn"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.createdOn && formik.errors.createdOn
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={!isEdit}
                     onChange={formik.handleChange}
@@ -460,8 +459,8 @@ const ReturnRequests = ({
                     name="price"
                     id="price"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.price && formik.errors.price
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={!isEdit}
                     onChange={formik.handleChange}

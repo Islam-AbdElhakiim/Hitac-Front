@@ -57,7 +57,7 @@ const Segment = ({ details }: { details: any }) => {
 
   const searchParams = useSearchParams();
   const [isEdit, setIsEdit] = useState(false);
-  const [filePath, setFilePath] = useState("/avatar.png");
+  const [filePath, setFilePath] = useState(details?.image);
 
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const dispatch = useDispatch<AppDispatch>();
@@ -119,7 +119,6 @@ const Segment = ({ details }: { details: any }) => {
         router.push("/segments");
       } catch (e) {
       } finally {
-        dispatch(HIDE_LOADER());
       }
     };
     setModalTitle(`Are you sure?`);
@@ -149,7 +148,7 @@ const Segment = ({ details }: { details: any }) => {
     console.log(files[0]);
     const formData = new FormData();
     formData.append("image", files[0]);
-    const res = await fetch("http://localhost:3000/api/upload", {
+    const res = await fetch("https://localhost:3000/api/upload", {
       method: "POST",
       body: formData,
     });
@@ -166,7 +165,7 @@ const Segment = ({ details }: { details: any }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
+        <div className="flex flex-col items-start justify-start mt-5 bg-white rounded-xl shadow-md  px-5 gap-3">
           {/* header- wrapper */}
 
           <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3 relative">
@@ -264,8 +263,8 @@ const Segment = ({ details }: { details: any }) => {
                     name="name"
                     id="name"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -290,8 +289,8 @@ const Segment = ({ details }: { details: any }) => {
                     name="description"
                     id="description"
                     className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       } ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

@@ -159,10 +159,10 @@ const SupplyOrder = ({
 
   const initialValues = {
     id: details?._id || "",
-    salesOrder: details?.salesOrder || "",
+    salesOrder: details?.salesOrder[0] || "",
     supplier: details?.supplier._id || "",
     createdOn: details?.createdOn.split("T")[0] || "",
-    products: [details?.products._id] || [],
+    products: details?.products.map((product: any) => product._id) || [],
     price: details?.price || "",
 
     description: details?.description || "",
@@ -193,7 +193,6 @@ const SupplyOrder = ({
         router.push("/supply-orders");
       } catch (e) {
       } finally {
-        dispatch(HIDE_LOADER());
       }
     };
     setModalTitle(`Are you sure?`);
@@ -262,8 +261,8 @@ const SupplyOrder = ({
             <div className="flex flex-row gap-3 justify-center items-center">
               <div
                 className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${isProfile
-                    ? "bg-mainBlue text-white"
-                    : "bg-lightGray text-black"
+                  ? "bg-mainBlue text-white"
+                  : "bg-lightGray text-black"
                   } shadow-md flex justify-center items-center text-xl font-light capitalize `}
                 onClick={() => setIsProfile(true)}
               >
@@ -271,8 +270,8 @@ const SupplyOrder = ({
               </div>
               <div
                 className={`w-[150px] h-[50px] cursor-pointer transition rounded-lg ${!isProfile
-                    ? "bg-mainBlue text-white"
-                    : "bg-lightGray text-black"
+                  ? "bg-mainBlue text-white"
+                  : "bg-lightGray text-black"
                   } shadow-md flex justify-center items-center text-xl font-light capitalize `}
                 onClick={() => setIsProfile(false)}
               >
@@ -314,8 +313,8 @@ const SupplyOrder = ({
                       name="id"
                       id="id"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.id && formik.errors.id
-                          ? "border-red-500 outline-red-500"
-                          : "border-lightGray outline-lightGray"
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
                         } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                       value={formik.values.id}
                       disabled={true}
@@ -368,8 +367,8 @@ const SupplyOrder = ({
                       name="createdOn"
                       id="createdOn"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.createdOn && formik.errors.createdOn
-                          ? "border-red-500 outline-red-500"
-                          : "border-lightGray outline-lightGray"
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
                         } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                       disabled={!isEdit}
                       onChange={formik.handleChange}
@@ -471,8 +470,8 @@ const SupplyOrder = ({
                       name="price"
                       id="price"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.price && formik.errors.price
-                          ? "border-red-500 outline-red-500"
-                          : "border-lightGray outline-lightGray"
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
                         } ${isEdit ? "bg-white " : "bg-lightGray"}`}
                       disabled={!isEdit}
                       onChange={formik.handleChange}

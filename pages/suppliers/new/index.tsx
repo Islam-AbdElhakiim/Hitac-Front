@@ -178,7 +178,7 @@ const NewContact = ({
       cities: "",
       telephones: [],
       emails: [],
-      note: "",
+      notes: "",
       segments: [],
       products: [],
     },
@@ -561,13 +561,13 @@ const NewContact = ({
                   </label>
 
                   <textarea
-                    name="note"
-                    id="note"
+                    name="notes"
+                    id="notes"
                     rows={7}
                     className={`w-full rounded-md border border-lightGray shadow-md  px-2 `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.note}
+                    value={formik.values.notes}
                   />
                 </div>
               </div>

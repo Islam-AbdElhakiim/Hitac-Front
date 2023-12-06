@@ -55,7 +55,7 @@ export default function Suppliers({ suplliers }: any) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
+  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -192,21 +192,19 @@ export default function Suppliers({ suplliers }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedSuplliers.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedSuplliers.length != 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "text-mainBlue group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${
-                    selectedSuplliers.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedSuplliers.length != 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                    : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedSuplliers.length != 1}
                   handleOnClick={() =>
                     router.push(`suppliers/${selectedSuplliers[0]}?isEdit=true`)
@@ -215,22 +213,20 @@ export default function Suppliers({ suplliers }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedSuplliers.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedSuplliers.length < 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${
-                    selectedSuplliers.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedSuplliers.length < 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                    : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedSuplliers.length < 1}
                   handleOnClick={handleDelete}
                 />
@@ -266,13 +262,7 @@ export default function Suppliers({ suplliers }: any) {
                       </span>
                       <span>Name</span>
                     </th>
-                    <th className="">
-                      <span className=" inline-block relative top-1 mr-1 ">
-                        {" "}
-                        <TbArrowsSort />{" "}
-                      </span>
-                      <span>Type</span>
-                    </th>
+
                     <th className="">
                       <span className=" inline-block relative top-1 mr-1 ">
                         {" "}
@@ -316,9 +306,8 @@ export default function Suppliers({ suplliers }: any) {
                             <td>{supp._id}</td>
                             <td>{`${supp.firstName} ${supp.lastName}`}</td>
 
-                            <td>{supp?.type || "-"}</td>
-                            <td>{supp.dept || "-"}</td>
-                            <td>{supp.note || "-"}</td>
+                            <td>{supp?.dept || "-"}</td>
+                            <td>{supp?.notes || "-"}</td>
 
                             <td>
                               <Link href={`/suppliers/${supp._id}`}>

@@ -69,7 +69,7 @@ const Employee = ({
   accounts: Account[];
 }) => {
   const user = useSelector((state: any) => state.authReducer);
-  console.log(user);
+  console.log(accounts);
   const searchParams = useSearchParams();
   const [isEdit, setIsEdit] = useState(false);
 
@@ -410,10 +410,11 @@ const Employee = ({
       dispatch(SHOW_LOADER());
       try {
         await deleteUserById(_id);
+        router.push("/employees");
       } catch (e) {
         console.log("error in deleting user", e);
       } finally {
-        dispatch(HIDE_LOADER());
+        // dispatch(HIDE_LOADER());
       }
     };
     //popup modal
@@ -590,8 +591,8 @@ const Employee = ({
                       name="firstname"
                       id="firstname"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.firstName.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         } `}
                       value={emp.firstName}
                       onChange={(e) => handleInput("firstName", e.target.value)}
@@ -617,8 +618,8 @@ const Employee = ({
                       name="lastname"
                       id="lastname"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.lastName.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         } `}
                       value={emp.lastName}
                       onChange={(e) => handleInput("lastName", e.target.value)}
@@ -647,8 +648,8 @@ const Employee = ({
                       name="email123"
                       id="email123"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.email.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         } `}
                       value={emp.email}
                       onChange={(e) => handleInput("email", e.target.value)}
@@ -673,8 +674,8 @@ const Employee = ({
                       name="telephone"
                       id="telephone"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.telephone.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         } `}
                       value={emp.telephone}
                       onChange={(e) => handleInput("telephone", e.target.value)}
@@ -702,8 +703,8 @@ const Employee = ({
                       name="age"
                       id="age"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.age.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         } `}
                       value={emp.age}
                       onChange={(e) => handleInput("age", e.target.value)}
@@ -728,8 +729,8 @@ const Employee = ({
                       name="salary"
                       id="salary"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.salary.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         } `}
                       value={emp.salary}
                       onChange={(e) => handleInput("salary", e.target.value)}
@@ -756,8 +757,8 @@ const Employee = ({
                       name="role"
                       id="role"
                       className={`w-full h-12 rounded-md shadow-md  px-2 border ${validation.role.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         }`}
                       onChange={(e) => {
                         handleInput("role", e.target.value);
@@ -822,8 +823,8 @@ const Employee = ({
                       name="userpassword"
                       id="userpassword"
                       className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.password.isValid
-                          ? "border-lightGray outline-lightGray"
-                          : "border-red-500 outline-red-500"
+                        ? "border-lightGray outline-lightGray"
+                        : "border-red-500 outline-red-500"
                         } `}
                       onChange={(e) => handleInput("password", e.target.value)}
                     />
@@ -1024,8 +1025,8 @@ const Employee = ({
                 <div
                   key={department.title}
                   className={`w-[250px] h-[100px] rounded-lg ${department.selected == true
-                      ? "bg-mainBlue text-white"
-                      : "bg-lightGray text-black"
+                    ? "bg-mainBlue text-white"
+                    : "bg-lightGray text-black"
                     } shadow-md flex justify-center items-center text-xl font-light capitalize ${isEdit && "cursor-pointer"
                     } `}
                   onClick={() => setDepartments(department)}
@@ -1139,7 +1140,7 @@ const Employee = ({
                       <td>{account.englishName}</td>
 
                       <td>{account.countries?.join(",")}</td>
-                      <td>{account.segments?.join(",")}</td>
+                      <td>{account.segments?.map((seg: any) => seg.name)?.join(",")}</td>
                     </tr>
                   ))
                   : searchedAccounts.map((account: Account) => (
@@ -1162,8 +1163,8 @@ const Employee = ({
                       <td>
                         <span
                           className={`${emp.accessedAccounts?.includes(account._id)
-                              ? "block"
-                              : "hidden"
+                            ? "block"
+                            : "hidden"
                             }`}
                         >
                           <IoCheckmarkCircleOutline />
@@ -1171,8 +1172,8 @@ const Employee = ({
 
                         <span
                           className={`${!emp.accessedAccounts?.includes(account._id)
-                              ? "block"
-                              : "hidden"
+                            ? "block"
+                            : "hidden"
                             }`}
                         >
                           <MdOutlineRadioButtonUnchecked />
@@ -1184,41 +1185,42 @@ const Employee = ({
             </table>
           </div>
 
-          {/* Edit */}
-          <div
-            className={`flex justify-center items-center p-5 w-full ${isEdit ? "hidden" : "flex"
-              }`}
-          >
-            {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
-            <Button
-              title="Update"
-              handleOnClick={() => setIsEdit(!isEdit)}
-              icon={
-                <span className="text-3xl">
-                  <MdModeEdit />{" "}
-                </span>
-              }
-              classes="px-5 py-2 bg-lightGray text-mainBlue text-xl hover:bg-mainBlue hover:text-white transition"
-            />
-          </div>
+          {/* edit */}
+          {!isEdit && (
+            <div className={`flex justify-center items-center p-5 w-full`}>
+              {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
+              <Button
+                title="Update"
+                handleOnClick={(e) => {
+                  e.stopPropagation();
+                  setIsEdit(!isEdit);
+                }}
+                icon={
+                  <span className="text-3xl">
+                    <MdModeEdit />
+                  </span>
+                }
+                classes="px-5 py-2 bg-lightGray text-mainBlue text-xl hover:bg-mainBlue hover:text-white transition"
+              />
+            </div>
+          )
+          }
 
           {/* Submit */}
-          <div
-            className={`flex justify-center items-center p-5 w-full ${isEdit ? "flex" : "hidden"
-              }`}
-          >
-            {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
-            <Button
-              title="Save"
-              handleOnClick={() => save()}
-              icon={
-                <span className="text-3xl">
-                  <AiOutlineSave />{" "}
-                </span>
-              }
-              classes="px-5 py-2 bg-mainOrange text-white text-xl hover:bg-mainOrange"
-            />
-          </div>
+          {isEdit && (
+            <div className={`flex justify-center items-center p-5 w-full `}>
+              <Button
+                title="Save"
+                type="submit"
+                icon={
+                  <span className="text-3xl">
+                    <AiOutlineSave />
+                  </span>
+                }
+                classes="px-5 py-2 bg-mainOrange text-white text-xl hover:bg-mainOrange"
+              />
+            </div>
+          )}
 
           {/* Modal */}
           <MyModal

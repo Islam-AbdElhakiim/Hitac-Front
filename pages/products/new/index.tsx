@@ -1,12 +1,13 @@
 import Button from "@/components/Button";
 import {
+  Attribute,
   productInitalType,
   productType,
   segmentType,
   stationType,
 } from "@/types";
 import { useTranslation } from "next-i18next";
-import { MdOutlineAdd } from "react-icons/md";
+import { MdDelete, MdOutlineAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/navigation";
@@ -65,17 +66,12 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
       name: "",
       description: "",
       segment: "",
-      size: "",
       image: "",
+      specifications: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // Handle form submission
-      console.log(values);
-      const attributes: any = [];
-      Object.keys(formik.values).filter((key) => key.startsWith("key")).map((key, i) => {
-        attributes.push({ [`${formik.values[key]}`]: `${formik.values[`value${i + 1}`]}`.split(",") })
-      })
 
 
       dispatch(SHOW_LOADER());
@@ -83,7 +79,7 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
       try {
         await createProducts({
           ...values,
-          attributes
+          specifications: attributes
         });
         router.push("/products");
       } catch (e) {
@@ -115,33 +111,54 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
     }
   };
 
-  const addField = (e: any) => {
-    e.preventDefault();
-    const currentKeyIndex =
-      Object.keys(formik.values).filter((key) => key.startsWith('key')).length +
-      1;
-    const currenValueIndex =
-      Object.keys(formik.values).filter((key) => key.startsWith('value')).length +
-      1;
+  const [attributes, setAttributes] = useState<Attribute[]>([]);
 
-    const newKey = `key${currentKeyIndex}`;
-    const newValue = `value${currentKeyIndex}`;
-    // Extend the validation schema dynamically
+  const addAttribute = () => {
+    let temp = new Attribute();
+    setAttributes((prev) => [...prev, temp]);
+  }
+  const addOptions = (_index: number) => {
+    setAttributes((prev) => {
+      let newValue = prev.map((attr, index) => {
+        if (index == _index) attr.values.push("");
+        return attr;
+      })
+      // console.log(newValue);
+      return newValue;
+    })
 
 
+  }
+  const deleteAttribute = (_index: number) => {
+    setAttributes(prev => prev.filter((val, index) => index != _index));
+  }
+  const updateOptionValue = (_attributeIndex: number, _valueIndex: number, e: any) => {
 
-    formik.setValues({
-      ...formik.values,
-      [newKey]: "",
-      [newValue]: "",
-    });
-  };
+    setAttributes((prev) => {
+      let newValue = prev.map((attr, attributeIndex) => {
+        // find attribute
+        if (attributeIndex == _attributeIndex) {
+          attr.values.map((value, valueIndex) => {
+            // find option value
+            if (valueIndex == _valueIndex) {
+              // update it
+              attr.values[valueIndex] = e.target.value
+            }
+          })
+        }
+        return attr;
+      })
+      // console.log(newValue);
+      return newValue;
+    })
+
+  }
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="lex flex-col items-start justify-start mt-5  h-[83vh] bg-white rounded-xl shadow-md overflow-auto px-5 gap-3">
+        <div className="lex flex-col items-start justify-start mt-5 bg-white rounded-xl shadow-md px-5 gap-3">
           {/* header- wrapper */}
           <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
             {/* Image */}
@@ -275,9 +292,10 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
                 </div>
               </div>
               {/* title */}
-              <div className="text-2xl text-darkGray border-b-[1px] w-full py-3">
+              <div className="text-2xl text-darkGray border-b-[1px] w-full py-3  flex gap-3 items-center">
                 <h2>Product specifications</h2>
                 <Button
+                  type="button"
                   icon={
                     <span className="text-[#00733B] transition group-hover:text-white text-xl">
                       <MdOutlineAdd />
@@ -285,62 +303,56 @@ const NewProduct = ({ segments }: { segments: segmentType[] }) => {
                   }
                   title="Add"
                   classes=" hover:bg-[#00733B] group hover:text-[white] transition "
-                  handleOnClick={(e) => addField(e)}
+                  handleOnClick={() => addAttribute()}
                 />
               </div>
+              <div className="grid grid-cols-2 w-full text-darkGray gap-5">
+                {attributes.map((attribute, attributeIndex) => (
+                  <div className="flex flex-col w-full gap-3 mb-4 relative">
+                    <div className="flex justify-start items-center gap-3">
+                      <label className="text-lg" htmlFor="title">{t("labels.attribute") + (attributeIndex + 1)} </label>
+                      {/* delete btn */}
+                      <Button
+                        type="button"
+                        icon={
+                          <span className="text-red-500 transition group-hover:text-white text-xl">
+                            <MdDelete />
+                          </span>
+                        }
+                        title={t("delete attribute")}
+                        classes=" hover:bg-red-500 group hover:text-[white] transition "
+                        handleOnClick={() => deleteAttribute(attributeIndex)}
+                      />
+                    </div>
+                    <input placeholder="title" type="text" name="title" className="w-full h-12 rounded-md shadow-md  px-3 border border-lightGray outline-lightGray" value={attribute.key} onChange={(e) => setAttributes(attributes.map((attr, ind) => {
+                      if (ind == attributeIndex) {
+                        attr.key = e.target.value;
+                      }
+                      return attr;
+                    }))} />
+                    < div className="w-1/4" >
+                      <Button
+                        type="button"
+                        icon={
+                          <span className="text-[#00733B] transition group-hover:text-white text-xl">
+                            <MdOutlineAdd />
+                          </span>
+                        }
+                        title={t("Add Options ")}
+                        classes=" hover:bg-[#00733B] group hover:text-[white] transition "
+                        handleOnClick={() => addOptions(attributeIndex)}
+                      />
+                    </div>
+                    {/* options */}
+                    {attribute.values.map((value, valueIndex) => (
+                      < input type="text" placeholder="add option" value={value} name="option" className="w-full h-12 rounded-md shadow-md  px-3 border border-lightGray outline-lightGray" onChange={(e) => updateOptionValue(attributeIndex, valueIndex, e)} />
+                    ))}
 
-              {/* first row */}
-              <div className="grid grid-cols-4 w-full text-darkGray gap-5">
-                {/* left col */}
-
-                {Object.keys(formik.values).filter((key) => key.startsWith("key"))
-                  .sort(
-                    (a, b) =>
-                      parseInt(a.replace("key", "")) -
-                      parseInt(b.replace("key", ""))
-                  ).map((key: any, i, arr) => (
-                    <>
-                      <div className="col-span-1 flex flex-col w-full gap-3 relative">
-                        <label className="text-lg h-12" htmlFor="size">
-                          {key}<span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name={key}
-                          id={key}
-                          className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
-                            }  `}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values[key]}
-                        />
-
-                      </div>
-                      <div className="col-span-3 flex flex-col w-full gap-3 relative">
-                        <label className="text-lg h-12" htmlFor="size">
-                          {`value${i + 1}`}<span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name={`value${i + 1}`}
-                          id={`value${i + 1}`}
-                          className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
-                            }  `}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values[`value${i + 1}`]}
-                        />
-
-                      </div>
-                    </>
-                  )
-                  )}
+                  </div>
+                ))}
 
               </div>
+
               <div className="flex justify-center items-center p-5 w-full">
                 <Button
                   type="submit"

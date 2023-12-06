@@ -152,7 +152,7 @@ const NewStation = () => {
       cities: "",
       telephones: [],
       emails: [],
-      note: "",
+      notes: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -248,7 +248,7 @@ const NewStation = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10 bg-white rounded-xl shadow-md ">
           {/* personal-data-section */}
           <div className="flex flex-col items-start justify-start w-full p-5 gap-3">
             {/* title */}
@@ -542,13 +542,13 @@ const NewStation = () => {
                   </label>
 
                   <textarea
-                    name="note"
-                    id="note"
+                    name="notes"
+                    id="notes"
                     rows={7}
                     className={`w-full rounded-md border border-lightGray shadow-md  px-2 `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.note}
+                    value={formik.values.notes}
                   />
                 </div>
               </div>

@@ -185,13 +185,13 @@ const NewAccount = ({
     initialValues: {
       firstName: "",
       lastName: "",
-      website: "",
+      websites: "",
       country: "",
       city: "",
       telephone: "",
       email: "",
       port: "",
-      note: "",
+      notes: "",
       account: "",
       segments: [],
       products: [],
@@ -329,7 +329,7 @@ const NewAccount = ({
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10bg-white rounded-xl shadow-md">
           {/* personal-data-section */}
           <div className="flex flex-col items-start justify-start w-full p-5 gap-3">
             {/* title */}
@@ -758,18 +758,18 @@ const NewAccount = ({
               </div>
               <div className="grid grid-cols-1 w-full text-darkGray gap-5">
                 <div className="flex flex-col w-full gap-3 relative mb-2">
-                  <label className="text-lg h-12" htmlFor="note">
+                  <label className="text-lg h-12" htmlFor="notes">
                     Note
                   </label>
 
                   <textarea
-                    name="note"
-                    id="note"
+                    name="notes"
+                    id="notes"
                     rows={7}
                     className={`w-full rounded-md border border-lightGray shadow-md  px-2 `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.note}
+                    value={formik.values.notes}
                   />
                 </div>
               </div>

@@ -53,7 +53,7 @@ export default function SupplyOrders({ orders }: any) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
+  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -192,21 +192,19 @@ export default function SupplyOrders({ orders }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedRow.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedRow.length != 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "text-mainBlue group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${
-                    selectedRow.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedRow.length != 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                    : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedRow.length != 1}
                   handleOnClick={() =>
                     router.push(`supply-orders/${selectedRow[0]}?isEdit=true`)
@@ -215,22 +213,20 @@ export default function SupplyOrders({ orders }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedRow.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedRow.length < 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${
-                    selectedRow.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedRow.length < 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                    : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedRow.length < 1}
                   handleOnClick={handleDelete}
                 />
@@ -326,14 +322,14 @@ export default function SupplyOrders({ orders }: any) {
                                 readOnly
                               />
                             </td>
-                            <td>{order._id}</td>
-                            <td>{`${order.salesOrder}`}</td>
+                            <td>{order?._id}</td>
+                            <td>{`${order?.salesOrder}`}</td>
 
-                            <td>{`${order.price}`}</td>
-                            <td>{`${order.products?.name}`}</td>
-                            <td>{`${order.supplier.firstName} ${order.supplier.lastName}`}</td>
-                            <td>{`${order.createdOn}`}</td>
-                            <td>{order.description}</td>
+                            <td>{`${order?.price}`}</td>
+                            <td>{`${order?.products?.map((product: any) => product?.name).join(", ")}`}</td>
+                            <td>{`${order?.supplier?.firstName || '-'} ${order?.supplier?.lastName || ''}`}</td>
+                            <td>{`${new Date(order?.createdOn).toLocaleDateString()}`}</td>
+                            <td>{order?.description}</td>
                             <td>
                               <Link href={`/supply-orders/${order._id}`}>
                                 <span className=" text-[26px] text-mainBlue cursor-pointer">

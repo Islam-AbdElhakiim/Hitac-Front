@@ -56,9 +56,6 @@ export default function Accounts({ accounts }: any) {
   const [modalBody, setModalBody] = useState<string>();
   const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
-  useEffect(() => {
-    dispatch(HIDE_LOADER());
-  }, []);
 
   //#region dispatch employees to the store
   if (accounts && accounts?.length > 0) {
@@ -318,17 +315,17 @@ export default function Accounts({ accounts }: any) {
                                 readOnly
                               />
                             </td>
-                            <td>{acc?._id}</td>
-                            <td>{acc?.englishName}</td>
+                            <td title={acc._id}>{acc?._id}</td>
+                            <td title={acc.englishName}>{acc?.englishName}</td>
 
-                            <td>{acc?.countries.join(',')}</td>
-                            <td>{acc?.telephones[0]}</td>
-                            <td>{acc?.emails[0]}</td>
-                            <td>
+                            <td title={acc.countries.join(',')}>{acc?.countries.join(',')}</td>
+                            <td title={acc.telephones[0]}>{acc?.telephones[0]}</td>
+                            <td title={acc.emails[0]}>{acc?.emails[0]}</td>
+                            <td title={`${acc.contacts[0]?.firstName} ${acc?.contacts[0]?.lastName}`}>
                               {acc?.contacts[0]?.firstName}{" "}
                               {acc?.contacts[0]?.lastName}
                             </td>
-                            <td>{acc?.segments.map((seg: any) => seg.name).join(',')}</td>
+                            <td title={acc.segments.map((seg: any) => seg.name).join(',')}>{acc?.segments.map((seg: any) => seg.name).join(',')}</td>
 
                             <td>
                               <Link href={`/accounts/${acc._id}`}>

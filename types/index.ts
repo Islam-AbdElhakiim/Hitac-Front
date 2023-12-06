@@ -143,13 +143,13 @@ export type contactInitalType = {
     _id?: string;
     firstName: string,
     lastName: string,
-    website: string,
+    websites: string,
     country: string,
     email: string,
     telephone: string,
     city: string,
     port: string,
-    note: string,
+    notes: string,
     segments: string[],
     products: string[],
 
@@ -167,7 +167,7 @@ export type contactinterface = {
     telephones: string[],
     cities: string[],
     ports: string[],
-    note: string,
+    notes: string,
     segments: string[],
     products: string[],
 
@@ -185,7 +185,7 @@ export type supplierType = {
     cities: string,
     segments: string[],
     products: string[],
-    note: string,
+    notes: string,
 
     [key: string]: string | number | undefined | string[]; // Adding an index signature
 
@@ -199,7 +199,7 @@ export type stationType = {
     emails: string[],
     telephones: string[],
     cities: string,
-    note: string,
+    notes: string,
 
     [key: string]: string | number | undefined | string[]; // Adding an index signature
 
@@ -209,7 +209,7 @@ export type supplyOrderType = {
     salesOrder: string,
     supplier: { [key: string]: string },
     createdOn: string,
-    products: { [key: string]: string },
+    products: [],
     price: string,
     description: string,
     [key: string]: string | number | undefined | string[] | { [key: string]: string }; // Adding an index signature
@@ -225,6 +225,45 @@ export type supplyOrderInitalType = {
     price: string,
     description: string,
     [key: string]: string | number | undefined | string[]; // Adding an index signature
+
+};
+export type inStockProductsInitalType = {
+    _id?: string;
+    salesCases: [],
+    suppliers: string[],
+    station: string,
+    packingDate?: string,
+    products: string[],
+    totalPallets: string,
+    description: string,
+    qualitySpecialist: string,
+    operation: string,
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
+
+};
+
+export type palletsInitalType = {
+    id?: string;
+    patch?: string,
+    salesCases?: string,
+    supplier: string,
+    station: string,
+    packingDate?: string,
+    product: string,
+    brand: string,
+    boxWeight: string,
+    boxesPerBase: string,
+    boxesPerColumn: string,
+    totalBoxes: string,
+    palletGrossWeight: string,
+    palletNetWeight: string,
+    status?: string,
+    containerSpot: string,
+    qrCode?: string,
+    qualitySpecialist: string,
+    operation: string,
+    specifications: { [key: string]: string },
+    [key: string]: string | number | undefined | string[] | { [key: string]: string }; // Adding an index signature
 
 };
 export type returnRequestsType = {
@@ -265,6 +304,7 @@ export type productType = {
     size: string,
     segment: { [key: string]: string },
     image?: string,
+    isDeleted?: boolean,
     specifications: Attribute[],
 
 }

@@ -66,7 +66,7 @@ const NewStation = () => {
     console.log(files[0]);
     const formData = new FormData();
     formData.append("image", files[0]);
-    const res = await fetch("http://localhost:3000/api/upload", {
+    const res = await fetch("https://localhost:3000/api/upload", {
       method: "POST",
       body: formData,
     });
@@ -83,7 +83,7 @@ const NewStation = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10 bg-white rounded-xl shadow-md">
           {/* header- wrapper */}
           <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
             {/* Image */}

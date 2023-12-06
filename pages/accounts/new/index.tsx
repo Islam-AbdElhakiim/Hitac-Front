@@ -325,7 +325,7 @@ const NewAccount = ({
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10  bg-white rounded-xl shadow-md">
           {/* personal-data-section */}
           <div className="flex flex-col items-start justify-start w-full p-5 gap-3">
             {/* title */}

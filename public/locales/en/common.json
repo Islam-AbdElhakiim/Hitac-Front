@@ -76,12 +76,12 @@
                         "inStock": {
                             "title": "In-Stock",
                             "urlTitle": "In-Stock",
-                            "target": "/prodcuts/in-stock"
+                            "target": "/inventory/products/in-stock"
                         },
                         "fulfilled": {
                             "title": "Fulfilled",
                             "urlTitle": "Fulfilled",
-                            "target": "/prodcuts/fullfilled"
+                            "target": "/inventory/products/fullfilled"
                         }
                     }
                 },
@@ -184,10 +184,9 @@
     },
     "labels": {
         "logout": "Logout",
-        "addAtrribute" : "Title",
-        "addOptions" : "Add options",
+        "addAtrribute": "Title",
+        "addOptions": "Add options",
         "attribute": "Attribute "
-
     },
     "pages": {
         "emp": "Employees",
@@ -198,6 +197,9 @@
         "segments": "Segments",
         "supply-orders": "Supply Orders",
         "return-requests": "Return Requests",
-        "products": "Products"
+        "products": "Products",
+        "pallets": "Products",
+        "inventory": "inventory",
+        "patchs": "patchs"
     }
 }

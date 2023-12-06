@@ -186,7 +186,7 @@ const Account = ({
 
     // Dynamically added email fields validation
   });
-  const telephones = details.telephones.reduce(
+  const telephones = details.telephones ? details.telephones.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["telephone"] = currentValue)
@@ -194,8 +194,8 @@ const Account = ({
       return acc;
     },
     {}
-  );
-  const emails = details.emails.reduce(
+  ) : { telephone: "" };
+  const emails = details.emails ? details.emails.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["email"] = currentValue)
@@ -203,8 +203,8 @@ const Account = ({
       return acc;
     },
     {}
-  );
-  const ports = details.ports.reduce(
+  ) : { email: "" };
+  const ports = details.ports ? details.ports.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["port"] = currentValue)
@@ -212,7 +212,7 @@ const Account = ({
       return acc;
     },
     {}
-  );
+  ) : { port: "" };
   const address = details?.addresses
     ? details?.addresses?.reduce((acc: any, currentValue: any, index: any) => {
       index == 0
@@ -221,7 +221,7 @@ const Account = ({
       return acc;
     }, {})
     : { address: "" };
-  const countries = details.countries.reduce(
+  const countries = details.countries ? details.countries.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["country"] = currentValue)
@@ -229,10 +229,9 @@ const Account = ({
       return acc;
     },
     {}
-  );
-  console.log(countries, address);
+  ) : { country: "" };
 
-  const cities = details.cities.reduce(
+  const cities = details.cities ? details.cities.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["city"] = currentValue)
@@ -240,7 +239,7 @@ const Account = ({
       return acc;
     },
     {}
-  );
+  ) : { city: "" };
 
   const initialValues = {
     englishName: details.englishName || "",
@@ -402,7 +401,6 @@ const Account = ({
       } catch (e) {
         console.log("error in deleting account", e);
       } finally {
-        dispatch(HIDE_LOADER());
       }
     };
     setModalTitle(`Are you sure?`);

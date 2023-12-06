@@ -57,7 +57,7 @@ export default function ReturnRequests({ orders }: any) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
+  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -195,21 +195,19 @@ export default function ReturnRequests({ orders }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedRow.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedRow.length != 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "text-mainBlue group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${
-                    selectedRow.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedRow.length != 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                    : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedRow.length != 1}
                   handleOnClick={() =>
                     router.push(`return-requests/${selectedRow[0]}?isEdit=true`)
@@ -218,22 +216,20 @@ export default function ReturnRequests({ orders }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedRow.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedRow.length < 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${
-                    selectedRow.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedRow.length < 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                    : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedRow.length < 1}
                   handleOnClick={handleDelete}
                 />
@@ -296,7 +292,7 @@ export default function ReturnRequests({ orders }: any) {
                         {" "}
                         <TbArrowsSort />{" "}
                       </span>
-                      <span>Return Reasons</span>
+                      <span>Reason</span>
                     </th>
                     <th className="">
                       <span className="  text-darkGray text-[26px]">
@@ -327,7 +323,7 @@ export default function ReturnRequests({ orders }: any) {
 
                             <td>{`${order.product.name}`}</td>
                             <td>{`${order.supplier.firstName} ${order.supplier.lastName}`}</td>
-                            <td>{`${order.createdOn}`}</td>
+                            <td>{`${new Date(order?.createdOn).toLocaleDateString()}`}</td>
                             <td>{`${order.description}`}</td>
                             <td>
                               <Link href={`/return-requests/${order._id}`}>

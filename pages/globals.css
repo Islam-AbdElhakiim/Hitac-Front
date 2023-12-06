@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+*,
+body {
+  font-family: 'poppins', sans-serif;
+}
+
 .rtl-rdirection {
   direction: rtl;
 }
+
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 td,
 th {
@@ -20,7 +32,7 @@ td {
 }
 
 .main-table tbody tr {
-  @apply border border-bgGray rounded-2xl  transition hover:bg-lightGray 
+  @apply border border-bgGray rounded-2xl transition hover:bg-lightGray
 }
 
 .gradient-bg {
@@ -30,7 +42,7 @@ td {
 
 .fs-md {
   font-size: clamp(1.0rem, 1vw + 0.6rem, 12rem);
-} 
+}
 
 .fs-sm {
   font-size: clamp(0.5rem, 1vw + 0.2rem, 6rem);
@@ -41,7 +53,7 @@ td {
   width: 120px;
   height: 120px;
   border: 5px solid #0F8BFD;
-  border-bottom-color: #FF551F; 
+  border-bottom-color: #FF551F;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
@@ -57,4 +69,5 @@ td {
     transform: rotate(360deg);
   }
 }
+
 /* #endregion loader */

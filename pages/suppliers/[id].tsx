@@ -218,7 +218,7 @@ const Supplier = ({
 
     // Dynamically added email fields validation
   });
-  const telephones = details.telephones.reduce(
+  const telephones = details.telephones ? details.telephones.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["telephones"] = currentValue)
@@ -226,8 +226,8 @@ const Supplier = ({
       return acc;
     },
     {}
-  );
-  const emails = details.emails.reduce(
+  ) : { telephones: "" };
+  const emails = details.emails ? details.emails.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["emails"] = currentValue)
@@ -235,7 +235,7 @@ const Supplier = ({
       return acc;
     },
     {}
-  );
+  ) : { emails: "" };
 
   const initialValues = {
     firstName: details.firstName || "",
@@ -244,9 +244,9 @@ const Supplier = ({
     cities: details.cities[0] || "",
     ...telephones,
     ...emails,
-    note: details.note || "",
-    segments: details.segments._id || [],
-    products: details.products._id || [],
+    notes: details.notes || "",
+    segments: details.segments.map((item: any) => item._id) || [],
+    products: details.products.map((item: any) => item._id) || [],
   };
 
   const formik = useFormik<supplierType>({
@@ -322,7 +322,6 @@ const Supplier = ({
         router.push("/suppliers");
       } catch (e) {
       } finally {
-        dispatch(HIDE_LOADER());
       }
     };
     setModalTitle(`Are you sure?`);
@@ -721,19 +720,19 @@ const Supplier = ({
                   </div>
                   <div className="grid grid-cols-1 w-full text-darkGray gap-5">
                     <div className="flex flex-col w-full gap-3 relative mb-2">
-                      <label className="text-lg h-12" htmlFor="note">
+                      <label className="text-lg h-12" htmlFor="notes">
                         Note
                       </label>
 
                       <textarea
-                        name="note"
-                        id="note"
+                        name="notes"
+                        id="notes"
                         rows={7}
                         className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${!isEdit ? "bg-white " : "bg-lightGray"
                           }`}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.note}
+                        value={formik.values.notes}
                         disabled={isEdit}
                       />
                     </div>
@@ -871,42 +870,42 @@ const Supplier = ({
                     )}
                   </div>
 
-                  {/* Submit */}
-                  {/* Edit */}
-                  <div
-                    className={`flex justify-center items-center p-5 w-full ${!isEdit ? "hidden" : "flex"
-                      }`}
-                  >
-                    {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
-                    <Button
-                      title="Update"
-                      handleOnClick={() => setIsEdit(!isEdit)}
-                      icon={
-                        <span className="text-3xl">
-                          <MdModeEdit />{" "}
-                        </span>
-                      }
-                      classes="px-5 py-2 bg-lightGray text-mainBlue text-xl hover:bg-mainBlue hover:text-white transition"
-                    />
-                  </div>
+                  {/* edit */}
+                  {isEdit && (
+                    <div className={`flex justify-center items-center p-5 w-full`}>
+                      {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
+                      <Button
+                        title="Update"
+                        handleOnClick={(e) => {
+                          e.stopPropagation();
+                          setIsEdit(!isEdit);
+                        }}
+                        icon={
+                          <span className="text-3xl">
+                            <MdModeEdit />
+                          </span>
+                        }
+                        classes="px-5 py-2 bg-lightGray text-mainBlue text-xl hover:bg-mainBlue hover:text-white transition"
+                      />
+                    </div>
+                  )
+                  }
 
                   {/* Submit */}
-                  <div
-                    className={`flex justify-center items-center p-5 w-full ${!isEdit ? "flex" : "hidden"
-                      }`}
-                  >
-                    {/* <input type="submit" value="Create User" className="px-10 py-4 rounded-md bg-mainOrange text-white shadow-md text-center" /> */}
-                    <Button
-                      title="Save"
-                      type="submit"
-                      icon={
-                        <span className="text-3xl">
-                          <AiOutlineSave />{" "}
-                        </span>
-                      }
-                      classes="px-5 py-2 bg-mainOrange text-white text-xl hover:bg-mainOrange"
-                    />
-                  </div>
+                  {!isEdit && (
+                    <div className={`flex justify-center items-center p-5 w-full `}>
+                      <Button
+                        title="Save"
+                        type="submit"
+                        icon={
+                          <span className="text-3xl">
+                            <AiOutlineSave />
+                          </span>
+                        }
+                        classes="px-5 py-2 bg-mainOrange text-white text-xl hover:bg-mainOrange"
+                      />
+                    </div>
+                  )}
                 </form>
               </div>
             </>

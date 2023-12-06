@@ -55,7 +55,7 @@ export default function Stations({ stations }: any) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>();
   const [modalBody, setModalBody] = useState<string>();
-  const [modalTrue, setModalTrue] = useState<() => void>(() => {});
+  const [modalTrue, setModalTrue] = useState<() => void>(() => { });
 
   useEffect(() => {
     dispatch(HIDE_LOADER());
@@ -193,21 +193,19 @@ export default function Stations({ stations }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedStations.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedStations.length != 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "text-mainBlue group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       <MdModeEdit />
                     </span>
                   }
                   title="Update"
-                  classes={`${
-                    selectedStations.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedStations.length != 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                    : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedStations.length != 1}
                   handleOnClick={() =>
                     router.push(`stations/${selectedStations[0]}?isEdit=true`)
@@ -216,22 +214,20 @@ export default function Stations({ stations }: any) {
                 <Button
                   icon={
                     <span
-                      className={` text-2xl transition ${
-                        selectedStations.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
-                      } `}
+                      className={` text-2xl transition ${selectedStations.length < 1
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
+                        } `}
                     >
                       {" "}
                       <RiDeleteBin6Line />
                     </span>
                   }
                   title="Delete"
-                  classes={`${
-                    selectedStations.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
-                  }  group `}
+                  classes={`${selectedStations.length < 1
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                    : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
+                    }  group `}
                   isDisabled={selectedStations.length < 1}
                   handleOnClick={handleDelete}
                 />
@@ -317,9 +313,9 @@ export default function Stations({ stations }: any) {
                             <td>{station._id}</td>
                             <td>{`${station.englishName}`}</td>
 
-                            <td></td>
-                            <td></td>
-                            <td>{station.note}</td>
+                            <td>{`${station.countries[0]}, ${station.address}`}</td>
+                            <td>{station?.type || '-'}</td>
+                            <td>{station.notes || '-'}</td>
 
                             <td>
                               <Link href={`/stations/${station._id}`}>

@@ -82,6 +82,8 @@ const Account = ({
   products: any;
   accounts: any;
 }) => {
+  console.log(details);
+
   const searchParams = useSearchParams();
   const [isEdit, setIsEdit] = useState(false);
 
@@ -113,7 +115,7 @@ const Account = ({
     country: Yup.string().required("Country is required"),
     city: Yup.string().required("City is required"),
     account: Yup.string().required("Account is required"),
-    website: Yup.string().required("Website is required"),
+    // website: Yup.string().required("Website is required"),
     port: Yup.string().required("port is required"),
     segments: Yup.array().min(1, "Please Choose segments!"),
     products: Yup.array().min(1, "Please Choose products!"),
@@ -191,7 +193,7 @@ const Account = ({
 
     // Dynamically added email fields validation
   });
-  const telephones = details.telephones.reduce(
+  const telephones = details.telephones ? details.telephones.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["telephone"] = currentValue)
@@ -199,8 +201,8 @@ const Account = ({
       return acc;
     },
     {}
-  );
-  const emails = details.emails.reduce(
+  ) : { telephone: "" };
+  const emails = details.emails ? details.emails.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["email"] = currentValue)
@@ -208,8 +210,8 @@ const Account = ({
       return acc;
     },
     {}
-  );
-  const ports = details.ports.reduce(
+  ) : { email: "" };
+  const ports = details.ports ? details.ports.reduce(
     (acc: any, currentValue: any, index: any) => {
       index == 0
         ? (acc["port"] = currentValue)
@@ -217,7 +219,7 @@ const Account = ({
       return acc;
     },
     {}
-  );
+  ) : { port: "" };
 
   const websites = details.websites
     ? details.websites.reduce((acc: any, currentValue: any, index: any) => {
@@ -231,7 +233,7 @@ const Account = ({
   const initialValues = {
     firstName: details.firstName || "",
     lastName: details.lastName || "",
-    note: details.note || "",
+    notes: details.notes || "",
     account: details.account?._id || "",
     country: details.countries[0] || "",
     city: details.cities[0] || "",
@@ -499,8 +501,8 @@ const Account = ({
                     name="firstName"
                     id="firstName"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.firstName && formik.errors.firstName
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       }  ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                     disabled={isEdit}
                     onChange={formik.handleChange}
@@ -525,8 +527,8 @@ const Account = ({
                     name="lastName"
                     id="lastName"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.lastName && formik.errors.lastName
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
@@ -551,8 +553,8 @@ const Account = ({
                     name="country"
                     id="country"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.country && formik.errors.country
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
@@ -577,8 +579,8 @@ const Account = ({
                     name="city"
                     id="city"
                     className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.city && formik.errors.city
-                        ? "border-red-500 outline-red-500"
-                        : "border-lightGray outline-lightGray"
+                      ? "border-red-500 outline-red-500"
+                      : "border-lightGray outline-lightGray"
                       }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
@@ -648,8 +650,8 @@ const Account = ({
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
                           }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
@@ -716,8 +718,8 @@ const Account = ({
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
                           }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
@@ -792,8 +794,8 @@ const Account = ({
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
                           } ${!isEdit ? "bg-white " : "bg-lightGray"} `}
                       />
                       {formik.touched[key] && formik.errors[key] && (
@@ -861,8 +863,8 @@ const Account = ({
                         onBlur={formik.handleBlur}
                         value={formik.values[key]}
                         className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${formik.touched[key] && formik.errors[key]
-                            ? "border-red-500 outline-red-500"
-                            : "border-lightGray outline-lightGray"
+                          ? "border-red-500 outline-red-500"
+                          : "border-lightGray outline-lightGray"
                           }  ${!isEdit ? "bg-white " : "bg-lightGray"}`}
                       />
                       {formik.touched[key] && formik.errors[key] && (
@@ -913,15 +915,15 @@ const Account = ({
                   </label>
 
                   <textarea
-                    name="note"
-                    id="note"
+                    name="notes"
+                    id="notes"
                     rows={7}
                     className={`w-full rounded-md border border-lightGray shadow-md  px-2   ${!isEdit ? "bg-white " : "bg-lightGray"
                       }`}
                     disabled={isEdit}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.note}
+                    value={formik.values.notes}
                   />
                 </div>
               </div>
@@ -938,16 +940,16 @@ const Account = ({
                 {/* segments selection */}
                 <div
                   className={`flex justify-center items-center w-full gap-10 p-10 border ${formik.touched.segments && formik.errors.segments
-                      ? " border-red-500"
-                      : " border-lightGray "
+                    ? " border-red-500"
+                    : " border-lightGray "
                     }`}
                 >
                   {segments?.map((segment: any, index: any) => (
                     <label
                       key={segment.title}
                       className={`w-[250px] h-[100px] transition rounded-lg ${formik.values.segments.includes(segment._id)
-                          ? "bg-mainBlue text-white"
-                          : "bg-bgGray text-black"
+                        ? "bg-mainBlue text-white"
+                        : "bg-bgGray text-black"
                         } shadow-md flex justify-center items-center text-xl font-light capitalize ${!isEdit && "cursor-pointer"
                         }`}
                     // onClick={() => handleSegments(segment)}
@@ -1000,16 +1002,16 @@ const Account = ({
                 {/* poducts selection */}
                 <div
                   className={`flex justify-center items-center w-full gap-10 p-10 border ${formik.touched.products && formik.errors.products
-                      ? " border-red-500"
-                      : " border-lightGray "
+                    ? " border-red-500"
+                    : " border-lightGray "
                     }`}
                 >
                   {products?.map((product: any, index: any) => (
                     <label
                       key={product.title}
                       className={`w-[182px] h-[65px] transition rounded-lg ${formik.values.products.includes(product._id)
-                          ? "bg-mainBlue text-white"
-                          : "bg-bgGray text-black"
+                        ? "bg-mainBlue text-white"
+                        : "bg-bgGray text-black"
                         } shadow-md flex justify-center items-center text-xl font-light capitalize ${!isEdit && "cursor-pointer"
                         }`}
                     // onClick={() => handleproducts(product)}

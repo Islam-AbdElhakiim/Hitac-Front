@@ -214,7 +214,7 @@ const NewEmployee = (props: any) => {
       } catch (e) {
         console.log(e);
       } finally {
-        dispatch(HIDE_LOADER());
+        // dispatch(HIDE_LOADER());
       }
     } else {
       return;
@@ -225,7 +225,7 @@ const NewEmployee = (props: any) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-start my-5 pb-10  h-[83vh] bg-white rounded-xl shadow-md overflow-auto">
+        <div className="flex flex-col items-start justify-start my-5 pb-10 bg-white rounded-xl shadow-md ">
           {/* header- wrapper */}
           <div className="flex flex-col justify-center items-center w-full border-b-[1px] py-3">
             {/* Image */}
@@ -287,19 +287,17 @@ const NewEmployee = (props: any) => {
                     type="text"
                     name="firstname"
                     id="firstname"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.firstName.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.firstName.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     value={newEmployee.firstName}
                     onChange={(e) => handleInput("firstName", e.target.value)}
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.firstName.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.firstName.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Firstname is required and should be between 3 and 20
                     letters!
@@ -316,19 +314,17 @@ const NewEmployee = (props: any) => {
                     type="text"
                     name="lastname"
                     id="lastname"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.lastName.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.lastName.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     value={newEmployee.lastName}
                     onChange={(e) => handleInput("lastName", e.target.value)}
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.lastName.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.lastName.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Lastname is required and should be between 3 and 20 letters!
                   </small>
@@ -347,19 +343,17 @@ const NewEmployee = (props: any) => {
                     type="email"
                     name="email123"
                     id="email123"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.email.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.email.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     value={newEmployee.email}
                     onChange={(e) => handleInput("email", e.target.value)}
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.email.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.email.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Please enter a valid email address!
                   </small>
@@ -375,19 +369,17 @@ const NewEmployee = (props: any) => {
                     type="telephone"
                     name="telephone"
                     id="telephone"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.telephone.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.telephone.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     value={newEmployee.telephone}
                     onChange={(e) => handleInput("telephone", e.target.value)}
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.telephone.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.telephone.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Please enter a valid Telephone Number!
                   </small>
@@ -406,19 +398,17 @@ const NewEmployee = (props: any) => {
                     type="age"
                     name="age"
                     id="age"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.age.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.age.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     value={newEmployee.age}
                     onChange={(e) => handleInput("age", e.target.value)}
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.age.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.age.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Age should be between 10 and 80 years!
                   </small>
@@ -434,19 +424,17 @@ const NewEmployee = (props: any) => {
                     type="salary"
                     name="salary"
                     id="salary"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.salary.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.salary.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     value={newEmployee.salary}
                     onChange={(e) => handleInput("salary", e.target.value)}
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.salary.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.salary.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Please enter a valid salary!
                   </small>
@@ -464,11 +452,10 @@ const NewEmployee = (props: any) => {
                     required
                     name="role"
                     id="role"
-                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${
-                      validation.role.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    }`}
+                    className={`w-full h-12 rounded-md shadow-md  px-2 border ${validation.role.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      }`}
                     onChange={(e) => {
                       handleInput("role", e.target.value);
                     }}
@@ -487,9 +474,8 @@ const NewEmployee = (props: any) => {
                     <option value="accountant">Accountant</option>
                   </select>
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.role.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.role.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Please select a role!
                   </small>
@@ -529,19 +515,17 @@ const NewEmployee = (props: any) => {
                     type="password"
                     name="userpassword"
                     id="userpassword"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.password.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.password.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     value={newEmployee.password}
                     onChange={(e) => handleInput("password", e.target.value)}
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.password.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.password.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Password should be more than 8 letters!
                   </small>
@@ -558,20 +542,18 @@ const NewEmployee = (props: any) => {
                     type="password"
                     name="confirmPassword"
                     id="confirmPassword"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${
-                      validation.confirmPassword.isValid
-                        ? "border-lightGray outline-lightGray"
-                        : "border-red-500 outline-red-500"
-                    } `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2 ${validation.confirmPassword.isValid
+                      ? "border-lightGray outline-lightGray"
+                      : "border-red-500 outline-red-500"
+                      } `}
                     onChange={(e) =>
                       handleInput("confirmPassword", e.target.value)
                     }
                   />
 
                   <small
-                    className={`text-red-500 absolute -bottom-6 left-2 ${
-                      validation.confirmPassword.isValid ? "hidden" : "block"
-                    } `}
+                    className={`text-red-500 absolute -bottom-6 left-2 ${validation.confirmPassword.isValid ? "hidden" : "block"
+                      } `}
                   >
                     Passwords do not match!
                   </small>
@@ -614,20 +596,18 @@ const NewEmployee = (props: any) => {
 
                 {/* departments selection */}
                 <div
-                  className={`flex justify-center items-center w-full gap-10 p-10 border ${
-                    validation.modules.isValid
-                      ? " border-lightGray "
-                      : " border-red-500"
-                  }`}
+                  className={`flex justify-center items-center w-full gap-10 p-10 border ${validation.modules.isValid
+                    ? " border-lightGray "
+                    : " border-red-500"
+                    }`}
                 >
                   {AccessedDepartments.map((department) => (
                     <div
                       key={department.title}
-                      className={`w-[250px] h-[100px] cursor-pointer transition rounded-lg ${
-                        department.selected == true
-                          ? "bg-mainBlue text-white"
-                          : "bg-bgGray text-black"
-                      } shadow-md flex justify-center items-center text-xl font-light capitalize `}
+                      className={`w-[250px] h-[100px] cursor-pointer transition rounded-lg ${department.selected == true
+                        ? "bg-mainBlue text-white"
+                        : "bg-bgGray text-black"
+                        } shadow-md flex justify-center items-center text-xl font-light capitalize `}
                       onClick={() => handleDepartments(department)}
                     >
                       {department.title}{" "}
@@ -635,9 +615,8 @@ const NewEmployee = (props: any) => {
                   ))}
                 </div>
                 <small
-                  className={`text-red-500 absolute -bottom-2 left-10 ${
-                    validation.modules.isValid ? "hidden" : "block"
-                  } `}
+                  className={`text-red-500 absolute -bottom-2 left-10 ${validation.modules.isValid ? "hidden" : "block"
+                    } `}
                 >
                   Please Choose the designated departments!
                 </small>

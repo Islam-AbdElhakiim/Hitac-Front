@@ -143,7 +143,7 @@ export default function Employees({ employees }: any) {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col justify-center items-center px-5 h-full">
+        <div className="flex flex-col items-center px-5 h-[92%]">
           <PageHeader pageTitle="pages.emp" newUrl={`employees/new`} />
           {/* Page Body */}
           <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
@@ -188,8 +188,8 @@ export default function Employees({ employees }: any) {
                   icon={
                     <span
                       className={` text-2xl transition ${selectedEmployees.length != 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "text-mainBlue group-hover:!text-white pointer-events-auto"
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "text-mainBlue group-hover:!text-white pointer-events-auto"
                         } `}
                     >
                       <MdModeEdit />
@@ -197,8 +197,8 @@ export default function Employees({ employees }: any) {
                   }
                   title="Update"
                   classes={`${selectedEmployees.length != 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
-                      : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none "
+                    : "!bg-lightGray hover:!bg-mainBlue hover:text-white pointer-events-auto"
                     }  group `}
                   isDisabled={selectedEmployees.length != 1}
                   handleOnClick={() =>
@@ -209,8 +209,8 @@ export default function Employees({ employees }: any) {
                   icon={
                     <span
                       className={` text-2xl transition ${selectedEmployees.length < 1
-                          ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
-                          : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
+                        ? " text-darkGray group-hover:!text-darkGray pointer-events-none"
+                        : "!text-[#E70C0C] group-hover:!text-white pointer-events-auto"
                         } `}
                     >
                       {" "}
@@ -219,8 +219,8 @@ export default function Employees({ employees }: any) {
                   }
                   title="Delete"
                   classes={`${selectedEmployees.length < 1
-                      ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
-                      : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
+                    ? " !bg-bgGray hover:!bg-bgGray pointer-events-none"
+                    : "!bg-lightGray hover:!bg-red-500 hover:text-white pointer-events-auto"
                     }  group `}
                   isDisabled={selectedEmployees.length < 1}
                   handleOnClick={handleDelete}
@@ -243,7 +243,7 @@ export default function Employees({ employees }: any) {
                       />
                     </th>
 
-                    <th className="">
+                    <th className="" >
                       <span className=" inline-block relative top-1  mr-1 ">
                         {" "}
                         <TbArrowsSort />{" "}
@@ -298,21 +298,21 @@ export default function Employees({ employees }: any) {
                                 readOnly
                               />
                             </td>
-                            <td>{emp._id}</td>
-                            <td>
-                              <div className="flex justify-center items-center gap-3 w-full">
-                                <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full p-3 relative border bg-darkGray">
+                            <td title={emp._id}>{emp._id}</td>
+                            <td >
+                              <div className="flex justify-center items-center gap-3">
+                                <div className="image-wrapper w-16 h-16 overflow-hidden rounded-full relative border bg-darkGray">
                                   <Image
                                     src={`${emp.image
-                                        ? emp.image
-                                        : "/uploads/avatar.png"
+                                      ? emp.image
+                                      : "/uploads/avatar.png"
                                       }`}
                                     fill
                                     alt="user image"
                                   />
                                 </div>
                                 <div className=" w-1/2">
-                                  <p className="text-xl text-darkGray  overflow-hidden max-w-full">
+                                  <p className="text-xl text-darkGray max-w-full">
                                     {emp.firstName}
                                   </p>
                                   <p className="text-sm text-lightGray">
@@ -322,8 +322,8 @@ export default function Employees({ employees }: any) {
                               </div>
                             </td>
 
-                            <td>{emp.role}</td>
-                            <td>{emp.email}</td>
+                            <td title={emp.role}>{emp.role}</td>
+                            <td title={emp.email}>{emp.email}</td>
 
                             <td>
                               <Link href={`/employees/${emp._id}`}>
