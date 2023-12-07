@@ -103,37 +103,7 @@ const NewVariant = ({ supplier, equipments }: any) => {
   });
 
 
-  const [attributes, setAttributes] = useState<variant[]>([]);
 
-  const addAttribute = () => {
-    let temp = new variant();
-    setAttributes((prev) => [...prev, temp]);
-  }
-
-  const deleteAttribute = (_index: number) => {
-    setAttributes(prev => prev.filter((val, index) => index != _index));
-  }
-  const updateOptionValue = (_attributeIndex: number, _valueIndex: number, e: any) => {
-
-    setAttributes((prev: any) => {
-      let newValue = prev.map((attr: any, attributeIndex: any) => {
-        // find attribute
-        if (attributeIndex == _attributeIndex) {
-          attr.values.map((value: any, valueIndex: any) => {
-            // find option value
-            if (valueIndex == _valueIndex) {
-              // update it
-              attr.values[valueIndex] = e.target.value
-            }
-          })
-        }
-        return attr;
-      })
-      // console.log(newValue);
-      return newValue;
-    })
-
-  }
   //#region modules
   const addInput = () => {
     formik.setValues({

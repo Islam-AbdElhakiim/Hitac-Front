@@ -29,16 +29,17 @@ export const createVaraint = async (supp: variantInitalType) => {
   const result = await postRequest(`equipments-variants`, supp);
   return result;
 };
-export const deletepatchById = async (id: string) => {
-  const result = await deleteRequest(`patches/delete/${id}`);
+export const updateVaraint = async (
+  id: string,
+  supp: variantInitalType
+) => {
+  const result = await patchRequest(`equipments-variants/${id}`, supp);
+  return result;
+};
+export const deleteVaraintById = async (id: string) => {
+  const result = await deleteRequest(`equipments-variants/delete/${id}`);
   return result;
 };
 
-export const updatepatch = async (
-  id: string,
-  supp: inStockProductsInitalType
-) => {
-  const result = await patchRequest(`patches/${id}`, supp);
-  return result;
-};
+
 

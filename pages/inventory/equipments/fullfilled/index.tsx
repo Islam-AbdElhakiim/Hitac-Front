@@ -140,7 +140,7 @@ export default function Accounts({ fulfilleds }: any) {
                 <Loader />
             ) : (
                 <div className="flex flex-col justify-center items-center px-5 h-full ">
-                    <PageHeader pageTitle="pages.acc" newUrl={`accounts/new`} />
+                    <PageHeader pageTitle="pages.equipments" newUrl={`accounts/new`} />
                     {/* Page Body */}
                     <div className="flex flex-col justify-cstart enter items-center  bg-white rounded-2xl shadow-lg w-full h-full px-10 ">
                         {/* top control row */}
@@ -308,7 +308,7 @@ export default function Accounts({ fulfilleds }: any) {
 
 
                                                         <td>
-                                                            <Link href={`/inventory/equipments/variants/${row._id}`}>
+                                                            <Link href={`/inventory/equipments/variant/${row._id}`}>
                                                                 <span className=" text-[26px] text-mainBlue cursor-pointer">
                                                                     <IoArrowForward />
                                                                 </span>

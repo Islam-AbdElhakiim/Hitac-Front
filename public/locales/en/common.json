@@ -200,6 +200,7 @@
         "products": "Products",
         "pallets": "Products",
         "inventory": "inventory",
-        "patchs": "patchs"
+        "patchs": "patchs",
+        "equipments": "Equipments"
     }
 }
