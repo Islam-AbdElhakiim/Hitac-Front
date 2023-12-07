@@ -92,12 +92,12 @@
                         "inStock": {
                             "title": "In-Stock",
                             "urlTitle": "In-Stock",
-                            "target": "/equipments/in-stock"
+                            "target": "/inventory/equipments/in-stock"
                         },
                         "fulfilled": {
                             "title": "Fulfilled",
                             "urlTitle": "Fulfilled",
-                            "target": "/equipments/fullfilled"
+                            "target": "/inventory/equipments/fullfilled"
                         }
                     }
                 }

@@ -241,6 +241,24 @@ export type inStockProductsInitalType = {
     [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
+export class variant {
+    title: string = "";
+    value: string = "";
+}
+
+export type variantInitalType = {
+    _id?: string;
+    arrivingDate?: string,
+    equipmentsType: string,
+    totalCount: string,
+    supplier: string,
+    status?: string,
+    fulfillDate?: string,
+    palletId?: string,
+    variants: variant[],
+    [key: string]: string | number | undefined | string[] | variant[] // Adding an index signature
+
+};
 
 export type palletsInitalType = {
     id?: string;

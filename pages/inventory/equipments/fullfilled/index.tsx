@@ -22,9 +22,10 @@ import { deleteUserById, getAllEmployees } from "@/http/employeeHttp";
 import { deleteAccountById, getAllAccounts } from "@/http/accountsHttp";
 import { GETALLACCOUNTS } from "@/redux/modules/accounts-slice";
 import { IoArrowForward } from "react-icons/io5";
+import { getAllVariants } from "@/http/equipmentsHttp";
 
 export const getServerSideProps = async ({ locale }: any) => {
-    const data = await getAllAccounts();
+    const data = await getAllVariants();
     return {
         props: {
             fulfilleds: data,
@@ -243,35 +244,21 @@ export default function Accounts({ fulfilleds }: any) {
                                                 {" "}
                                                 <TbArrowsSort />{" "}
                                             </span>
-                                            <span>ID</span>
+                                            <span>Equipment</span>
                                         </th>
                                         <th className="">
                                             <span className=" inline-block relative top-1 mr-1 ">
                                                 {" "}
                                                 <TbArrowsSort />{" "}
                                             </span>
-                                            <span>Pallet</span>
+                                            <span>Count</span>
                                         </th>
                                         <th className="">
                                             <span className=" inline-block relative top-1 mr-1 ">
                                                 {" "}
                                                 <TbArrowsSort />{" "}
                                             </span>
-                                            <span>Patch</span>
-                                        </th>
-                                        <th className="">
-                                            <span className=" inline-block relative top-1 mr-1 ">
-                                                {" "}
-                                                <TbArrowsSort />{" "}
-                                            </span>
-                                            <span>Product</span>
-                                        </th>
-                                        <th className="">
-                                            <span className=" inline-block relative top-1 mr-1 ">
-                                                {" "}
-                                                <TbArrowsSort />{" "}
-                                            </span>
-                                            <span>Supplier</span>
+                                            <span>Fullfill Date</span>
                                         </th>
                                         <th className="">
                                             <span className=" inline-block relative top-1 mr-1 ">
@@ -285,22 +272,9 @@ export default function Accounts({ fulfilleds }: any) {
                                                 {" "}
                                                 <TbArrowsSort />{" "}
                                             </span>
-                                            <span>Packing Date</span>
+                                            <span>Note</span>
                                         </th>
-                                        <th className="">
-                                            <span className=" inline-block relative top-1 mr-1 ">
-                                                {" "}
-                                                <TbArrowsSort />{" "}
-                                            </span>
-                                            <span>Fulfill Date</span>
-                                        </th>
-                                        <th className="">
-                                            <span className=" inline-block relative top-1 mr-1 ">
-                                                {" "}
-                                                <TbArrowsSort />{" "}
-                                            </span>
-                                            <span>Notes</span>
-                                        </th>
+
                                         <th className="">
                                             <span className="  text-darkGray text-[26px]">
                                                 <PiDotsThreeCircleLight />
@@ -325,21 +299,16 @@ export default function Accounts({ fulfilleds }: any) {
                                                                 readOnly
                                                             />
                                                         </td>
-                                                        <td title={row._id}>{row?._id}</td>
-                                                        <td title={row.pallet}>{row?.pallet}</td>
+                                                        <td title={row.equipmentsType}>{row?.equipmentsType}</td>
+                                                        <td title={row.totalCount}>{row?.totalCount}</td>
 
-                                                        <td title={row.patch}>{row?.patch}</td>
-                                                        <td title={row.product}>{row?.product}</td>
-                                                        <td title={row.supplier}>{row?.supplier}</td>
-                                                        <td title={`${row.station}`}>
-                                                            {row?.station}
-                                                        </td>
-                                                        <td title={row.packingDate}>{row?.packingDate}</td>
                                                         <td title={row.fulfillDate}>{row?.fulfillDate}</td>
+                                                        <td title={row.station}>{row?.station}</td>
                                                         <td title={row.notes}>{row?.notes}</td>
 
+
                                                         <td>
-                                                            <Link href={`/inventory/products/pallets/${row._id}`}>
+                                                            <Link href={`/inventory/equipments/variants/${row._id}`}>
                                                                 <span className=" text-[26px] text-mainBlue cursor-pointer">
                                                                     <IoArrowForward />
                                                                 </span>

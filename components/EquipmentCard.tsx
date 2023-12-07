@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import Image from "next/image";
 import Box from '../assets/imgs/box.png'
 
-export default function EquipmentCard({ id = '1' }: { id: string }) {
+export default function EquipmentCard({ data }: any) {
     const router = useRouter();
 
     return (
@@ -18,15 +18,15 @@ export default function EquipmentCard({ id = '1' }: { id: string }) {
                 />
             </div>
             <div className='flex flex-col justify-start items-start w-full gap-6'>
-                <h4 className='text-[26px] text-[#414042] font-bold font-poppins'>Cartoon Boxes</h4>
+                <h4 className='text-[26px] text-[#414042] font-bold font-poppins'>{data?.title}</h4>
                 <div className='grid grid-cols-2 justify-between items-center w-full'>
                     <div className='flex gap-2 text-[18px]'>
                         <p className='font-medium text-[#676B89] '>Total Available :</p>
-                        <p className='text-[#0F8BFD]'>364</p>
+                        <p className='text-[#0F8BFD]'>{data?.totalCount}</p>
                     </div>
                     <div className='flex gap-2 text-[18px]'>
                         <p className='font-medium text-[#676B89] '>Available Variants :</p>
-                        <p className='text-[#0F8BFD]'>10</p>
+                        <p className='text-[#0F8BFD]'>{data?.variants}</p>
                     </div>
 
 

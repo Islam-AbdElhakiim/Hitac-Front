@@ -30,18 +30,20 @@ import DataCard from "@/components/DataCard";
 import { FiFilter } from "react-icons/fi";
 import PatchCard from "@/components/PatchCard";
 import EquipmentCard from "@/components/EquipmentCard";
+import { getAllEquipments } from "@/http/equipmentsHttp";
 
 export const getServerSideProps = async ({ locale }: any) => {
-  const data = await getAllProducts();
+  const data = await getAllEquipments();
   return {
     props: {
-      products: data,
+      equipments: data,
       ...(await serverSideTranslations(locale, ["common"])),
     },
   };
 };
 
-export default function Products({ products }: { products: productType[] }) {
+export default function Products({ equipments }: { equipments: any }) {
+  console.log("equipments", equipments)
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation("common", {
@@ -53,7 +55,7 @@ export default function Products({ products }: { products: productType[] }) {
 
   // const [allEmployees, setAllEmployees] = useState<EmployeeType[]>(employees);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageProducts, setPageProducts] = useState(products?.slice());
+  const [pageProducts, setPageProducts] = useState(equipments?.slice());
 
   const [selectedProducts, setSelectedProducts] = useState(new Array());
 
@@ -78,10 +80,7 @@ export default function Products({ products }: { products: productType[] }) {
   const handlePrevPagination = () => {
     if (currentPage > 1) setCurrentPage((prev: number) => prev - 1);
   };
-  const handleNextPagination = () => {
-    if (10 * currentPage < products?.length)
-      setCurrentPage((prev: number) => prev + 1);
-  };
+
   //#endregion
 
   //#region handle selecting employee Account
@@ -95,25 +94,11 @@ export default function Products({ products }: { products: productType[] }) {
     }
   };
   //selecting all emplyee
-  const selectAll = () => {
-    setSelectedProducts(products.map((prod: any) => prod._id));
-    if (selectedProducts?.length == products?.length) {
-      setSelectedProducts([]);
-    }
-  };
+
   //#endregion
 
   //#region handle interna search method
-  const handleSearch = (value: string) => {
-    // console.log(value)
-    if (value) {
-      setPageProducts(
-        pageProducts.filter((prod: any) => prod.name.startsWith(value))
-      );
-    } else {
-      setPageProducts(products?.slice());
-    }
-  };
+
   //#endregion
 
   //#region handleDelete
@@ -159,13 +144,11 @@ export default function Products({ products }: { products: productType[] }) {
 
           <div className="flex flex-col p-10 gap-6">
             <h2 className="text-[22px] font-semibold mb-10">Summary</h2>
-            <div className="flex gap-x-20 gap-y-10 flex-wrap">
-              <DataCard />
-              <DataCard />
-              <DataCard />
-              <DataCard />
-              <DataCard />
-              <DataCard />
+            <div className="flex lg:gap-x-20  gap-y-10 flex-wrap">
+              <DataCard data={{ title: "Total Products", value: "10" }} />
+              <DataCard data={{ title: "Total Products", value: "10" }} />
+              <DataCard data={{ title: "Total Products", value: "10" }} />
+              <DataCard data={{ title: "Total Products", value: "10" }} />
             </div>
             <div className="flex justify-center">
               <Button title="View More" classes="bg-mainOrange text-white px-[13px] py-[16px]" />
@@ -173,15 +156,13 @@ export default function Products({ products }: { products: productType[] }) {
 
             <h2 className="text-[22px] font-semibold mb-10">Equipment</h2>
             <div className="flex gap-x-16 gap-y-10 flex-wrap">
-              <Link href="/inventory/equipments/in-stock/sss">
-                <EquipmentCard id='d' />
-              </Link>
-              <Link href="/inventory/equipments/in-stock/sss">
-                <EquipmentCard id='d' />
-              </Link>
-              <Link href="/inventory/equipments/in-stock/sss">
-                <EquipmentCard id='d' />
-              </Link>
+              {equipments.map((res: any) => (
+
+                <Link href={`/inventory/equipments/in-stock/details/${res?._id}`}>
+                  <EquipmentCard data={res} />
+                </Link>
+              ))}
+
             </div>
             <div className="flex justify-center">
               <Link href="/inventory/equipments/in-stock/new">

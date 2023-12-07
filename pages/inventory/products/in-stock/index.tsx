@@ -60,7 +60,6 @@ export default function Products({ patchs, pallets }: { patchs: any, pallets: an
   const { t } = useTranslation("common", {
     bindI18n: "languageChanged loaded",
   });
-  console.log(patchs, pallets);
 
   const palletCounts: any = {};
   const totalPallets = pallets?.length;
@@ -76,10 +75,9 @@ export default function Products({ patchs, pallets }: { patchs: any, pallets: an
     }
   });
   const pallet = Object.entries(palletCounts).map(([key, value]) => ({
-    product: key,
-    count: value
+    title: key,
+    value: value
   }))
-  console.log(pallet);
 
 
   const user = useSelector((state: any) => state.authReducer);
@@ -194,7 +192,7 @@ export default function Products({ patchs, pallets }: { patchs: any, pallets: an
           <div className="flex flex-col p-10 gap-6">
             <h2 className="text-[22px] font-semibold mb-10">Summary</h2>
             <div className="flex gap-x-12 gap-y-10 flex-wrap">
-              <DataCard data={{ product: 'Total Pallets', count: totalPallets }} />
+              <DataCard data={{ title: 'Total Pallets', count: totalPallets }} />
               {pallet.map((res: any) => (
                 <DataCard data={res} />
 
