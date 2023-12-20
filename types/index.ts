@@ -190,6 +190,87 @@ export type supplierType = {
     [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
+
+export type intialSalesType = {
+    _id?: string;
+    account: string,
+    email: string,
+    whatsapp: string,
+    country: string,
+    port: string,
+    products: string[],
+    packaging: string,
+    totalWeight: string,
+    unit: string,
+    currency: string,
+    totalUnits: string,
+    rate: string,
+    total: string,
+    description: string,
+
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
+
+};
+
+export type orderItem = {
+    totalWeight: string,
+    product: string,
+    specifications: { [key: string]: string },
+
+
+}
+export type confirmationSalesType = {
+    _id?: string;
+    deposit: string;
+    percent: string;
+    currency: string;
+    finalPrice: string;
+    paymentPlan: string;
+    exportManager: string;
+    incoTerms: string;
+    orderItems: orderItem[];
+
+    [key: string]: string | number | undefined | orderItem[] | { [key: string]: string }; // Adding an index signature
+
+};
+export type successSalesType = {
+    _id?: string;
+    deposit: string;
+    percent: string;
+    currency: string;
+    finalPrice: string;
+    paymentPlan: string;
+    remaining: string;
+    fulfillment: string;
+    fulfillmentDate: string;
+
+    [key: string]: string | number | undefined | orderItem[] | { [key: string]: string }; // Adding an index signature
+
+};
+export type supplySalesType = {
+    _id?: string;
+    supplyOrder: string;
+    supplier: string;
+    station: string;
+    operation: string;
+    qualitySpecialist: string;
+    logistics: string;
+
+    [key: string]: string | number | undefined | orderItem[] ; // Adding an index signature
+
+};
+export type transportingSalesType = {
+    _id?: string;
+    pot: string;
+    shippingName: string;
+    cutOff: string;
+    bookingNumber: string;
+    transportingDate: string;
+    arrivingDate: string;
+
+    [key: string]: string | number | undefined | orderItem[] ; // Adding an index signature
+
+};
 export type stationType = {
     _id?: string;
     englishName: string,
@@ -260,6 +341,38 @@ export type variantInitalType = {
 
 };
 
+export type emailInitalType = {
+    id?: string;
+    to: string;
+    sentDate: string;
+    status: string;
+    agent: string;
+    body: string;
+    [key: string]: string | number | undefined | string[] | { [key: string]: string }; // Adding an index signature
+
+};
+export type whatsappInitalType = {
+    id?: string;
+    to:  string;
+    sentDate:  string;
+    status:  string;
+    agent:  string;
+    template:  string;
+    body:  string;
+    [key: string]: string | number | undefined | string[] | { [key: string]: string }; // Adding an index signature
+
+};
+export type socialInitalType = {
+    id?: string;
+    platfrom:  string;
+    account:  string;
+    sentDate:  string;
+    status:  string;
+    agent:  string;
+    body:  string;
+    [key: string]: string | number | undefined | string[] | { [key: string]: string }; // Adding an index signature
+
+};
 export type palletsInitalType = {
     id?: string;
     patch?: string,
@@ -315,6 +428,17 @@ export type segmentType = {
     [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 }
+export type salesType = {
+    _id?: string;
+    account: { [key: string]: string },
+    origin: string,
+    port: string,
+    segment: { [key: string]: string },
+    createdOn: string,
+    status: string,
+    isDeleted   : string,
+
+}
 export type productType = {
     _id: string;
     name: string,
@@ -324,6 +448,76 @@ export type productType = {
     image?: string,
     isDeleted?: boolean,
     specifications: Attribute[],
+
+}
+export type supplierAccountingType = {
+    _id?: string;
+    type: string,
+    supplier: string,
+    supplyOrder: string,
+    totalBefore: string,
+    amount: string,
+    totalAfter: string,
+    bankAccount: string,
+    date: string,
+    notes: string,
+    isDeleted?: boolean,
+
+}
+export type bankAccountType = {
+    _id?: string;
+    bankName: string,
+    holder: string,
+    account: string,
+    address: string,
+    available: string,
+    isDeleted?: boolean,
+
+}
+export type stationAccountingType = {
+    _id?: string;
+    type: string,
+    station: string,
+    supplyOrder: string,
+    totalBefore: string,
+    amount: string,
+    totalAfter: string,
+    bankAccount: string,
+    date: string,
+    notes: string,
+    isDeleted?: boolean,
+
+}
+export type revenueAccountingType = {
+    _id?: string;
+    type: string,
+    salesCases: string,
+    amount: string,
+    account: string,
+    createdOn: string,
+    notes: string,
+    isDeleted?: boolean,
+
+}
+export type cashType = {
+    _id?: string;
+    salesCases: string,
+    amount: string,
+    account: string,
+    createdOn: string,
+    notes: string,
+    isDeleted?: boolean,
+
+}
+
+export type expensesAccountingType = {
+    _id?: string;
+    type: string,
+    amount: string,
+    bankAccount: string,
+    date: string,
+    notes: string,
+    isDeleted?: boolean,
 
 }
 export type productInitalType = {

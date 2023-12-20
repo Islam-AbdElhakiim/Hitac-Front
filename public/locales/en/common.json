@@ -123,17 +123,17 @@
                 "emails": {
                     "title": "Emails",
                     "urlTitle": "Emails",
-                    "target": "/emails"
+                    "target": "/marketing/email"
                 },
                 "whatsapp": {
                     "title": "Whatsapp",
                     "urlTitle": "Whatsapp",
-                    "target": "/whatsapp"
+                    "target": "/marketing/whatsapp"
                 },
                 "socialPosts": {
                     "title": "Social Posts",
                     "urlTitle": "Social Posts",
-                    "target": "/social-posts"
+                    "target": "/marketing/social-posts"
                 }
             }
         },
@@ -171,13 +171,18 @@
                             "title": "Revenue",
                             "urlTitle": "Revenue",
                             "target": "/accounting/credit/revenue"
-                        },
-                        "returnRequests": {
-                            "title": "Return Requests",
-                            "urlTitle": "Return Requests",
-                            "target": "/accounting/credit/return-requests"
                         }
                     }
+                },
+                "bankAccounts": {
+                    "title": "Bank Accounts",
+                    "urlTitle": "bankAccounts",
+                    "target": "/accounting/bank-accounts"
+                },
+                "cash": {
+                    "title": "Cash",
+                    "urlTitle": "Cash",
+                    "target": "/accounting/cash"
                 }
             }
         }

@@ -14,7 +14,14 @@ import { useState } from "react";
 import Image from "next/image";
 import { SHOW_LOADER } from "@/redux/modules/loader-slice";
 import { AppDispatch } from "@/redux/store";
-
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+export const getServerSideProps = async (context: any) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale, ["common"])),
+    },
+  };
+};
 const NewStation = () => {
   const { t } = useTranslation("common", {
     bindI18n: "languageChanged loaded",
@@ -46,7 +53,6 @@ const NewStation = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // Handle form submission
-
 
       dispatch(SHOW_LOADER());
       try {
@@ -144,10 +150,11 @@ const NewStation = () => {
                     type="text"
                     name="name"
                     id="name"
-                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${formik.touched.name && formik.errors.name
-                      ? "border-red-500 outline-red-500"
-                      : "border-lightGray outline-lightGray"
-                      }} `}
+                    className={`w-full h-12 rounded-md border border-lightGray shadow-md  px-2  ${
+                      formik.touched.name && formik.errors.name
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
+                    }} `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -169,10 +176,11 @@ const NewStation = () => {
                     rows={8}
                     name="description"
                     id="description"
-                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${formik.touched.description && formik.errors.description
-                      ? "border-red-500 outline-red-500"
-                      : "border-lightGray outline-lightGray"
-                      } `}
+                    className={`w-full rounded-md border border-lightGray shadow-md  px-2 ${
+                      formik.touched.description && formik.errors.description
+                        ? "border-red-500 outline-red-500"
+                        : "border-lightGray outline-lightGray"
+                    } `}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.description}
