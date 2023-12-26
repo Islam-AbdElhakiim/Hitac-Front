@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import React from "react";
+import React, { useState } from "react";
 import { confirmationSalesType } from "@/types";
 import Button from "@/components/Button";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
@@ -18,6 +18,7 @@ import { getAllEmployees } from "@/http/employeeHttp";
 import { useRouter } from "next/navigation";
 import { SHOW_LOADER } from "@/redux/modules/loader-slice";
 import { AppDispatch } from "@/redux/store";
+import PerformaModal from "@/components/PerformaModal";
 export const getServerSideProps = async (context: any) => {
   const productFetch = async () => {
     return await getAllProducts();
@@ -61,6 +62,7 @@ export default function ConfirmationPage({
   const { isLoading } = useSelector((state: any) => state.loaderReducer);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const [show, setShow] = useState(false);
 
   const validationSchema: any = Yup.object().shape({});
 
@@ -524,7 +526,9 @@ export default function ConfirmationPage({
                 type="button"
                 title={"Generate Performa"}
                 classes=" bg-[#0F8BFD] text-white p-4 text-bold hover:bg-red-500 group hover:text-[white] transition "
-                handleOnClick={() => {}}
+                handleOnClick={() => {
+                  setShow(true);
+                }}
               />
 
               <div className="text-2xl text-darkGray border-b-[1px] w-full pt-3  flex gap-3 items-center">
@@ -568,6 +572,12 @@ export default function ConfirmationPage({
                     </div> */}
             </form>
           </div>
+          <PerformaModal
+            show={show}
+            onHide={() => {
+              setShow(false);
+            }}
+          />
         </div>
       )}
     </>

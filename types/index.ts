@@ -211,6 +211,16 @@ export type intialSalesType = {
     [key: string]: string | number | undefined | string[]; // Adding an index signature
 
 };
+export type performaType = {
+    _id?: string;
+    date: string;
+      expiryDate: string;
+      terms: string;
+      note: string;
+
+    [key: string]: string | number | undefined | string[]; // Adding an index signature
+
+};
 
 export type orderItem = {
     totalWeight: string,
